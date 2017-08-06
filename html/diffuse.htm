@@ -1,0 +1,193 @@
+<html>
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Cygwin (vers 1st September 2004), see www.w3.org">
+   <link rel="STYLESHEET" href="style.css" type="text/css">
+
+  <title>SCATMECH: Diffuse_Subsurface_BRDF_Model</title>
+<script language="JavaScript" id="_fed_an_js_tag" src="/js/federated-analytics.all.min.js?agency=NIST&subagency=pml&pua=UA-37115410-46&yt=true"></script>
+</head>
+
+<body>
+  <a name="top" id="top"><!-- --></a>
+
+  <table width="98%" border="0" cellpadding="0" cellspacing="0"
+  align="center">
+    <tr>
+      <td>
+        <p class="nav"><a href="index.htm">SCATMECH</a> &gt; <a href=
+        "classes.htm">Classes and Functions</a> &gt;
+        <a href="classes.htm#SSM">Surface Scattering Models</a>
+        &gt; Diffuse_Subsurface_BRDF_Model</p>
+
+	<h1>class Diffuse_Subsurface_BRDF_Model</h1>
+
+        
+        <hr>
+        <p><b>Diffuse_Subsurface_BRDF_Model</b> calculates the
+        scattering from a diffuse material having a smooth exposed
+        interface. It is similar to <a href=
+        "lambert.htm">Lambertian_BRDF_Model</a>, except that the
+        coeffients for transmission into and out of the material
+        are included in the calculation, and that radiation which internally reflects back into the surface is
+	  consistently recycled.
+
+	  <blockquote>
+	    <center>
+	      <img src="./Images/Diffuse_Subsurface_BRDF_Model.jpg" width="800" alt="Diagram illustrating Diffuse_Subsurface_BRDF_Model">
+	      </center>
+	    </blockquote>
+
+	<h2>Parameters:</h2>
+
+        <table border="1" cellpadding="5">
+          <tr>
+            <th>Parameter</th>
+
+            <th>Data
+            Type</th>
+
+            <th>Description</th>
+
+            <th>Default</th>
+          </tr>
+
+          <tr>
+            <td class="parameter">lambda</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">Wavelength of the light
+            in vacuum [&#181;m].<br>
+            (Inherited from <a href=
+            "BRDF_Model.htm">BRDF_Model</a>.)</td>
+
+            <td class="default">0.532</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">type</td>
+
+            <td class="datatype">int</td>
+
+            <td class="description">
+	      Indicates whether the light is incident from above the
+            substrate or from within the substrate and whether the
+            scattering is evaluated in reflection or transmission.
+            The choices are:<br>
+	      <b>0</b> : Light is incident from the above the substrate, and scattering is evaluated in reflection.<br>
+	      <b>1</b> : Light is incident from the above the substrate, and scattering is evaluated in transmission.<br>
+	      <b>2</b> : Light is incident from the within the substrate, and scattering is evaluated in reflection.<br>
+	      <b>3</b> : Light is incident from the within the substrate, and scattering is evaluated in transmission.<br>
+	      For <b>1</b>, <b>2</b>, and <b>3</b>, the substrate must be non-absorbing.<br>
+	      Diffuse_Subsurface_Model only supports <b>type=0</b>.<br>
+            (Inherited from <a href=
+            "BRDF_Model.htm">BRDF_Model</a>).</td>
+
+            <td class="default">0</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">substrate</td>
+
+            <td class="datatype"><a href="dielfunc.htm">dielectric_function</a></td>
+
+            <td class="description">The
+            optical constants of the substrate, expressed as a
+            complex number (n,k) or, optionally, as a function of
+            wavelength.<br>
+            (Inherited from <a href=
+            "BRDF_Model.htm">BRDF_Model</a>.)</td>
+
+            <td class="default">(4.05,0.05)</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">reflectance</td>
+
+            <td class="datatype"><a href="reflectance.htm">Reflectance</a></td>
+
+            <td class="description">Reflectance of the
+            material.<br>
+            See <a href="reflectance.htm">Reflectance</a> for more
+            information.<br>
+            (Inherited from <a href=
+            "lambert.htm">Lambertian_BRDF_Model</a>.)</td>
+
+            <td class="default">Table_Reflectance</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">stack</td>
+
+            <td class="datatype"><a href="dielstack.htm">dielectric_stack</a></td>
+
+            <td class="description">Description of any stack
+            of films deposited on the substrate, usually specified
+            by a file.<br>
+            See <a href="dielstack.htm">dielectric_stack</a>, for
+            more information.</td>
+
+            <td class="default"><i>no films</i></td>
+          </tr>
+        </table>
+
+	<h2>See also:</h2>
+
+        <p><a href=
+        "index.htm">SCATMECH Home</a>, &nbsp; <a href=
+        "convent.htm">Conventions</a>, &nbsp; <a href=
+        "BRDF_Model.htm">BRDF_Model</a>, &nbsp; <a href=
+        "lambert.htm">Lambertian_BRDF_Model</a></p>
+	<p>Thomas A.
+        Germer, "<a href="http://physics.nist.gov/Divisions/Div844/publications/germer/SPIE5158-28.pdf">Polarized
+	light diffusely scattered under smooth
+        and rough surfaces</a>," in <i>Polarization Science and Remote
+        Sensing</i>, J.&nbsp;A. Shaw and J.&nbsp;S. Tyo, Eds.,
+        Proc. SPIE <b>5158</b>, 193-204 (2003).
+
+        <h2>Include file:</h2>
+
+          <pre>
+#include "<a href="../code/diffuse.h">diffuse.h</a>"
+</pre>
+        <h2>Source code:</h2>
+
+          <pre>
+<a href="../code/diffuse.cpp">diffuse.cpp</a>
+</pre>
+        <h2>Definition of public elements:</h2>
+
+          <pre>
+class Diffuse_Subsurface_BRDF_Model
+    : public <a href="lambert.htm">Lambertian_BRDF_Model</a>,
+{
+};
+</pre>
+ 
+        <p><a href=
+        "#top"><span class="totop">Top of Page</span></a></p>
+<!-- START FOOTER -->
+<hr>
+<h2>For More Information</h2>
+
+<p>
+<a href="http://www.nist.gov/pml/div685/grp06/germer.cfm">SCATMECH Technical Information and Questions</a><br>
+<a href="http://www.nist.gov/pml/div685/index.cfm" target="_top">Sensor Science Division Home Page</a><br>
+<a href="mailto:fraser@nist.gov">Sensor Science Division Inquiries</a><br>
+<a href="mailto:thomas.germer@nist.gov">Website Comments</a>
+
+<p>
+Current SCATMECH version: <a href="./download.htm">7.00 (January 2015)</a><br>
+This page first online: Version 3.00 (December 2001) <br>
+This page last modified: Version 7.00 (January 2015) <br>
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+</td>
+</tr>
+</table>
+
+</body>
+</html>

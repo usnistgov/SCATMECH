@@ -1,0 +1,315 @@
+<html>
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Cygwin (vers 1st September 2004), see www.w3.org">
+   <link rel="STYLESHEET" href="style.css" type="text/css">
+
+  <title>SCATMECH: dielectric_function</title>
+<script language="JavaScript" id="_fed_an_js_tag" src="/js/federated-analytics.all.min.js?agency=NIST&subagency=pml&pua=UA-37115410-46&yt=true"></script>
+</head>
+
+<body>
+  <a name="top" id="top"><!-- --></a>
+
+  <table width="98%" border="0" cellpadding="0" cellspacing="0"
+  align="center">
+    <tr>
+      <td>
+        <p class="nav"><a href="index.htm">SCATMECH</a> &gt; <a href=
+        "classes.htm">Classes and Functions</a> &gt;
+        <a href="classes.htm#OPM">Optical Properties and
+        Materials</a> &gt;  dielectric_function</p>
+
+        <h1>class dielectric_function</h1>
+
+        <hr>
+
+        <p>This class handles the storage of the wavelength dependence
+        of the optical constants of a material. The optical constants
+        are internally stored as a lookup table of optical
+        constants <i>n</i> and <i>k</i>, using two elements of the
+        class <a href="./scattabl.htm">Table</a>. The optical constants can be
+        assigned values with a single pair of constants (<i>n</i>
+        and <i>k</i>) or from a text file.
+        See <a href="./scattabl.htm">Table</a> for information about
+        the format of the text file.  The wavelengths are in column 1,
+        the values of <i>n</i> are in column 2, and the values
+        of <i>k</i> are in column 3.
+
+
+	<h2>Include file:</h2>
+
+          <pre>
+#include "<a href="../code/dielfunc.h">dielfunc.h</a>"
+</pre>
+        <h2>Source code:</h2>
+
+          <pre>
+<a href="../code/dielfunc.cpp">dielfunc.cpp</a>
+</pre>
+        <h2>See also:</h2>
+
+        <p><a href="index.htm">SCATMECH Home</a>, &nbsp;
+        <a href="convent.htm">Conventions</a>, &nbsp; <a href=
+        "dielectric.htm">dielectric_constant</a>, &nbsp; <a href=
+        "optconst.htm">optical_constant</a>, &nbsp; <a href=
+        "scattabl.htm">Table</a></p>
+
+	<h2>Definition of public elements:</h2>
+
+          <pre>
+class dielectric_function {
+        <a href="#dielectric_function">dielectric_function</a>();
+        <a href="#dielectric_function">dielectric_function</a>(const string&amp; filename);
+        <a href="#dielectric_function">dielectric_function</a>(const <a href="optconst.htm">optical_constant</a>&amp; nn);
+        dielectric_function&amp; <a href="#operator=">operator=</a>(const dielectric_function&amp; df);
+        void <a href="#read">read</a>(const string&amp; filename);
+        <a href="dielectric.htm">dielectric_constant</a> <a href="#epsilon">epsilon</a>(double lambda) const;
+        <a href="optconst.htm">optical_constant</a> <a href="#index">index</a>(double lambda) const;
+        double <a href="#e1">e1</a>(double lambda) const;
+        double <a href="#e2">e2</a>(double lambda) const;
+        double <a href="#n">n</a>(double lambda) const;
+        double <a href="#k">k</a>(double lambda) const;
+        static dielectric_function <a href="#AskUser">AskUser</a>(const string&amp; query,
+                                           const string&amp; deflt);
+        static dielectric_function <a href="#AskUser">AskUser</a>(const string&amp; query,
+                                           const <a href="optconst.htm">optical_constant</a>&amp; deflt);
+        void <a href="#force_nonabsorbing">force_nonabsorbing</a>();
+
+        void <a href="#set_interp">set_interpolationx</a>(<a href="scattabl.htm#InterpolationMode">Table::InterpolationMode</a> m);
+        <a href="scattabl.htm#InterpolationMode">Table::InterpolationMode</a> <a href="#set_interp">get_interpolationx</a>();
+        void <a href="#set_interp">set_interpolationy</a>(<a href="scattabl.htm#InterpolationMode">Table::InterpolationMode</a> m);
+        <a href="scattabl.htm#InterpolationMode">Table::InterpolationMode</a> <a href="#set_interp">get_interpolationy</a>();
+
+};
+</pre>
+        <hr>
+
+        <h3><a name="dielectric_function" id="dielectric_function">dielectric_function()<br>
+        dielectric_function(const string&amp; filename)<br>
+        dielectric_function(const optical_constant&amp; nn)</a></h3>
+
+        <blockquote><p>
+          The class constructors. When called with no argument, the
+          class must be assigned a value (either through <a href=
+          "#read">read</a> or with <a href="#operator=">operator=</a>) before other functions can be
+          called. When called with string containing
+          the name of a file, the constructor will call the
+          function <a href="#read">read</a> using that file. When
+          called with an <a href="optconst.htm">optical_constant</a>, the class will be
+          constructed with constant optical constants.
+
+	<h4>Examples:</h4>
+
+	<pre>
+dielectric_function eps1;   // Default constructor
+dielectric_function eps2("silicon"); // Using a file name to initialize the values
+dielectric_function eps3("(1.5,0)"); // Using a (n,k) pair of values as a string
+dielectric_function eps4(optical_constant(1.5,0.)); // Using an optical constant
+	</pre>
+	
+	</blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+	<h3><a name="operator=" id="operator=">dielectric_function&amp; operator=(const dielectric_function&amp; df)</a></h3>
+
+        <blockquote><p>
+          This function allows for assignment.
+
+	<h4>Example:</h4>
+
+	<pre>
+dielectric_function eps1 = dielectric_function("silicon");
+	</pre>
+
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+	<h3><a name="read" id=
+        "read">void read(const string&amp; filename)</a></h3>
+
+        <blockquote><p>
+	    This function will either read a file whose name is pointed to by <b>filename</b> or attempt to read the string as a 
+	    complex number, interpreted as a complex index of refraction, e.g., "(3.4,1.2)".  If the string is the name of a file,
+	    that file must contain at least three columns: 
+	  </blockquote>
+
+        <center>
+          <table border="0">
+            <tr>
+              <td>
+                <table border="0">
+                  <tr>
+                    <td><b>Column</b></td>
+
+                    <td>&nbsp;</td>
+
+                    <td align="left"><b>Description</b></td>
+                  </tr>
+
+                  <tr align="center">
+                    <td>1</td>
+
+                    <td>&nbsp;</td>
+
+                    <td align="left">Wavelength</td>
+                  </tr>
+
+                  <tr align="center">
+                    <td>2</td>
+
+                    <td>&nbsp;</td>
+
+                    <td align="left">Real part of refractive index (<i>n</i>)</td>
+                  </tr>
+
+                  <tr>
+                    <td align="center">3</td>
+
+                    <td>&nbsp;</td>
+
+                    <td align="left">Imaginary part of refractive index (<i>k</i>)</td>
+                  </tr>
+                </table>
+              </td>
+
+            </tr>
+          </table>
+        </center>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+	<h3><a name="epsilon" id="epsilon">dielectric_constant epsilon(double lambda)
+        const</a></h3>
+
+        <blockquote><p>
+          Function that returns the <a href="dielectric.htm">dielectric_constant</a> of the material at wavelength <b>lambda</b>.
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+	<h3><a name="index" id="index">optical_constant index(double lambda) const</a></h3>
+
+        <blockquote><p>
+          Function that returns the <a href="optconst.htm">optical_constant</a> of the material at wavelength <b>lambda</b>.
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+	<h3><a name="e1" id="e1">double e1(double lambda) const</a><br>
+        <a name="e2" id="e2">double e2(double lambda) const</a></h3>
+
+        <blockquote><p>
+          Functions that return either the real part (&epsilon;<sub>1</sub>) or
+          the imaginary part (&epsilon;<sub>2</sub>) of the dielectric
+          constant, evaluated at wavelength <b>lambda</b>.
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+	<h3><a name="n" id=
+        "n">double n(double lambda) const</a><br>
+        <a name="k" id="k">double k(double lambda) const</a></h3>
+
+        <blockquote><p>
+          Functions that return either the real part (<i>n</i>) or
+          the imaginary part (<i>k</i>) of the complex index of
+          refraction, evaluated at wavelength <b>lambda</b>.
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+	<h3><a name="AskUser"
+        id="AskUser">static dielectric_function AskUser(const
+        string&amp; query,const string&amp; deflt)</a><br>
+        <a name="AskUser" id="AskUser">static dielectric_function
+        AskUser(const string&amp; query,const optical_constant&amp;
+        deflt)</a></h3>
+
+        <blockquote><p>
+          Functions that query the user using the standard input stream (cin) and the standard unbuffered error stream (cerr). The first
+          argument is the query, while the second is the default
+          response. If the second argument is a reference to a string, the default is interpreted as a filename. If the
+          second argument is an <a href=
+          "optconst.htm">optical_constant</a>, the default is a
+          constant function with that value. The response by the
+          user can be either a filename or a value. If the response
+          is a single number, it will assumed to be the real part of the
+          optical constant, and the user will be asked for a second
+          value, which will be interpreted as the imaginary part of
+          the optical constant. If the initial response cannot be
+          interpreted as a number, then the function will assume
+          the response is the name of a file.
+
+        <h4>Examples:</h4>
+
+          <pre>
+dielectric_function eps;
+eps = dielectric_function::AskUser("Enter the optical constants","silicon.dat");
+eps = dielectric_function::AskUser("Enter the optical constants again",optical_constant(4.15,0.05));
+</pre>
+
+        <p>See
+          <a href="interface.htm">Console Interface</a> for more
+          information.
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+	<h3><a name=
+        "force_nonabsorbing" id="force_nonabsorbing">void
+        force_nonabsorbing()</a></h3>
+
+        <blockquote><p>
+          This function forces the material to be non-absorbing by
+          setting the imaginary part of the index of refraction to
+          zero.
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+
+	  <h3><a name="set_interp" id="set_interp">
+	      void set_interpolationx(<a href="#InterpolationMode">InterpolationMode</a> m)<br>
+	      <a href="#InterpolationMode">InterpolationMode</a> get_interpolationx()<br>
+	      void set_interpolationy(<a href="#InterpolationMode">InterpolationMode</a> m)<br>
+	      <a href="#InterpolationMode">InterpolationMode</a> get_interpolationy()<br>
+	    </a></h3>
+
+	  <blockquote><p>
+	      Functions to set and get the interpolation mode for each of the axes of the <b>Table</b>.
+	    By default, a <b>Table</b> is interpolated linearly.  Other
+	    The independent variable (x) may be interpolated linearly (LIN) or logarithmically (LOG).
+	    The dependet variable (y) may be interpolated linearly (LIN), logarithmically (LOG), as 
+	    a cubic spline (SPLINE), or as a cubic spline on a logarithmic scale (LOGSPLINE).
+	  </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+
+<!-- START FOOTER -->
+<hr>
+<h2>For More Information</h2>
+
+<p>
+<a href="http://www.nist.gov/pml/div685/grp06/germer.cfm">SCATMECH Technical Information and Questions</a><br>
+<a href="http://www.nist.gov/pml/div685/index.cfm" target="_top">Sensor Science Division Home Page</a><br>
+<a href="mailto:fraser@nist.gov">Sensor Science Division Inquiries</a><br>
+<a href="mailto:thomas.germer@nist.gov">Website Comments</a>
+
+<p>
+Current SCATMECH version: <a href="./download.htm">7.00 (January 2015)</a><br>
+This page first online: Version 3.00 (December 2001) <br>
+This page last modified: Version 7.00 (January 2015) <br>
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+</td>
+</tr>
+</table>
+
+</body>
+</html>

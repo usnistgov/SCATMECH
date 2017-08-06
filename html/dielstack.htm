@@ -1,0 +1,654 @@
+<html>
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Cygwin (vers 1st September 2004), see www.w3.org">
+   <link rel="STYLESHEET" href="style.css" type="text/css">
+
+  <title>SCATMECH: dielectric_stack</title>
+<script language="JavaScript" id="_fed_an_js_tag" src="/js/federated-analytics.all.min.js?agency=NIST&subagency=pml&pua=UA-37115410-46&yt=true"></script>
+</head>
+
+<body>
+  <a name="top" id="top"><!-- --></a>
+
+  <table width="98%" border="0" cellpadding="0" cellspacing="0" align="center">
+    <tr>
+      <td>
+        <p class="nav"><b><a href="index.htm">SCATMECH</a> &gt; <a href=
+        "classes.htm">Classes and Functions</a> &gt;
+        <a href="classes.htm#OPM">Optical Properties and
+        Materials</a> &gt; dielectric_stack</b></p>
+
+        <h1>class dielectric_stack</h1>
+
+        <hr>
+
+
+        <p>A <b>dielectric_stack</b> stores information about a stack
+        of films on a substrate. It provides member functions that
+        return the reflection and transmission coefficients of the
+        stack.
+
+	<h2>Include file:</h2>
+
+          <pre>
+#include "<a href="../code/filmtran.h">filmtran.h</a>"
+</pre>
+        <h2>Source code:</h2>
+
+          <pre>
+<a href="../code/filmtran.cpp">filmtran.cpp</a>
+</pre>
+        <h2>See also:</h2>
+
+        <p><a href="index.htm">SCATMECH Home</a>, &nbsp;
+        <a href="convent.htm">Conventions</a>, &nbsp; <a href=
+        "optconst.htm">optical_constant</a>, &nbsp; <a href=
+        "dielectric.htm">dielectric_constant</a>, &nbsp; <a href=
+        "dielfunc.htm">dielectric_function</a></p>
+
+        <p>M. Born and E. Wolf, <i>Principles of Optics</i>,
+        (Pergamon, Oxford, 1980).<br>
+        G. R. Fowles, <i>Introduction to Modern Optics</i>, (Holt,
+        Rinehart and Winston, New York, 1975).</p>
+
+	<h2>Definition of public elements:</h2>
+
+          <pre>
+class dielectric_stack {
+   void <a href=
+"#read_stack_file">read_stack_file</a>(const string&amp; filename);
+   static dielectric_stack <a href=
+"#AskUser">AskUser</a>(const string&amp; prompt,const string&amp; deflt="");
+   void <a href=
+"#print">print</a>(ostream&amp; os, double lambda) const;
+   <a href="#dielectric_stack">dielectric_stack</a>();
+   <a href=
+"#dielectric_stack">dielectric_stack</a>(const dielectric_stack&amp; ds);
+   dielectric_stack&amp; <a href=
+"#operator=">operator=</a>(const dielectric_stack&amp; ds);
+   <a href="#~dielectric_stack">~dielectric_stack</a>();
+   void <a href="#wash">wash</a>();
+   void <a href="#grow">grow</a>(const <a href=
+"dielfunc.htm">dielectric_function</a>&amp; epsilon, double thickness);
+   complex&lt;double&gt; <a href=
+"#rp12">rp12</a>(complex&lt;double&gt; theta,double lambda,
+                        const <a href=
+"dielfunc.htm">dielectric_function&amp;</a> n0,
+                        const <a href=
+"dielfunc.htm">dielectric_function&amp;</a> nt) const;
+   complex&lt;double&gt; <a href=
+"#rs12">rs12</a>(complex&lt;double&gt; theta,double lambda,
+                        const <a href=
+"dielfunc.htm">dielectric_function&amp;</a> n0,
+                        const <a href=
+"dielfunc.htm">dielectric_function&amp;</a> nt) const;
+   complex&lt;double&gt; <a href=
+"#tp12">tp12</a>(complex&lt;double&gt; theta,double lambda,
+                        const <a href=
+"dielfunc.htm">dielectric_function&amp;</a> n0,
+                        const <a href=
+"dielfunc.htm">dielectric_function&amp;</a> nt) const;
+   complex&lt;double&gt; <a href=
+"#ts12">ts12</a>(complex&lt;double&gt; theta,double lambda,
+                        const <a href=
+"dielfunc.htm">dielectric_function&amp;</a> n0,
+                        const <a href=
+"dielfunc.htm">dielectric_function&amp;</a> nt) const;
+   complex&lt;double&gt; <a href=
+"#rp21">rp21</a>(complex&lt;double&gt; theta,double lambda,
+                        const <a href=
+"dielfunc.htm">dielectric_function&amp;</a> n0,
+                        const <a href=
+"dielfunc.htm">dielectric_function&amp;</a> nt) const;
+   complex&lt;double&gt; <a href=
+"#rs21">rs21</a>(complex&lt;double&gt; theta,double lambda,
+                        const <a href=
+"dielfunc.htm">dielectric_function&amp;</a> n0,
+                        const <a href=
+"dielfunc.htm">dielectric_function&amp;</a> nt) const;
+   complex&lt;double&gt; <a href=
+"#tp21">tp21</a>(complex&lt;double&gt; theta,double lambda,
+                        const <a href=
+"dielfunc.htm">dielectric_function&amp;</a> n0,
+                        const <a href=
+"dielfunc.htm">dielectric_function&amp;</a> nt) const;
+   complex&lt;double&gt; <a href=
+"#ts21">ts21</a>(complex&lt;double&gt; theta,double lambda,
+                        const <a href=
+"dielfunc.htm">dielectric_function&amp;</a> n0,
+                        const <a href=
+"dielfunc.htm">dielectric_function&amp;</a> nt) const;
+   <a href="jonesmatrix.htm">JonesMatrix</a> <a href=
+"#JMr">r12</a>(complex&lt;double&gt; theta,double lambda,
+                   const <a href=
+"dielfunc.htm">dielectric_function&amp;</a> n0,
+                   const <a href=
+"dielfunc.htm">dielectric_function&amp;</a> nt) const;
+   <a href="jonesmatrix.htm">JonesMatrix</a> <a href=
+"#JMr">t12</a>(complex&lt;double&gt; theta,double lambda,
+                   const <a href=
+"dielfunc.htm">dielectric_function&amp;</a> n0,
+                   const <a href=
+"dielfunc.htm">dielectric_function&amp;</a> nt) const;
+   <a href="jonesmatrix.htm">JonesMatrix</a> <a href=
+"#JMr">r21</a>(complex&lt;double&gt; theta,double lambda,
+                   const <a href=
+"dielfunc.htm">dielectric_function&amp;</a> n0,
+                   const <a href=
+"dielfunc.htm">dielectric_function&amp;</a> nt) const;
+   <a href="jonesmatrix.htm">JonesMatrix</a> <a href=
+"#JMr">t21</a>(complex&lt;double&gt; theta,double lambda,
+                   const <a href=
+"dielfunc.htm">dielectric_function&amp;</a> n0,
+                   const <a href=
+"dielfunc.htm">dielectric_function&amp;</a> nt) const;
+
+   complex&lt;double&gt; <a href=
+"#rp12i">rp12i</a>(complex&lt;double&gt; angle,double lambda,
+                        const <a href=
+"dielfunc.htm">dielectric_function&amp;</a> n0,
+                        const <a href=
+"dielfunc.htm">dielectric_function&amp;</a> nt) const;
+   complex&lt;double&gt; <a href=
+"#rs12i">rs12i</a>(complex&lt;double&gt; angle,double lambda,
+                        const <a href=
+"dielfunc.htm">dielectric_function&amp;</a> n0,
+                        const <a href=
+"dielfunc.htm">dielectric_function&amp;</a> nt) const;
+   complex&lt;double&gt; <a href=
+"#tp12i">tp12i</a>(complex&lt;double&gt; angle,double lambda,
+                        const <a href=
+"dielfunc.htm">dielectric_function&amp;</a> n0,
+                        const <a href=
+"dielfunc.htm">dielectric_function&amp;</a> nt) const;
+   complex&lt;double&gt; <a href=
+"#ts12i">ts12i</a>(complex&lt;double&gt; angle,double lambda,
+                        const <a href=
+"dielfunc.htm">dielectric_function&amp;</a> n0,
+                        const <a href=
+"dielfunc.htm">dielectric_function&amp;</a> nt) const;
+   complex&lt;double&gt; <a href=
+"#rp21i">rp21i</a>(complex&lt;double&gt; angle,double lambda,
+                        const <a href=
+"dielfunc.htm">dielectric_function&amp;</a> n0,
+                        const <a href=
+"dielfunc.htm">dielectric_function&amp;</a> nt) const;
+   complex&lt;double&gt; <a href=
+"#rs21i">rs21i</a>(complex&lt;double&gt; angle,double lambda,
+                        const <a href=
+"dielfunc.htm">dielectric_function&amp;</a> n0,
+                        const <a href=
+"dielfunc.htm">dielectric_function&amp;</a> nt) const;
+   complex&lt;double&gt; <a href=
+"#tp21i">tp21i</a>(complex&lt;double&gt; angle,double lambda,
+                        const <a href=
+"dielfunc.htm">dielectric_function&amp;</a> n0,
+                        const <a href=
+"dielfunc.htm">dielectric_function&amp;</a> nt) const;
+   complex&lt;double&gt; <a href=
+"#ts21i">ts21i</a>(complex&lt;double&gt; angle,double lambda,
+                        const <a href=
+"dielfunc.htm">dielectric_function&amp;</a> n0,
+                        const <a href=
+"dielfunc.htm">dielectric_function&amp;</a> nt) const;
+   <a href="jonesmatrix.htm">JonesMatrix</a> <a href=
+"#JMri">r12i</a>(complex&lt;double&gt; angle,double lambda,
+                   const <a href=
+"dielfunc.htm">dielectric_function&amp;</a> n0,
+                   const <a href=
+"dielfunc.htm">dielectric_function&amp;</a> nt) const;
+   <a href="jonesmatrix.htm">JonesMatrix</a> <a href=
+"#JMri">t12i</a>(complex&lt;double&gt; angle,double lambda,
+                   const <a href=
+"dielfunc.htm">dielectric_function&amp;</a> n0,
+                   const <a href=
+"dielfunc.htm">dielectric_function&amp;</a> nt) const;
+   <a href="jonesmatrix.htm">JonesMatrix</a> <a href=
+"#JMri">r21i</a>(complex&lt;double&gt; angle,double lambda,
+                   const <a href=
+"dielfunc.htm">dielectric_function&amp;</a> n0,
+                   const <a href=
+"dielfunc.htm">dielectric_function&amp;</a> nt) const;
+   <a href="jonesmatrix.htm">JonesMatrix</a> <a href=
+"#JMri">t21i</a>(complex&lt;double&gt; angle,double lambda,
+                   const <a href=
+"dielfunc.htm">dielectric_function&amp;</a> n0,
+                   const <a href=
+"dielfunc.htm">dielectric_function&amp;</a> nt) const;
+};
+</pre>
+
+        <hr>
+
+        <h3><a name="read_stack_file" id="read_stack_file">void
+        read_stack_file(const string&amp; filename)</a></h3>
+
+        <blockquote><p>
+          Reads
+          a file containing the optical constants and thicknesses
+          of a dielectric stack. The file format must contain two
+          whitespace-delimited columns:
+
+          <center>
+            <table border="0">
+              <tr>
+                <th>Column</th>
+
+                <th>Description</th>
+              </tr>
+
+              <tr align="center">
+                <td>1</td>
+
+                <td>Dielectric Function [either n, (n,k), or
+                filename]</td>
+              </tr>
+
+              <tr align="center">
+                <td>2</td>
+
+                <td>Thickness</td>
+              </tr>
+            </table>
+          </center>
+
+          <p>A
+          blank line or end-of-file completes the description. The
+          layers are specified in the order in which they will be
+          deposited. The following example assumes that there are
+          two files (silicon and copper), which contain optical
+          constants:</p>
+
+        <center>
+          <table border="0">
+            <tr>
+              <th colspan="2">Example</th>
+            </tr>
+
+            <tr>
+              <td>silicon&nbsp;&nbsp;</td>
+
+              <td>2.00&nbsp;&nbsp;</td>
+            </tr>
+
+            <tr>
+              <td>(1.46,0.)&nbsp;&nbsp;</td>
+
+              <td>0.05&nbsp;&nbsp;</td>
+            </tr>
+
+            <tr>
+              <td>copper&nbsp;&nbsp;</td>
+
+              <td>0.01&nbsp;&nbsp;</td>
+            </tr>
+
+            <tr>
+              <td>(1.46,0.)&nbsp;&nbsp;</td>
+
+              <td>0.05&nbsp;&nbsp;</td>
+            </tr>
+          </table>
+        </center>
+
+          <p>This example represent four layers, the first layer
+          (nearest to substrate) having optical constants given in
+          a file named <b>silicon</b> and thickness 2.00 (in
+          whatever units the calculations are carried out). The
+          next layer has a a constant and real index of refraction
+          of 1.46 and thickness 0.05. The next layer has optical
+          constants given in a file named <b>copper</b> and
+          thickness 0.01. Finally, another layer of index 1.46 and
+          thickness 0.05 is deposited.
+        <h4>Example:</h4>
+
+          <pre>
+string filename="MyStack";
+dielectric_stack ds=read_stack_file(filename);
+</pre>
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+	<h3><a name=
+        "AskUser" id="AskUser">static dielectric_stack
+        AskUser(const string&amp; prompt,const string&amp;
+        deflt)</a></h3>
+
+        <blockquote><p>
+          A function which asks the user for information about a
+          stack of films. It uses <b>prompt</b> to prompt the user
+          and <b>deflt</b> if the user presses return. The user can
+          input a film description file by preceding the filename
+          with a colon (":"). Films can also be specified by
+          entering a list as would be done in a film description
+          file. A blank line completes the descriptions.
+        <h4>Example:</h4>
+
+          <pre>
+dielectric_stack ds;
+ds = dielectric_stack::AskUser("Film stack","");
+</pre>
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+	<h3><a name=
+        "print" id="print">void print(ostream&amp; os, double
+        lambda) const</a></h3>
+
+        <blockquote><p>
+          A print function to display a synopsis of the current
+          layers that exist. The optical constants that will be
+          displayed are evaluated at wavelength <b>lambda</b>.
+        <h4>Example:</h4>
+
+          <pre>
+dielectric_stack ds;
+ds.print(cout,0.633);
+</pre>
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+	<h3><a name=
+        "dielectric_stack" id=
+        "dielectric_stack">dielectric_stack()<br>
+        dielectric_stack(const dielectric_stack&amp; ds)</a></h3>
+
+        <blockquote><p>
+          The default and copy constructors. The default
+          constructor initializes the stack to have no layers.
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+	<h3><a name="operator="
+        id="operator=">dielectric_stack&amp; operator=(const
+        dielectric_stack&amp; ds)</a></h3>
+
+        <blockquote><p>
+          Assignment operator.
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+	<h3><a name=
+        "~dielectric_stack" id=
+        "~dielectric_stack">~dielectric_stack()</a></h3>
+
+        <blockquote><p>
+          Destructor.
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+	<h3><a name="wash" id=
+        "wash">void wash()</a></h3>
+
+        <blockquote><p>
+          Function that removes all existing layers.
+        <h4>Example:</h4>
+
+          <pre>
+dielectric_stack ds;
+ds.wash();
+</pre>
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+	<h3><a name=
+        "grow" id="grow">void grow(const
+        dielectric_function&amp; epsilon, double thickness)</a></h3>
+
+        <blockquote><p>
+          Function that adds a new layer on top of existing layers,
+          with a specified <b>epsilon</b> and <b>thickness</b>.
+        <h4>Example:</h4>
+
+          <pre>
+double thick1;
+dielectric_function eps1("silicon");
+dielectric_stack ds;
+ds.wash();
+ds.grow(eps1,thick1);
+</pre>
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+	<h3><a name=
+        "rp12" id="rp12">complex&lt;double&gt;
+        rp12(complex&lt;double&gt; theta,double lambda,const
+        dielectric_function&amp; n0,const dielectric_function&amp;
+        nt) const</a><br>
+        <a name="rs12" id="rs12">complex&lt;double&gt;
+        rs12(complex&lt;double&gt; theta,double lambda,const
+        dielectric_function&amp; n0,const dielectric_function&amp;
+        nt) const</a><br>
+        <a name="tp12" id="tp12">complex&lt;double&gt;
+        tp12(complex&lt;double&gt; theta,double lambda,const
+        dielectric_function&amp; n0,const dielectric_function&amp;
+        nt) const</a><br>
+        <a name="ts12" id="ts12">complex&lt;double&gt;
+        ts12(complex&lt;double&gt; theta,double lambda,const
+        dielectric_function&amp; n0,const dielectric_function&amp;
+        nt) const</a></h3>
+
+        <blockquote><p>
+          The reflection coefficients and transmission coefficients
+          for <i>p</i> and <i>s</i> polarized light, assuming that
+          the light is propagating from the top layer to the bottom
+          layer. The incident angle (measured as an angle from
+          normal when the wave is propagating in vacuum) is
+          <b>theta</b>, the wavelength in vacuum is <b>lambda</b>,
+          and the optical properties of the surrounding media are
+          <b>n0</b> and <b>nt</b>, respectively, where <b>n0</b> is
+          the incident medium and <b>nt</b> is the transmitted
+          medium. If the incident angle <b>theta</b> is not real,
+          the wave is evanescent in vacuum. If the internal angle
+          of incidence is <b>angle</b>, then <b>theta</b> =
+          asin(sin(<b>angle</b>)*<b>n0</b>).
+
+        <h4>Example:</h4>
+
+          <pre>
+dielectric_stack ds;
+double lambda=0.633;
+double theta=45.*deg;
+// The following make a type change from optical_constant to dielectric_function...
+ds.grow(optical_constant(2.25),0.1);
+cout &lt;&lt; "rs = " &lt;&lt; rs12(theta,lambda,
+                                    optical_constant(1.),
+                                    optical_constant(1.5)) &lt;&lt; endl
+     &lt;&lt; "rp = " &lt;&lt; rp12(theta,lambda,
+                                    optical_constant(1.),
+                                    optical_constant(1.5)) &lt;&lt; endl
+     &lt;&lt; "ts = " &lt;&lt; ts12(theta,lambda,
+                                    optical_constant(1.),
+                                    optical_constant(1.5)) &lt;&lt; endl
+     &lt;&lt; "tp = " &lt;&lt; tp12(theta,lambda,
+                                    optical_constant(1.),
+                                    optical_constant(1.5)) &lt;&lt; endl;
+</pre>
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+	<h3><a name=
+        "rp21" id="rp21">complex&lt;double&gt;
+        rp21(complex&lt;double&gt; theta,double lambda,const
+        dielectric_function&amp; n0,const dielectric_function&amp;
+        nt) const</a><br>
+        <a name="rs21" id="rs21">complex&lt;double&gt;
+        rs21(complex&lt;double&gt; theta,double lambda,const
+        dielectric_function&amp; n0,const dielectric_function&amp;
+        nt) const</a><br>
+        <a name="tp21" id="tp21">complex&lt;double&gt;
+        tp21(complex&lt;double&gt; theta,double lambda,const
+        dielectric_function&amp; n0,const dielectric_function&amp;
+        nt) const</a><br>
+        <a name="ts21" id="ts21">complex&lt;double&gt;
+        ts21(complex&lt;double&gt; theta,double lambda,const
+        dielectric_function&amp; n0,const dielectric_function&amp;
+        nt) const</a></h3>
+
+        <blockquote><p>
+          The reflection coefficients and transmission coefficients
+          for <i>p</i> and <i>s</i> polarized light, assuming that
+          the light is propagating from the bottom layer to the top
+          layer. The incident angle (measured as an angle from
+          normal when the wave is propagating in vacuum) is
+          <b>theta</b>, the wavelength in vacuum is <b>lambda</b>,
+          and the optical properties of the surrounding media are
+          <b>n0</b> and <b>nt</b>, respectively, where <b>n0</b> is
+          the incident medium and <b>nt</b> is the transmitted
+          medium. If the incident angle <b>theta</b> is not real,
+          the wave is evanescent in vacuum. If the internal angle
+          of incidence is <b>angle</b>, then <b>theta</b> =
+          asin(sin(<b>angle</b>)*<b>n0</b>).
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+	<h3><a name=
+        "JMr" id="JMr">JonesMatrix r12(complex&lt;double&gt;
+        theta,double lambda,const dielectric_function&amp; n0,const
+        dielectric_function&amp; nt) const<br>
+        JonesMatrix t12(complex&lt;double&gt; theta,double
+        lambda,const dielectric_function&amp; n0,const
+        dielectric_function&amp; nt) const<br>
+        JonesMatrix r21(complex&lt;double&gt; theta,double
+        lambda,const dielectric_function&amp; n0,const
+        dielectric_function&amp; nt) const<br>
+        JonesMatrix t21(complex&lt;double&gt; theta,double
+        lambda,const dielectric_function&amp; n0,const
+        dielectric_function&amp; nt) const</a></h3>
+
+        <blockquote><p>
+          Jones matrix equivalents to the reflection and
+          transmission coefficient coefficients described above.
+        <h4>Example:</h4>
+
+          <pre>
+dielectric_stack ds;
+double lambda=0.633;
+double theta=45.*deg;
+ds.grow(optical_constant((2.25),0.1);
+JonesMatrix r = ds.r12(theta,lambda,
+                       optical_constant(1.),
+                       optical_constant(1.5));
+</pre>
+
+        </blockquote>
+
+	<h3><a name="rp12i" id=
+        "rp12i">complex&lt;double&gt; rp12i(complex&lt;double&gt;
+        angle,double lambda,const dielectric_function&amp; n0,const
+        dielectric_function&amp; nt) const</a><br>
+        <a name="rs12i" id="rs12i">complex&lt;double&gt;
+        rs12i(complex&lt;double&gt; angle,double lambda,const
+        dielectric_function&amp; n0,const dielectric_function&amp;
+        nt) const</a><br>
+        <a name="tp12i" id="tp12i">complex&lt;double&gt;
+        tp12i(complex&lt;double&gt; angle,double lambda,const
+        dielectric_function&amp; n0,const dielectric_function&amp;
+        nt) const</a><br>
+        <a name="ts12i" id="ts12i">complex&lt;double&gt;
+        ts12i(complex&lt;double&gt; angle,double lambda,const
+        dielectric_function&amp; n0,const dielectric_function&amp;
+        nt) const</a></h3>
+
+        <blockquote><p>
+          The reflection coefficients and transmission coefficients
+          for <i>p</i> and <i>s</i> polarized light, assuming that
+          the light is propagating from the top layer to the bottom
+          layer. The incident angle (measured as an internal angle
+          from normal) is <b>angle</b>, the wavelength in vacuum is
+          <b>lambda</b>, and the optical properties of the
+          surrounding media are <b>n0</b> and <b>nt</b>,
+          respectively, where <b>n0</b> is the incident medium and
+          <b>nt</b> is the transmitted medium.
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+	<h3><a name=
+        "rp21i" id="rp21i">complex&lt;double&gt;
+        rp21i(complex&lt;double&gt; angle,double lambda,const
+        dielectric_function&amp; n0,const dielectric_function&amp;
+        nt) const</a><br>
+        <a name="rs21i" id="rs21i">complex&lt;double&gt;
+        rs21i(complex&lt;double&gt; angle,double lambda,const
+        dielectric_function&amp; n0,const dielectric_function&amp;
+        nt) const</a><br>
+        <a name="tp21i" id="tp21i">complex&lt;double&gt;
+        tp21i(complex&lt;double&gt; angle,double lambda,const
+        dielectric_function&amp; n0,const dielectric_function&amp;
+        nt) const</a><br>
+        <a name="ts21i" id="ts21i">complex&lt;double&gt;
+        ts21i(complex&lt;double&gt; angle,double lambda,const
+        dielectric_function&amp; n0,const dielectric_function&amp;
+        nt) const</a></h3>
+
+        <blockquote><p>
+          The reflection coefficients and transmission coefficients
+          for <i>p</i> and <i>s</i> polarized light, assuming that
+          the light is propagating from the bottom layer to the top
+          layer. The incident angle (measured as an internal angle
+          from normal) is <b>angle</b>, the wavelength in vacuum is
+          <b>lambda</b>, and the optical properties of the
+          surrounding media are <b>n0</b> and <b>nt</b>,
+          respectively, where <b>n0</b> is the incident medium and
+          <b>nt</b> is the transmitted medium.
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+	<h3><a name=
+        "JMri" id="JMri">JonesMatrix r12i(complex&lt;double&gt;
+        angle,double lambda,const dielectric_function&amp; n0,const
+        dielectric_function&amp; nt) const<br>
+        JonesMatrix t12i(complex&lt;double&gt; angle,double
+        lambda,const dielectric_function&amp; n0,const
+        dielectric_function&amp; nt) const<br>
+        JonesMatrix r21i(complex&lt;double&gt; angle,double
+        lambda,const dielectric_function&amp; n0,const
+        dielectric_function&amp; nt) const<br>
+        JonesMatrix t21i(complex&lt;double&gt; angle,double
+        lambda,const dielectric_function&amp; n0,const
+        dielectric_function&amp; nt) const</a></h3>
+
+        <blockquote><p>
+          Jones matrix equivalents to the reflection and
+          transmission coefficient coefficients described above.
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p><br>
+
+<!-- START FOOTER -->
+<hr>
+<h2>For More Information</h2>
+
+<p>
+<a href="http://www.nist.gov/pml/div685/grp06/germer.cfm">SCATMECH Technical Information and Questions</a><br>
+<a href="http://www.nist.gov/pml/div685/index.cfm" target="_top">Sensor Science Division Home Page</a><br>
+<a href="mailto:fraser@nist.gov">Sensor Science Division Inquiries</a><br>
+<a href="mailto:thomas.germer@nist.gov">Website Comments</a>
+
+<p>
+Current SCATMECH version: <a href="./download.htm">7.00 (January 2015)</a><br>
+This page first online: Version 1.00 (March 2000) <br>
+This page last modified: Version 7.00 (January 2015) <br>
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+</td>
+</tr>
+</table>
+
+</body>
+</html>

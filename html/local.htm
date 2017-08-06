@@ -1,0 +1,362 @@
+<html>
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Cygwin (vers 1st September 2004), see www.w3.org">
+   <link rel="STYLESHEET" href="style.css" type="text/css">
+
+  <title>SCATMECH: Local_BRDF_Model</title>
+</head>
+
+<body>
+  <table width="98%" border="0" cellpadding="0" cellspacing="0"
+  align="center">
+    <tr>
+      <td>
+        <p class="nav"><a href="index.htm">SCATMECH</a> &gt; <a href=
+        "classes.htm">Classes and Functions</a> &gt;
+        <a href="classes.htm#SSM">Surface Scattering Models</a>
+        &gt; Local_BRDF_Model</p>
+
+	<h1><a name="top" id="top">Abstract class Local_BRDF_Model</a></h1>
+
+        
+        <hr>
+        <p>The abstract class <b>Local_BRDF_Model</b> handles the
+        generic operations associated with any scattering model
+        which is associated with a localized defect for which a
+        differential scattering cross-section (DSC) is a more
+        natural description of the scattering function. It adds to
+        the class <a href="BRDF_Model.htm">BRDF_Model</a> a
+        conversion from DSC to BRDF using a specified defect
+        density or inverse spot size. All classes which inherit
+        <b>Local_BRDF_Model</b> must define either <a href=
+        "#jonesDSC">jonesDSC</a> or <a href=
+        "#muellerDSC">muellerDSC</a>. The class also provides the
+        public functions <a href="#JonesDSC">JonesDSC</a> and
+        <a href="#MuellerDSC">MuellerDSC</a>, defined in a similar
+        fashion as the similarly named functions in <a href=
+        "BRDF_Model.htm">BRDF_Model</a>.
+
+        <p>The convention of <b>Local_BRDF_Model</b> is that the
+        function <a href="#jonesDSC">jonesDSC</a> returns a
+        scattering matrix of type <a href=
+        "jonesmatrix.htm">JonesMatrix</a>, which, when converted to
+        a <a href="muellermatrix.htm">MuellerMatrix</a> by
+        typecasting, becomes the differential scattering
+        cross-section (DSC). This function differs from that
+        defined for <a href="sphrscat.htm">SphericalScatterer</a>
+        by a factor of 1/<i>k</i>.</p>
+
+	<h2>Parameters:</h2>
+
+        <table border="1" cellpadding="5">
+          <tr>
+            <th>Parameter</th>
+
+            <th>Data
+            Type</th>
+
+            <th>Description</th>
+
+            <th>Default</th>
+          </tr>
+
+          <tr>
+            <td class="parameter">lambda</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">Wavelength of the light
+            in vacuum [&#181;m].<br>
+            (Inherited from <a href=
+            "BRDF_Model.htm">BRDF_Model</a>.)</td>
+
+            <td class="default">0.532</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">type</td>
+
+            <td class="datatype">int</td>
+
+            <td class="description">
+	      Indicates whether the light is incident from above the
+            substrate or from within the substrate and whether the
+            scattering is evaluated in reflection or transmission.
+            The choices are:<br>
+	      <b>0</b> : Light is incident from the above the substrate, and scattering is evaluated in reflection.<br>
+	      <b>1</b> : Light is incident from the above the substrate, and scattering is evaluated in transmission.<br>
+	      <b>2</b> : Light is incident from the within the substrate, and scattering is evaluated in reflection.<br>
+	      <b>3</b> : Light is incident from the within the substrate, and scattering is evaluated in transmission.<br>
+	      For <b>1</b>, <b>2</b>, and <b>3</b>, the substrate must be non-absorbing.<br>
+	      Not every model inheriting Local_BRDF_Model supports all modes.<br>
+            (Inherited from <a href=
+            "BRDF_Model.htm">BRDF_Model</a>).</td>
+
+            <td class="default">0</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">substrate</td>
+
+            <td class="datatype"><a href="dielfunc.htm">dielectric_function</a></td>
+
+            <td class="description">The
+            optical constants of the substrate, expressed as a
+            complex number (n,k) or, optionally, as a function of
+            wavelength.<br>
+            (Inherited from <a href=
+            "BRDF_Model.htm">BRDF_Model</a>.)</td>
+
+            <td class="default">(4.05,0.05)</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">density</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The
+            surface number density of local scatterers
+            [&#181;m<sup>-2</sup>].</td>
+
+            <td class="default">1</td>
+          </tr>
+        </table>
+
+        <h2>See also:</h2>
+
+        <p><a href=
+        "index.htm">SCATMECH Home</a>, &nbsp; <a href=
+        "convent.htm">Conventions</a>, &nbsp; <a href=
+        "sphrscat.htm">SphericalScatterer</a>
+        &nbsp;</p>
+
+	<h2>Include file:</h2>
+
+          <pre>
+#include "<a href="../code/local.h">local.h</a>"
+</pre>
+        <h2>Source code:</h2>
+
+          <pre>
+<a href="../code/local.cpp">local.cpp</a>
+<a href="../code/reg_local.cpp">reg_local.cpp</a>
+</pre>
+        <h2>Definition of public and protected elements:</h2>
+
+          <pre>
+class BRDF_Model {
+    public:
+        <a href="jonesmatrix.htm">JonesMatrix</a> <a href=
+"#jones2">JonesDSC</a>(double thetai,
+                          double thetas,
+                          double phis,
+                          <a href=
+"#cs">Coordinate_System</a> cs = <a href="#cs">psps</a>);
+
+        <a href="muellermatrix.htm">MuellerMatrix</a> <a href=
+"#mueller2">MuellerDSC</a>(double thetai,
+                              double thetas,
+                              double phis,
+                              <a href=
+"#cs">Coordinate_System</a> cs = <a href="#cs">psps</a>);
+
+        <a href="jonesmatrix.htm">JonesMatrix</a> <a href=
+"#jones3">JonesDSC</a>(<a href="vector.htm">Vector</a>&amp; source,
+                          <a href=
+"vector.htm">Vector</a>&amp; viewer,
+                          <a href=
+"vector.htm">Vector</a>&amp; normal,
+                          <a href=
+"#cs">Coordinate_System</a> cs = <a href="#cs">plane</a>);
+
+        <a href="muellermatrix.htm">MuellerMatrix</a> <a href=
+"#mueller3">MuellerDSC</a>(<a href=
+"vector.htm">Vector</a>&amp; source,
+                              <a href=
+"vector.htm">Vector</a>&amp; viewer,
+                              <a href=
+"vector.htm">Vector</a>&amp; normal,
+                              <a href=
+"#cs">Coordinate_System</a> cs = <a href="#cs">plane</a>);
+
+protected:
+        virtual <a href="jonesmatrix.htm">JonesMatrix</a> <a href=
+"#jones">jonesDSC</a>(double thetai,
+                                  double thetas,
+                                  double phis);
+        virtual <a href=
+"muellermatrix.htm">MuellerMatrix</a> <a href=
+"#mueller">muellerDSC</a>(double thetai,
+                                      double thetas,
+                                      double phis);
+};
+
+typedef <a href=
+"modelptr.htm">Model_Ptr</a>&lt;Local_BRDF_Model&gt; <a href=
+"#ptr">Local_BRDF_Model_Ptr</a>;
+
+</pre>
+
+        <hr>
+
+        <h3><a name=
+        "JonesDSC" id="JonesDSC">JonesMatrix
+        JonesDSC(double&nbsp;thetai, double&nbsp;thetas,
+        double&nbsp;phis, Coordinate_System&nbsp;cs)</a><br>
+        <a name="MuellerDSC" id="MuellerDSC">MuellerMatrix
+        MuellerDSC(double&nbsp;thetai, double&nbsp;thetas,
+        double&nbsp;phis, Coordinate_System&nbsp;cs)</a></h3>
+
+        <blockquote><p>
+          These functions
+          behave like their three-argument versions, but allow for
+          evaluation of models using different polarization
+          coordinate systems. They cannot be overloaded by
+          inherited classes. The value of <b>cs</b> defines the
+          coordinate system for which the scattering matrix will be
+          returned.
+        <h4>Example:</h4>
+
+          <pre>
+double ti,ts,ps;
+JonesVector incidentlight;
+BRDF_Model *model;
+JonesVector jones = model-&gt;Jones(ti,ts,ps,BRDF_Model::plane)*incidentlight;
+</pre>
+
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+	<h3><a name="jonesDSC"
+        id="jonesDSC">JonesMatrix JonesDSC(Vector&amp;&nbsp;source,
+        Vector&amp;&nbsp;viewer, Vector&amp;&nbsp;normal,
+        Coordinate_System&nbsp;cs)</a><br>
+        <a name="muellerDSC" id="muellerDSC">MuellerMatrix
+        MuellerDSC(Vector&amp;&nbsp;source,
+        Vector&amp;&nbsp;viewer, Vector&amp;&nbsp;normal,
+        Coordinate_System&nbsp;cs)</a></h3>
+
+        <blockquote><p>
+          These function behave like the functions <a href=
+          "#jones2">jones</a> and <a href="#mueller2">mueller</a>,
+          except that rather than specifying scattering angles,
+          directions to the source and viewer and the surface
+          normal are specified. <b>source</b> is a <a href=
+          "vector.htm">Vector</a> pointing from the sample to the
+          light source. <b>viewer</b> is a <a href=
+          "vector.htm">Vector</a> pointing in the scattering
+          direction. <b>normal</b> is a <a href=
+          "vector.htm">Vector</a> pointing in the outward surface
+          normal. Neither <b>source</b>, <b>viewer</b>, or
+          <b>normal</b> need be normalized.
+
+          <p>Note that the coordinate system defaults to
+          <b>BRDF_Model::plane</b>, which is most natural for
+          rendering applications.</p>
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+	<h3><a name="jonesDSC"
+        id="jonesDSC">virtual JonesMatrix jonesDSC(double
+        thetai,double thetas,double phis)</a></h3>
+
+        <blockquote><p>
+          This function returns the Jones scattering matrix. Its
+          parameters are the incident angle <b>thetai</b>, the
+          scattering polar angle <b>thetas</b>, and the scattering
+          azimuthal angle <b>phis</b>. If this function is not
+          defined for an inherited class, it defaults to a <a href=
+          "muellermatrix.htm">MuellerMatrix</a> to <a href=
+          "jonesmatrix.htm">JonesMatrix</a> conversion. One of the
+          functions, <b>mueller</b> or <b>jones</b>, must be
+          defined by any inherited class.
+
+        <h4>Example:</h4>
+
+          <pre>
+double ti,ts,ps;
+JonesVector incidentlight;
+Some_BRDF_Model model; // Assume that Some_BRDF_Model is a BRDF_Model...
+JonesVector jones = model.jones(ti,ts,ps)*incidentlight;
+</pre>
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+	<h3><a name="muellerDSC" id=
+        "muellerDSC">virtual MuellerMatrix muellerDSC(double
+        thetai,double thetas,double phis)</a></h3>
+
+        <blockquote><p>
+          This function returns the Mueller scattering matrix. Its
+          parameters are the incident angle <b>thetai</b>, the
+          scattering polar angle <b>thetas</b>, and the scattering
+          azimuthal angle <b>phis</b>. If this function is not
+          defined for an inherited class, it defaults to a <a href=
+          "jonesmatrix.htm">JonesMatrix</a> to <a href=
+          "muellermatrix.htm">MuellerMatrix</a> conversion. One of
+          the functions, <b>mueller</b> or <b>jones</b>, must be
+          defined by any inherited class.
+
+          <p>The convention of the <b>Local_BRDF_Model</b> class is
+          that the 00 term of the Mueller matrix is the
+          differential scattering cross section (DSC).</p>
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+	<h3><a name="ptr" id=
+        "ptr">typedef Model_Ptr&lt;Local_BRDF_Model&gt;
+        Local_BRDF_Model_Ptr</a></h3>
+
+        <blockquote><p>
+          The typedef <b>Local_BRDF_Model_Ptr</b> behaves like a
+          pointer to an instance of class <b>Local_BRDF_Model</b>.
+          The following statement will query the user for an
+          instance of class <b>Local_BRDF_Model</b>:
+
+          <pre>
+Local_BRDF_Model_Ptr model = Get_Model_Ptr();
+</pre>
+
+          <p>The next
+          statement will also create an instance of class
+          <b>Local_BRDF_Model</b>:
+          <pre>
+Local_BRDF_Model_Ptr model = "Bobbert_Vlieger_BRDF_Model";
+</pre>
+
+          <p>See <a href=
+          "modelptr.htm">Model_Ptr&lt;model&gt;</a>.
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+<!-- START FOOTER -->
+<hr>
+<h2>For More Information</h2>
+
+<p>
+<a href="http://www.nist.gov/pml/div685/grp06/germer.cfm">SCATMECH Technical Information and Questions</a><br>
+<a href="http://www.nist.gov/pml/div685/index.cfm" target="_top">Sensor Science Division Home Page</a><br>
+<a href="mailto:fraser@nist.gov">Sensor Science Division Inquiries</a><br>
+<a href="mailto:thomas.germer@nist.gov">Website Comments</a>
+
+<p>
+Current SCATMECH version: <a href="./download.htm">7.00 (January 2015)</a><br>
+This page first online: Version 3.00 (December 2001) <br>
+This page last modified: Version 7.00 (January 2015) <br>
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+</td>
+</tr>
+</table>
+
+</body>
+</html>

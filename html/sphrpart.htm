@@ -1,0 +1,257 @@
+<html>
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Cygwin (vers 1st September 2004), see www.w3.org">
+   <link rel="STYLESHEET" href="style.css" type="text/css">
+
+  <title>SCATMECH: Double_Interaction_BRDF_Model</title>
+<script language="JavaScript" id="_fed_an_js_tag" src="/js/federated-analytics.all.min.js?agency=NIST&subagency=pml&pua=UA-37115410-46&yt=true"></script>
+</head>
+
+<body>
+  <a name="top" id="top"><!-- --></a>
+
+  <table width="98%" border="0" cellpadding="0" cellspacing="0"
+  align="center">
+    <tr>
+      <td>
+        <p class="nav"><a href="index.htm">SCATMECH</a> &gt; <a href=
+        "classes.htm">Classes and Functions</a> &gt;
+        <a href="classes.htm#SSM">Surface Scattering Models</a>
+        &gt; Double_Interaction_BRDF_Model</p>
+
+	<h1>class Double_Interaction_BRDF_Model</h1>
+
+        
+        <hr>
+        <p>The class <b>Double_Interaction_BRDF_Model</b>
+        implements the double interaction model for light
+        scattering from a spherical particle above a surface. This is a ray tracing approximation and
+	  does not consider the interaction between the particle and its image in the substrate.
+	<br><br>
+        <center>
+          <img src="Images/sphrpart.gif" width="300" height="197"
+          alt=
+          "Diagram showing the components contributing to the effective BRDF of a sample surrounded by air.">
+          </center>
+
+	  <h2>Parameters:</h2>
+
+        <table border="1" cellpadding="5">
+          <tr>
+            <th>Parameter</th>
+
+            <th>Data
+            Type</th>
+
+            <th>Description</th>
+
+            <th>Default</th>
+          </tr>
+
+          <tr>
+            <td class="parameter">lambda</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">Wavelength of the light
+            in vacuum [&#181;m].<br>
+            (Inherited from <a href=
+            "BRDF_Model.htm">BRDF_Model</a>.)</td>
+
+            <td class="default">0.532</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">type</td>
+
+            <td class="datatype">int</td>
+
+            <td class="description">
+	      Indicates whether the light is incident from above the
+            substrate or from within the substrate and whether the
+            scattering is evaluated in reflection or transmission.
+            The choices are:<br>
+	      <b>0</b> : Light is incident from the above the substrate, and scattering is evaluated in reflection.<br>
+	      <b>1</b> : Light is incident from the above the substrate, and scattering is evaluated in transmission.<br>
+	      <b>2</b> : Light is incident from the within the substrate, and scattering is evaluated in reflection.<br>
+	      <b>3</b> : Light is incident from the within the substrate, and scattering is evaluated in transmission.<br>
+	      For <b>1</b>, <b>2</b>, and <b>3</b>, the substrate must be non-absorbing.<br>
+            (Inherited from <a href= "BRDF_Model.htm">BRDF_Model</a>).</td>
+
+            <td class="default">0</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">substrate</td>
+
+            <td class="datatype"><a href="dielfunc.htm">dielectric_function</a></td>
+
+            <td class="description">The
+            optical constants of the substrate, expressed as a
+            complex number (n,k) or, optionally, as a function of
+            wavelength.<br>
+            (Inherited from <a href=
+            "BRDF_Model.htm">BRDF_Model</a>.)</td>
+
+            <td class="default">(4.05,0.05)</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">density</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The
+            surface number density of local scatterers
+            [&#181;m<sup>-2</sup>].<br>
+            (Inherited from <a href=
+            "local.htm">Local_BRDF_Model</a>.)</td>
+
+            <td class="default">1</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">stack</td>
+
+            <td class="datatype"><a href="dielstack.htm">dielectric_stack</a></td>
+
+            <td class="description">Description of any stack
+            of films deposited on the substrate, usually specified
+            by a file. See <a href=
+            "dielstack.htm">dielectric_stack</a>, for more
+            information.<br></td>
+
+            <td class="default"><i>no
+            films</i></td>
+          </tr>
+
+          <tr>
+            <td class="parameter">distance</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The
+            distance from the surface to the center of the particle
+            [&#181;m]. For a sphere touching a surface, the
+            distance should be the same as the sphere's
+            radius. This parameter should be at least as large as the radius of the particle, if the particle is spherical.</td>
+
+            <td class="default">0.05</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">scatterer</td>
+
+            <td class="datatype"><a href="freescat.htm">Free_Space_Scatterer_Ptr</a></td>
+
+            <td class="description">The model
+            describing the scattering by a particle. The medium surrounding the sphere (<tt>scatterer.medium</tt>) must be the same as the substrate 
+	      (<tt>substrate</tt>), and the wavelength (<tt>scatterer.lambda</tt>) must match the model wavelength (<tt>lambda</tt>).
+	      <br></td>
+
+            <td class="default">MieScatterer</td>
+          </tr>
+
+
+
+          <tr>
+            <td class="parameter">alpha</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The rotation of the 
+	    particle about the z-axis [rad]. This parameter only has an 
+	    effect if the particle is non-axially symmetric. (Note that all models currently inheriting <a href="freescat.htm">Free_Space_Scatterer</a> are axially symmetric.)
+            </td>
+
+            <td class="default">0</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">beta</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The rotation of the 
+	    particle about the y-axis [rad]. This rotation 
+	    follows the rotation <b>alpha</b> about the 
+	    z-axis.  This parameter only has an 
+	    effect if the particle is non-spherical. To further rotate the particle about the z-axis after rotation about the y-axis, the 
+	    user should evaluate the scattering in a rotated geometry.
+            </td>
+
+            <td class="default">0</td>
+          </tr>
+
+        </table>
+
+        <h2>See also:</h2>
+
+        <p><a href=
+        "index.htm">SCATMECH Home</a>, &nbsp; <a href=
+        "convent.htm">Conventions</a>, &nbsp; <a href=
+        "BRDF_Model.htm">BRDF_Model</a>, &nbsp; <a href=
+        "local.htm">Local_BRDF_Model</a>, &nbsp; <a href=
+        "sphrscat.htm">Abstract class SphericalScatterer</a>, &nbsp;
+        <a href="rayscat.htm">class RayleighScatterer</a>, &nbsp;
+        <a href="raygscat.htm">class RayleighGansScatterer</a>,
+        &nbsp; <a href="miescat.htm">class MieScatterer</a>, &nbsp;
+        <a href="dielstack.htm">dielectric_stack</a></p>
+
+        <p>K. B. Nahm and W. L. Wolfe, "Light-scattering models for
+        spheres on a conducting plane: comparison with experiment,"
+        Appl. Opt. <b>26</b>, 2995-2999 (1987).</p>
+
+        <p>T. A. Germer, "<a href="http://physics.nist.gov/Divisions/Div844/publications/germer/ApplOpt36-8798.pdf">Angular
+	 dependence and polarization of
+        out-of-plane optical scattering from particulate
+        contamination, subsurface defects, and surface
+        microroughness</a>," Appl. Opt. <b>36</b>, 8798-8805
+        (1997).</p>
+
+	<h2>Include file:</h2>
+
+          <pre>
+#include "<a href="../code/sphprt.h">sphprt.h</a>"
+</pre>
+        <h2>Source code:</h2>
+
+          <pre>
+<a href="../code/sphprt.cpp">sphprt.cpp</a>
+</pre>
+        <h2>Definition of public elements:</h2>
+
+          <pre>
+class Double_Interaction_BRDF_Model
+    : public <a href="local.htm">Local_BRDF_Model</a>
+{
+};
+</pre>
+
+        <p><a href=
+        "#top"><span class="totop">Top of Page</span></a></p>
+<!-- START FOOTER -->
+<hr>
+<h2>For More Information</h2>
+
+<p>
+<a href="http://www.nist.gov/pml/div685/grp06/germer.cfm">SCATMECH Technical Information and Questions</a><br>
+<a href="http://www.nist.gov/pml/div685/index.cfm" target="_top">Sensor Science Division Home Page</a><br>
+<a href="mailto:fraser@nist.gov">Sensor Science Division Inquiries</a><br>
+<a href="mailto:thomas.germer@nist.gov">Website Comments</a>
+
+<p>
+Current SCATMECH version: <a href="./download.htm">7.00 (January 2015)</a><br>
+This page first online: Version 1.00 (March 2000) <br>
+This page last modified: Version 7.00 (January 2015) <br>
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+</td>
+</tr>
+</table>
+
+</body>
+</html>

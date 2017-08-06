@@ -1,0 +1,180 @@
+<html>
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Cygwin (vers 1st September 2004), see www.w3.org">
+   <link rel="STYLESHEET" href="style.css" type="text/css">
+
+  <title>SCATMECH: Microroughness_BRDF_Model</title>
+<script language="JavaScript" id="_fed_an_js_tag" src="/js/federated-analytics.all.min.js?agency=NIST&subagency=pml&pua=UA-37115410-46&yt=true"></script>
+</head>
+
+<body>
+  <a name="top" id="top"><!-- --></a>
+
+  <table width="98%" border="0" cellpadding="0" cellspacing="0"
+  align="center">
+    <tr>
+      <td>
+        <p class="nav"><a href="index.htm">SCATMECH</a> &gt; <a href=
+        "classes.htm">Classes and Functions</a> &gt;
+        <a href="classes.htm#SSM">Surface Scattering Models</a>
+        &gt;  Microroughness_BRDF_Model</p>
+
+        <h1>class Microroughness_BRDF_Model</h1>
+
+        <hr>
+
+        <p>The class <b>Microroughness_BRDF_Model</b> implements the
+        solution to first-order vector perturbation, or
+        Rayleigh-Rice, theory for roughness in the smooth surface
+        limit for a single interface with no films. It inherits the
+        properties of <a href=
+        "roughbrdf.htm">Roughness_BRDF_Model</a>, which supplies the model with 
+	  the power spectral density (PSD) function of the surface roughness. 
+
+	  <blockquote>
+	    <center>
+	      <img src="./Images/Microroughness_BRDF_Model.jpg" width="800" alt="Illustration of Microroughness_BRDF_Model, showing a single rough surface between a substrate and vacuum.">
+	      </center>
+	    </blockquote>
+        
+	<h2>Parameters:</h2>
+
+        <table border="1" cellpadding="5">
+          <tr>
+            <th>Parameter</th>
+
+            <th>Data
+            Type</th>
+
+            <th>Description</th>
+
+            <th>Default</th>
+          </tr>
+
+          <tr>
+            <td class="parameter">lambda</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">Wavelength of the light
+            in vacuum [&#181;m].<br>
+            (Inherited from <a href=
+            "BRDF_Model.htm">BRDF_Model</a>).</td>
+
+            <td class="default">0.532</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">type</td>
+
+            <td class="datatype">int</td>
+
+            <td class="description">
+	      Indicates whether the light is incident from above the
+            substrate or from within the substrate and whether the
+            scattering is evaluated in reflection or transmission.
+            The choices are:<br>
+	      <b>0</b> : Light is incident from the above the substrate, and scattering is evaluated in reflection.<br>
+	      <b>1</b> : Light is incident from the above the substrate, and scattering is evaluated in transmission.<br>
+	      <b>2</b> : Light is incident from the within the substrate, and scattering is evaluated in reflection.<br>
+	      <b>3</b> : Light is incident from the within the substrate, and scattering is evaluated in transmission.<br>
+	      For <b>1</b>, <b>2</b>, and <b>3</b>, the substrate must be non-absorbing.<br>
+            (Inherited from <a href="BRDF_Model.htm">BRDF_Model</a>).</td>
+
+            <td class="default">0</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">substrate</td>
+
+            <td class="datatype"><a href="dielfunc.htm">dielectric_function</a></td>
+
+            <td class="description">The
+            optical constants of the substrate, expressed as a
+            complex number (n,k) or, optionally, as a function of
+            wavelength.<br>
+            (Inherited from <a href=
+            "BRDF_Model.htm">BRDF_Model</a>).</td>
+
+            <td class="default">(4.05,0.05)</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">psd</td>
+
+            <td class="datatype"><a href="psd.htm">PSD_Function_Ptr</a></td>
+
+            <td class="description">The
+            two-dimensional power spectrum of the surface height
+            function [&#181;m<sup>4</sup>].<br>
+            (Inherited from <a href=
+            "roughbrdf.htm">Roughness_BRDF_Model</a>).</td>
+
+            <td class="default">ABC_PSD_Function</td>
+          </tr>
+        </table>
+
+        <h2>See also:</h2>
+
+        <p><a href=
+        "index.htm">SCATMECH Home</a>, &nbsp; <a href=
+        "convent.htm">Conventions</a>, &nbsp; <a href=
+        "BRDF_Model.htm">BRDF_Model</a>, &nbsp; <a href=
+        "roughbrdf.htm">Roughness_BRDF_Model</a></p>
+
+        <p>D. E. Barrick, <i>Radar Cross Section Handbook</i>, (Plenum, New York, 1970).<br>
+        J. C. Stover, <i>Optical Scattering: Measurement and Analysis</i>, Third Edition (SPIE Optical Engineering Press, Bellingham, WA, 2012).<br>
+	S. O. Rice, "Reflection of electromagnetic waves from slightly rough surfaces," Commun.Pure Appl. Math. <b>4</b>, 351 (1951).<br>
+	E. L. Church and J. M. Zavada, "Residual surface roughness of diamond-turned optics," Appl. Opt. <b>14</b>, 1788 (1975).<br>
+	E. L. Church, H. A., Jenkinson, and J. M. Zavada, "Measurement of the finish of diamond-turned metal surfaces by differential light scattering," Opt. Eng. <b>16</b>, 360 (1977).<br>
+	E. L. Church, H. A., Jenkinson, and J. M. Zavada, "Relationship between surface scattering and microtopographic features," Opt. Eng. <b>18</b>, 125 (1979).</b>
+
+
+
+	<h2>Include file:</h2>
+
+          <pre>
+#include "<a href="../code/urough.h">urough.h</a>"
+</pre>
+        <h2>Source code:</h2>
+
+          <pre>
+<a href="../code/urough.cpp">urough.cpp</a>
+</pre>
+        <h2>Definition of public elements:</h2>
+
+          <pre>
+class Microroughness_BRDF_Model
+ : public <a href="roughbrdf.htm">Roughness_BRDF_Model</a>
+{
+};
+</pre>
+
+        <hr>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+<!-- START FOOTER -->
+<hr>
+<h2>For More Information</h2>
+
+<p>
+<a href="http://www.nist.gov/pml/div685/grp06/germer.cfm">SCATMECH Technical Information and Questions</a><br>
+<a href="http://www.nist.gov/pml/div685/index.cfm" target="_top">Sensor Science Division Home Page</a><br>
+<a href="mailto:fraser@nist.gov">Sensor Science Division Inquiries</a><br>
+<a href="mailto:thomas.germer@nist.gov">Website Comments</a>
+
+<p>
+Current SCATMECH version: <a href="./download.htm">7.00 (January 2015)</a><br>
+This page first online: Version 1.00 (March 2000) <br>
+This page last modified: Version 7.00 (January 2015) <br>
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+</td>
+</tr>
+</table>
+
+</body>
+</html>

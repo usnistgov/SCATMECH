@@ -1,0 +1,184 @@
+<html>
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Cygwin (vers 1st September 2004), see www.w3.org">
+   <link rel="STYLESHEET" href="style.css" type="text/css">
+
+  <title>SCATMECH: TMatrix_Axisymmetric_Scatterer</title>
+<script language="JavaScript" id="_fed_an_js_tag" src="/js/federated-analytics.all.min.js?agency=NIST&subagency=pml&pua=UA-37115410-46&yt=true"></script>
+</head>
+
+<body>
+  <a name="top" id="top"><!-- --></a>
+
+  <table width="98%" border="0" cellpadding="0" cellspacing="0"
+  align="center">
+    <tr>
+      <td>
+        <p class="nav"><a href="index.htm">SCATMECH</a> &gt; <a href=
+        "classes.htm">Classes and Functions</a> &gt;
+        <a href="classes.htm#FSSM">Free-Space Scattering Models</a>
+        &gt;  TMatrix_Axisymmetric_Scatterer</p>
+
+        <h1>class TMatrix_Axisymmetric_Scatterer</h1>
+
+        <hr>
+
+        <p>The class <b>TMatrix_Axisymmetric_Scatterer</b> implements
+        a theory for scattering by an axisymmetric homogeneous
+        particle as described by <a href="#BarberHill">Barber and Hill</a>. The shape of the particle
+	is described by the class <a href="./axishape.htm">Axisymmetric_Shape</a>.
+
+        <h2>Parameters:</h2>
+
+        <table border="1" cellpadding="5">
+          <tr>
+            <th>Parameter</th>
+
+            <th>Data Type</th>
+
+            <th>Description</th>
+
+            <th>Default</th>
+          </tr>
+
+          <tr>
+            <td class="parameter">lambda</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">Wavelength of the light
+            [&#181;m].<br>
+            (Inherited from <a href=
+            "freescat.htm">Free_Space_Scatterer</a>.)</td>
+
+            <td class="default">0.532</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">medium</td>
+
+            <td class="datatype"><a href="dielfunc.htm">dielectric_function</a></td>
+
+            <td class="description">The
+            optical constants of the medium surrounding the sphere,
+            expressed as a complex number (n,k) or, optionally, as
+            a function of wavelength.<br>
+            (Inherited from <a href=
+            "freescat.htm">Free_Space_Scatterer</a>.)</td>
+
+            <td class="default">(1,0)</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">Shape</td>
+            <td class="datatype"><a href="axishape.htm">Axisymmetric_Shape_Ptr</a></td>
+            <td class="description">The shape and size of the particle.</td>
+            <td class="default">Ellipsoid_Axisymmetric_Shape</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">particle</td>
+
+            <td class="datatype"><a href="dielfunc.htm">dielectric_function</a></td>
+
+            <td class="description">The
+            optical constants of the particle, expressed as a
+            complex number (n,k) or, optionally, as a function of
+            wavelength.</td>
+
+            <td class="default">(1.59,0)</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">lmax</td>
+
+            <td class="datatype">int</td>
+
+            <td class="description">The
+            maximum polar order considered in the calculation. A
+            value of zero implies that the calculation should use
+            the value suggested by Bohren and Huffman for a
+            sphere.<br>
+            Note: Validity of the results requires convergence over
+            this parameter.</td>
+
+            <td class="default">0</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">mmax</td>
+
+            <td class="datatype">int</td>
+
+            <td class="description">The
+            maximum azimuthal order considered in the calculation.
+            A value of zero implies that this order should be the
+            same as that used for the polar order.<br>
+            Note: Validity of the results requires convergence over
+            this parameter.</td>
+
+            <td class="default">0</td>
+          </tr>
+        </table>
+
+        <h2>See also:</h2> 
+
+	<p><a href="index.htm">SCATMECH Home</a>, &nbsp; 
+	  <a href="convent.htm">Conventions</a>, &nbsp;
+	  <a href="freescat.htm">Free_Space_Scatterer</a>, &nbsp;
+	  <a href="sphrscat.htm">Double_Interaction_BRDF_Model</a>, &nbsp;
+	  <a href="subsphere.htm">Subsurface_Particle_BRDF_Model</a>, &nbsp;
+	  <a href="axipart.htm">Axisymmetric_Particle_BRDF_Model</a>, &nbsp;
+	  <a href="subaxipart.htm">Subsurface_Axisymmetric_Particle_BRDF_Model</a>
+	</p>
+
+        <p><a name="BarberHill" id="BarberHill">P. W. Barber and S. C. Hill, <i>Light Scattering by
+        Particles: Computational Methods</i>, (World Scientific,
+        Singapore, 1990).</a><br>
+        C. F. Bohren and D. R. Huffman, <i>Absorption and
+        Scattering of Light by Small Particles</i>, (Wiley, New
+        York, 1983).<br>
+        H. C. van de Hulst, <i>Light Scattering by Small
+        Particles</i>, (Dover, New York, 1981).
+
+        <h2>Include file:</h2>
+
+          <pre>
+#include "<a href="../code/axifree.h">axifree.h</a>"
+#include "<a href="../code/tmatrix.h">tmatrix.h</a>"
+</pre>
+
+        <h2>Source code:</h2>
+
+          <pre>
+<a href="../code/axifree.cpp">axifree.cpp</a>
+<a href="../code/tmatrix.cpp">tmatrix.cpp</a>
+</pre>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+<!-- START FOOTER -->
+<hr>
+<h2>For More Information</h2>
+
+<p>
+<a href="http://www.nist.gov/pml/div685/grp06/germer.cfm">SCATMECH Technical Information and Questions</a><br>
+<a href="http://www.nist.gov/pml/div685/index.cfm" target="_top">Sensor Science Division Home Page</a><br>
+<a href="mailto:fraser@nist.gov">Sensor Science Division Inquiries</a><br>
+<a href="mailto:thomas.germer@nist.gov">Website Comments</a>
+
+<p>
+Current SCATMECH version: <a href="./download.htm">7.00 (January 2015)</a><br>
+This page first online: Version 5.00 (July 2005) <br>
+This page last modified: Version 7.00 (January 2015) <br>
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+</td>
+</tr>
+</table>
+
+</body>
+</html>

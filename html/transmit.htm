@@ -1,0 +1,184 @@
+<html>
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Cygwin (vers 1st September 2004), see www.w3.org">
+   <link rel="STYLESHEET" href="style.css" type="text/css">
+
+  <title>SCATMECH: Transmit_BRDF_Model</title>
+<script language="JavaScript" id="_fed_an_js_tag" src="/js/federated-analytics.all.min.js?agency=NIST&subagency=pml&pua=UA-37115410-46&yt=true"></script>
+</head>
+
+<body>
+  <a name="top" id="top"><!-- --></a>
+
+  <table width="98%" border="0" cellpadding="0" cellspacing="0"
+  align="center">
+    <tr>
+      <td>
+        <p class="nav"><a href="index.htm">SCATMECH</a> &gt; <a href=
+        "classes.htm">Classes and Functions</a> &gt;
+        <a href="classes.htm#SSM">Surface Scattering Models</a>
+        &gt; Transmit_BRDF_Model</p>
+
+        <hr>
+        Many of the scattering models inheriting <a href="BRDF_Model.htm">BRDF_Model</a> provide bidirectional
+        transmittance distribution function (BTDF)(<b>type</b> set to <b>1</b>), bidirectional reflection distribution function (BRDF) for reflection from the substrate side 
+	(<b>type</b> set to <b>2</b>), and/or BTDF from the substrate side (<b>type</b> set to <b>3</b>). However,
+        they calculate that quantity inside the material, not
+        taking into account refraction and transmission into and out of the material. The model
+        <b>Transmit_BRDF_Model</b> provides an interface that
+        allows one to calculate the scatter by any of those models,
+        but evaluated outside of the material, assuming that the
+        material has parallel faces. The model takes another model
+        as a parameter and requires that the optical properties of
+        the substrate be non-absorbing.  It connects the internal angles 
+	to the external angles by Snell's law, accounts for the transmittance through the 
+	bottom interface (taking into account any films on that interface), and accounts for the change
+	in the projected solid angle as the light passes through the interface. Note that with <b>type</b> set to <b>0</b>, the model is evaluated in 
+	reflection, and no refraction or transmission effects are needed.
+
+        <center>
+          <img src="Images/TransmitBRDF.gif" width="580" height="478"
+          alt=
+          "Diagram showing light incident upon a slab, light scattering at the first interface, and showing that the Transmit_BRDF_Model handles transmission and refraction at the second interface.">
+          </center>
+
+        <p><b><i>Parameters:</i></b><br>
+        <br></p>
+
+        <table border="1" cellpadding="5">
+          <tr>
+            <th>Parameter</th>
+
+            <th>Data Type</th>
+
+            <th>Description</th>
+
+            <th>Default</th>
+          </tr>
+
+          <tr>
+            <td class="parameter">lambda</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">Wavelength of the light
+            in vacuum [&#181;m].<br>
+            (Inherited from <a href=
+            "BRDF_Model.htm">BRDF_Model</a>).<br>
+            Note: This parameter overrides the same parameter in
+            <b>model</b>.</td>
+
+            <td class="default">0.532</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">type</td>
+
+            <td class="datatype">int</td>
+
+            <td class="description">
+	      Indicates whether the light is incident from above the
+            substrate or from within the substrate and whether the
+            scattering is evaluated in reflection or transmission.
+            The choices are:<br>
+	      <b>0</b> : Light is incident from the above the substrate, and scattering is evaluated in reflection.<br>
+	      <b>1</b> : Light is incident from the above the substrate, and scattering is evaluated in transmission.<br>
+	      <b>2</b> : Light is incident from the within the substrate, and scattering is evaluated in reflection.<br>
+	      <b>3</b> : Light is incident from the within the substrate, and scattering is evaluated in transmission.<br>
+	      For <b>1</b>, <b>2</b>, and <b>3</b>, the substrate must be non-absorbing.<br>
+	      Transmit_BRDF_Model supports all types, provided the model pointed to by <tt class = "parameter">model</tt> supports it.<br>
+            (Inherited from <a href=
+            "BRDF_Model.htm">BRDF_Model</a>).</td>
+
+            <td class="default">0</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">substrate</td>
+
+            <td class="datatype">dielectric_function</a></td>
+
+            <td class="description">The
+            optical constants of the substrate, expressed as a
+            complex number (n,k) or, optionally, as a function of
+            wavelength.<br>
+            (Inherited from <a href=
+            "BRDF_Model.htm">BRDF_Model</a>).<br>
+            Note 1: This parameter overrides the same parameter in
+            <b>model</b>.<br>
+            Note 2: The material must be nonabsorbing. The default
+            must be changed.</td>
+
+            <td class="default">(4.05,0.05)</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">model</td>
+
+            <td class="datatype"><a href="BRDF_Model.htm">BRDF_Model_Ptr</a></td>
+
+            <td class="description">The scattering model.<br></td>
+
+            <td class="default">Microroughness_BRDF_Model</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">films</td>
+
+            <td class="datatype"><a href="dielstack.htm">dielectric_stack</a></td>
+
+            <td class="description">Description of the stack of films deposited on the bottom surface, usually specified by a file.
+	      See <a href="dielstack.htm">dielectric_stack</a>, for more information.<br></td>
+
+            <td class="default"><i>no films</i></td>
+          </tr>
+
+        </table><br>
+        <br>
+	<h2>See also:</h2>
+
+        <p><a href="index.htm">SCATMECH Home</a>, &nbsp; <a href=
+        "convent.htm">Conventions</a>, &nbsp; <a href=
+        "BRDF_Model.htm">BRDF_Model</a></p>
+
+	<h2>Include file:</h2>
+
+          <pre>
+	    #include "<a href="../code/transmit.h">transmit.h</a>"
+	  </pre>
+
+        <h2>Source code:</h2>
+
+          <pre>
+	    <a href="../code/transmit.cpp">transmit.cpp</a>
+	  </pre>
+
+        <hr>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+<!-- START FOOTER -->
+<hr>
+<h2>For More Information</h2>
+
+<p>
+<a href="http://www.nist.gov/pml/div685/grp06/germer.cfm">SCATMECH Technical Information and Questions</a><br>
+<a href="http://www.nist.gov/pml/div685/index.cfm" target="_top">Sensor Science Division Home Page</a><br>
+<a href="mailto:fraser@nist.gov">Sensor Science Division Inquiries</a><br>
+<a href="mailto:thomas.germer@nist.gov">Website Comments</a>
+
+<p>
+Current SCATMECH version: <a href="./download.htm">7.00 (January 2015)</a><br>
+This page first online: Version 5.00 (July 2005) <br>
+This page last modified: Version 7.00 (January 2015) <br>
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+</td>
+</tr>
+</table>
+
+</body>
+</html>

@@ -1,0 +1,401 @@
+<html>
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Cygwin (vers 1st September 2004), see www.w3.org">
+   <link rel="STYLESHEET" href="style.css" type="text/css">
+
+  <title>SCATMECH: Subsurface_Bobbert_Vlieger_BRDF_Model</title>
+</head>
+
+<body>
+  <a name="top" id="top"><!-- --></a>
+
+  <table width="98%" border="0" cellpadding="0" cellspacing="0"
+  align="center">
+    <tr>
+      <td>
+        <p class="nav"><a href="index.htm">SCATMECH</a> &gt; <a href=
+        "classes.htm">Classes and Functions</a> &gt;
+        <a href="classes.htm#SSM">Surface Scattering Models</a>
+        &gt; Subsurface_Bobbert_Vlieger_BRDF_Model</p>
+
+	<h1>class Subsurface_Bobbert_Vlieger_BRDF_Model</h1>
+
+        
+        <hr>
+	<p>
+        The <b>Subsurface_Bobbert_Vleiger_BRDF_Model</b> implements the theory
+        of <a href="#BV">Bobbert and Vlieger</a> for the scattering by a sphere under a surface.
+        The theory applies to a sphere of total radius
+        <i>radius</i> having any number of coatings, a distance
+        <i>delta</i> below a surface, which can also have any number of coatings. 
+	The sphere must lie entirely below the substrate coatings, and the substrate must be non-absorbing.
+	The theory is exact, although care must be 
+        taken to choose appropriate operating parameters, and
+        convergence should always be checked. Implementation of the model is carried out
+	by using <a href="bobvlieg.htm">Bobbert_Vlieger_BRDF_Model</a> with modified effective 
+	indices of refraction and wavelength.
+	<br><br>
+        <center>
+          <img src="Images/Subsurface_Bobbert_Vlieger_BRDF_Model.jpg" width="800"
+          alt="Diagram showing sphere above surface.">
+        </center>
+
+	<h2>Parameters:</h2>
+
+        <table border="1" cellpadding="5">
+          <tr>
+            <th>Parameter</th>
+
+            <th>Data
+            Type</th>
+
+            <th>Description</th>
+
+            <th>Default</th>
+          </tr>
+
+          <tr>
+            <td class="parameter">lambda</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">Wavelength of the light
+            in vacuum [&#181;m].<br>
+            (Inherited from <a href=
+            "BRDF_Model.htm">BRDF_Model</a>.)</td>
+
+            <td class="default">0.532</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">type</td>
+
+            <td class="datatype">int</td>
+
+            <td class="description">
+	      Indicates whether the light is incident from above the
+            substrate or from within the substrate and whether the
+            scattering is evaluated in reflection or transmission.
+            The choices are:<br>
+	      <b>0</b> : Light is incident from the above the substrate, and scattering is evaluated in reflection.<br>
+	      <b>1</b> : Light is incident from the above the substrate, and scattering is evaluated in transmission.<br>
+	      <b>2</b> : Light is incident from the within the substrate, and scattering is evaluated in reflection.<br>
+	      <b>3</b> : Light is incident from the within the substrate, and scattering is evaluated in transmission.<br>
+	      For <b>1</b>, <b>2</b>, and <b>3</b>, the substrate must be non-absorbing.<br>
+	      Bobbert_Vlieger_BRDF_Model supports all four types.<br>
+            (Inherited from <a href=
+            "BRDF_Model.htm">BRDF_Model</a>).</td>
+
+            <td class="default">0</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">substrate</td>
+            <td class="datatype"><a href="dielfunc.htm">dielectric_function</a></td>
+            <td class="description">The optical constants of the substrate, expressed as a
+            complex number (n,k) or, optionally, as a function of wavelength.<br>
+	      The substrate must be non-absorbing for this model.<br>
+            (Inherited from <a href="BRDF_Model.htm">BRDF_Model</a>.)
+	    </td>
+            <td class="default">(4.05,0.05)</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">density</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The
+            surface number density of local scatterers
+            [&#181;m<sup>-2</sup>].<br>
+            (Inherited from <a href=
+            "local.htm">Local_BRDF_Model</a>.)</td>
+
+            <td class="default">1</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">sphere</td>
+
+            <td class="datatype"><a href="dielfunc.htm">dielectric_function</a></td>
+
+            <td class="description">The
+            optical constants of the particle, expressed as a
+            complex number (n,k) or, optionally, as a function of
+            wavelength.</td>
+
+            <td class="default">(1.59,0)</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">radius</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The
+            total radius of the spherical particle [&#181;m]. This radius includes
+            the thickness of any coatings.</td>
+
+            <td class="default">0.05</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">spherecoat</td>
+
+            <td class="datatype"><a href="dielfunc.htm">dielectric_stack</a></td>
+
+            <td class="description">Description of any stack of
+	      coatings on the particle, usually specified by a file.<br>
+            See <a href="dielstack.htm">dielectric_stack</a>, for
+            more information.<br></td>
+
+            <td class="default"><i>none</i></td>
+          </tr>
+
+          <tr>
+            <td class="parameter">stack</td>
+
+            <td class="datatype"><a href="dielstack.htm">dielectric_stack</a></td>
+
+            <td class="description">Description of any stack
+            of films deposited on the substrate, usually specified
+            by a file.<br>
+            See <a href="dielstack.htm">dielectric_stack</a>, for
+            more information.<br></td>
+
+            <td class="default"><i>no
+            films</i></td>
+          </tr>
+
+          <tr>
+            <td class="parameter">delta</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The
+            distance between the particle and the substrate
+            [&#181;m]. This value is zero when the particle is
+            touching the substrate. It cannot be less than
+            zero.</td>
+
+            <td class="default">0</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">lmax</td>
+
+            <td class="datatype">int</td>
+
+            <td class="description">Maximum
+            spherical harmonic order used in the calculation.
+            Setting this value to 0 sends a request to use the
+            value appropriate for the free-space particle, as
+            suggested by Bohren and Huffman. For negative values of
+            lmax, the lmax appropriate for the free-space particle
+            is increased by the absolute value of lmax. For an
+            accurate solution, convergence should be checked by
+            varying this parameter.</td>
+
+            <td class="default">0</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">order</td>
+
+            <td class="datatype">int</td>
+
+            <td class="description">The
+            perturbative order for the solution. For the exact
+            solution, the order should be set to -1. When order is
+            set to 0, the model reproduces the <a href=
+            "sphrpart.htm">Double_Interaction_BRDF_Model</a> with a
+            <a href="miescat.htm">MieScatterer</a>. When order is
+            set to 1 or higher, matrix inversion is performed by
+            successive approximation. This parameter is included in
+            the model, but should normally be set to
+            -1 for the exact solution.</td>
+
+            <td class="default">-1</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">Norm_Inc_Approx</td>
+
+            <td class="datatype">int</td>
+
+            <td class="description">A flag
+            indicating whether or not to use the Normal Incidence
+            Approximation in the calculation. This approximation
+            assumes that the reflection coefficients of the substrate are constant
+            and given by their normal incidence values. This
+            approximation is valid for a perfectly reflecting
+            metallic substrate, or if the distance of the particle
+            from the surface is large. This approximation is
+            included for pedagogical reasons, and the flag should
+            be set to 0 for an accurate solution. See the reference
+            by <a href="#Videen">Videen</a> for
+            details.</td>
+
+            <td class="default">0</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">improve</td>
+
+            <td class="datatype">int</td>
+
+            <td class="description">The
+            number of iterative improvement iterations. For <i>l</i><sub>max</sub> much larger than that
+            needed for the free-space Mie scattering solution, the
+            matrix inversion accumulates some significant errors
+            that propagate to the final scattering solution.
+            Setting this value to something other than 0 increases
+            the computation time needed for each different incident
+            angle but improves the solution stability significantly. 
+	    A value of 2 or 3 has been found to be
+            satisfactory under all tested conditions.</td>
+
+            <td class="default">3</td>
+          </tr>
+        </table>
+
+        <h2>See also:</h2>
+
+        <p><a href=
+        "index.htm">SCATMECH Home</a>, &nbsp; <a href=
+        "convent.htm">Conventions</a>, &nbsp; <a href=
+        "local.htm">Local_BRDF_Model</a></p>
+
+        <p><a name="BV" id="BV">P.A.&nbsp;Bobbert and
+        J.&nbsp;Vlieger, "Light scattering by a sphere on a
+        substrate," Physica <b>137A</b>, 209-242 (1986).</a></p>
+
+        <p><a name="BVG" id="BVG">P.A.&nbsp;Bobbert,
+        J.&nbsp;Vlieger, and R.&nbsp;Greef, "Light reflection from
+        a substrate sparsley seeded with spheres - Comparison with
+        an ellipsometric experiment," Physica <b>137A</b>, 243-257
+        (1986).</a></p>
+
+        <p><a name="KEMG" id="KEMG">J.H.&nbsp;Kim,
+        S.H.&nbsp;Ehrman, G.W.&nbsp;Mulholland, and
+        T.A.&nbsp;Germer,</a> "<a href=
+        "http://physics.nist.gov/Divisions/Div844/publications/germer/SPIE4449-39.pdf">
+        Polarized light scattering from metallic particles on
+        silicon wafers</a>," in <i>Optical Metrology Roadmap for
+        the Semiconductor, Optical, and Data Storage
+        Industries</i>, Angela Duparr&#233; and Bhanwar Singh,
+        Eds., Proc. SPIE <b>4449</b>, 281-290 (2001).</p>
+
+        <p><a name="Videen" id="Videen">G.&nbsp;Videen, "Light
+        scattering from a sphere on or near a surface,"
+        J.&nbsp;Opt.&nbsp;Soc.&nbsp;Am.&nbsp;A <b>8</b>, 483-489
+        (1991).</a></p>
+
+	<h2>Include file:</h2>
+
+          <pre>
+#include "<a href="../code/subbobvlieg.h">subbobvlieg.h</a>"
+</pre>
+        <h2>Source code:</h2>
+
+          <pre>
+<a href="../code/subbobvlieg.cpp">subbobvlieg.cpp</a>
+</pre>
+
+        <h2>Definition of public elements:</h2>
+
+          <pre>
+class Subsurface_Bobbert_Vlieger_BRDF_Model
+   : public <a href="local.htm">Local_BRDF_Model</a>
+{
+   complex&lt;double&gt; <a href="#Epp">Epp</a>(double thetai,double thetas,double phis);
+   complex&lt;double&gt; <a href="#Eps">Eps</a>(double thetai,double thetas,double phis);
+   complex&lt;double&gt; <a href="#Esp">Esp</a>(double thetai,double thetas,double phis);
+   complex&lt;double&gt; <a href="#Ess">Ess</a>(double thetai,double thetas,double phis);
+
+   complex&lt;double&gt;  <a href="#extinction">PartialExtinctionS</a>(double theta);
+   complex&lt;double&gt;  <a href="#extinction">PartialExtinctionP</a>(double theta);
+};
+</pre>
+
+        <hr>
+        <h3><a name="Epp" id="Epp">complex&lt;double&gt; Epp(double thetai,double thetas,double phis)</a><br>
+        <a name="Eps" id="Eps">complex&lt;double&gt; Eps(double thetai,double thetas,double phis)</a><br>
+        <a name="Esp" id="Esp">complex&lt;double&gt; Esp(double thetai,double thetas,double phis)</a><br>
+        <a name="Ess" id="Ess">complex&lt;double&gt; Ess(double thetai,double thetas,double phis)</a></h3>
+
+        <blockquote><p>
+          Routines which
+          return the elements of the Jones matrix for scattering
+          from a sphere on a surface. These elements are the same
+          as those calculated by <a href="#jonesDSC">jonesDSC</a>,
+          and these routines provide a means for obtaining each
+          term individually.
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+	<h3><a name="extinction" id="extinction">complex&lt;double&gt; PartialExtinctionS(double theta)</a><br>
+	   complex&lt;double&gt; PartialExtinctionP(double theta)</h3>
+
+	<blockquote>
+	  The real part of these functions return the partial
+	  extinction cross section for an incident angle
+	  of <tt>theta</tt> (expressed in radians) and s- or
+	  p-polarization, respectively, where the &quot;partial&quot;
+	  means the following: when <tt>type=0</tt>
+	  or <tt>type=2</tt>, the reflectance is reduced
+	  by <tt>real(PartialExtinctionS(theta))*density/cos(theta)</tt>,
+	  and for <tt>type=1</tt> or <tt>type=3</tt>, the
+	  transmittance is reduced
+	  by <tt>real(PartialExtinctionS(theta)*density/cos(theta)</tt>. The total extinction
+	  cross section is the sum of these values for <tt>type=0</tt>
+	  and <tt>type=1</tt>, for light incident downward, or the sum
+	  of these values for <tt>type=2</tt> and <tt>type=3</tt>, for
+	  light incident upward. The value of the partial extinction
+	  cross section can be negative, which is an indication that
+	  the reflectance or transmittance is <i>increased</i> by the
+	  presence of the particle. The routines use the extinction
+	  theorem to arrive at their results. The imaginary part is
+	  that part which would affect the reflected or transmitted
+	  phase.
+
+<h4>Example:</h4>
+
+          <pre>
+	    Subsurface_Bobbert_Vlieger_BRDF_Model model;
+	    model.set_type(0);
+	    // Change in reflectance...
+	    double deltaRs = real(model.PartialExtinctionS(theta))*density/cos(theta);
+	    model.set_type(1);
+	    // Change in transmittance...
+	    double deltaTs = real(model.PartialExtinctionS(theta))*density/cos(theta);
+</pre>
+
+	</blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+<!-- START FOOTER -->
+<hr>
+<h2>For More Information</h2>
+
+<p>
+<a href="http://www.nist.gov/pml/div685/grp06/germer.cfm">SCATMECH Technical Information and Questions</a><br>
+<a href="http://www.nist.gov/pml/div685/index.cfm" target="_top">Sensor Science Division Home Page</a><br>
+<a href="mailto:fraser@nist.gov">Sensor Science Division Inquiries</a><br>
+<a href="mailto:thomas.germer@nist.gov">Website Comments</a>
+
+<p>
+Current SCATMECH version: <a href="./download.htm">7.00 (January 2015)</a><br>
+This page first online: Version 7.00 (January 2015) <br>
+This page last modified: Version 7.00 (January 2015) <br>
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+</td>
+</tr>
+</table>
+
+</body>
+</html>

@@ -1,0 +1,379 @@
+<html>
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Cygwin (vers 1st September 2004), see www.w3.org">
+   <link rel="STYLESHEET" href="style.css" type="text/css">
+
+  <title>SCATMECH: Console interface</title>
+<script language="JavaScript" id="_fed_an_js_tag" src="/js/federated-analytics.all.min.js?agency=NIST&subagency=pml&pua=UA-37115410-46&yt=true"></script>
+</head>
+
+<body>
+  <a name="top" id="top"><!-- --></a>
+
+  <table width="98%" border="0" cellpadding="0" cellspacing="0"  align="center">
+    <tr>
+      <td>
+        <p class="nav"><a href="index.htm">SCATMECH</a> &gt; Console
+        Interface</p>
+
+        <h1>Console Interface</h1>
+
+        <hr>
+
+        <p>The SCATMECH library provides functions for querying a
+        user for data and for displaying program status. This page
+        describes how these functions behave. Their functionality
+        can be subdivided into a number of topics:</p>
+
+        <ul>
+          <li><a href="#single">Single value entry</a></li>
+
+          <li><a href="#df">Dielectric function entry</a></li>
+
+          <li><a href="#films">Film stack entry</a></li>
+
+          <li><a href="#model">Model entry</a></li>
+
+          <li><a href="#environment">Searching for files</a></li>
+        </ul>
+
+        <p>Note that use of the interactive console functions is
+        optional to the programmer. There are other ways of
+        transferring data to and from the library. For example, all
+        classes inheriting <a href="model.htm">Model</a> have a
+        function <a href="model.htm#parameter">set_parameter</a>
+        defined to set model parameters. Furthermore, the template
+        class <a href="modelptr.htm">Model_Ptr&lt;model&gt;</a> has
+        a function <a href="modelptr.htm">operator=(const
+        string&amp; name)</a>, which enables a particular instance
+        of the class to be created.</p>
+
+	<a name="single" id="single"><!-- --></a>
+        <h2>Single value entry</h2>
+
+        <p>The simplest functions query the user for a single value
+        and are described in <a href="askuser.htm">User Interface
+        Functions</a>. These routines always present the user with
+        a default value, given in brackets (e.g. &lt;&nbsp;&gt;).
+        The user can type in a specific value followed by return,
+        or accept the default value by just pressing return without
+        entering anything else. For example:</p>
+
+        <blockquote>
+          <pre>
+	  Wavelength [um] &lt;0.532&gt; :
+</pre>
+        </blockquote>
+
+        <p>Here, the user can accept the default of 0.532
+        &#956;m, or type in something else.</p><a href=
+        "#top"><span class="totop">Top of Page</span>.</a>
+
+        <a name="df" id="df"><!-- --></a>
+	<h2>Dielectric function entry</h2>
+
+        <p>The class <a href="dielfunc.htm">dielectric_function</a>
+        has functions <a href="dielfunc.htm#AskUser">AskUser</a>
+        which query the user. When the user is asked for an optical
+        constant or dielectric function, he has a number of
+        options. Consider the following prompt:</p>
+
+        <blockquote>
+          <pre>
+Substrate [n, (n,k), or filename] &lt;(4.15,0.05)&gt; :
+</pre>
+        </blockquote>
+
+        <p>If
+        the user just presses return, then the substrate optical
+        constant will be taken to be 4.15+i0.05. If the user
+        responds with a single number, then the program will ask
+        for the value of k. For example,</p>
+
+        <blockquote>
+          <pre>
+Substrate [n, (n,k), or filename] &lt;(4.15,0.05)&gt; :<font color="#000000">1.5</font>
+Substrate (k) &lt;0.05&gt; :
+</pre>
+        </blockquote>
+
+        <p>If
+        the user wishes to enter both n and k simultaneously, then
+        he can type them both as a complex number:</p>
+
+        <blockquote>
+          <pre>
+Substrate [n, (n,k), or filename] &lt;(4.15,0.05)&gt; :<font color="#000000">(1.5,0)</font>
+</pre>
+        </blockquote>
+
+        <p>The
+        user can also enter the name of a file containing the
+        tabulated wavelength dependence of the optical constants:</p>
+
+	<blockquote>
+	  <pre>
+Substrate [n, (n,k), or filename] &lt;(4.15,0.05)&gt; :<font color="#000000">silicon.dat</font>
+</pre>
+	  </blockquote>
+
+	<p>See the information in <a href="scattabl.htm#formats">Table</a> for a 
+	discription of the file formats allowed. For a <a href="dielfunc.htm">dielectric_function</a>, the 
+	  file must contain at least three columns, corresponding to wavelength, index of refraction, and extinction coefficient.</p>
+
+	<a href="#top"><span class="totop">Top of Page</span>.</a>
+
+        <a name="films" id="films"><!-- --></a>
+	<h2>Film stack entry</h2>
+
+        <p>The class <a href="dielstack.htm">dielectric_stack</a>
+        has functions <a href="dielstack.htm#AskUser">AskUser</a>
+        which query the user. If the library queries for
+        information about a stack of films, it will prompt the user
+        with something like:</p>
+
+        <blockquote>
+          <pre>
+Films on rough surface
+(':filename', or index and thickness) &lt;&gt; :
+</pre>
+        </blockquote>
+
+        <p>The
+        user can accept the default (no films) by pressing return.
+        The user can also type an index (as a complex number pair)
+        and thickness. For example:</p>
+
+        <blockquote>
+          <pre>
+Films on rough surface
+(':filename', or index and thickness, or a blank line) &lt;&gt; :<font color="#000000">(2.1,0) 0.3</font>
+Layer #2:
+</pre>
+        </blockquote>
+
+        <p>Films are entered in the order that they are deposited
+        onto the sample. That is, the most buried film is entered
+        first. A blank line will complete the description of the
+        film stack. The index can also be entered as a filename as
+        described above. For example, if the file <b>TiO2</b>
+        contains a tabulation of the optical properties of a common
+        coating material, then:</p>
+
+        <blockquote>
+          <pre>
+Films on rough surface
+(':filename', or index and thickness, or a blank line) &lt;&gt; :<font color="#000000">TiO2 0.3</font>
+Layer #2:
+</pre>
+        </blockquote>
+
+	<p>Several films can be entered in a single line by alternating materials and thicknesses:</p>
+        <blockquote>
+          <pre>
+Films on rough surface
+(':filename', or index and thickness, or a blank line) &lt;&gt; :<font color="#000000">MgF 0.185 ZnS 0.218 MgF 0.185</font>
+Layer #4:
+</pre>
+        </blockquote>
+
+        <p>Finally, one can specify a film stack using a file
+        containing the film information by entering a colon (:)
+        followed by the filename:</p>
+
+        <blockquote>
+          <pre>
+Films on rough surface
+(':filename', or index and thickness, or a blank line) &lt;&gt; :<font color="#000000">:filmfile</font>
+</pre>
+        </blockquote>
+
+        <p>The
+        film description file contains two columns. The first
+        column is the material (specified by complex number or
+        filename), and the second column is the thickness. Again,
+        the films are entered in the order in which they are
+        deposited. For example, the following is an appropriate
+        file for an interference filter:</p>
+
+        <blockquote>
+          <pre>
+MgF 0.185
+ZnS 0.109
+MgF 0.185
+ZnS 0.109
+MgF 0.185
+ZnS 0.109
+MgF 0.185
+ZnS 0.218
+MgF 0.185
+ZnS 0.109
+MgF 0.185
+ZnS 0.109
+MgF 0.185
+ZnS 0.109
+MgF 0.185
+</pre>
+        </blockquote>
+        <a href="#top"><span class="totop">Top of Page</span>.</a>
+
+        <a name="model" id="model"><!-- --></a>
+	<h2>Model entry</h2>
+
+        <p>The template class <a href=
+        "modelptr.htm">Model_Ptr&lt;model&gt;</a> has an operator
+        defined that enables statements like,</p>
+
+        <blockquote>
+          <pre>
+Model_Ptr&lt;BRDF_Model&gt; brdf = Get_Model_Ptr();
+Model_Ptr&lt;Slope_Distribution_Function&gt; sdf = Get_Model_Ptr();
+Model_Ptr&lt;SphericalScatterer&gt; sphere = Get_Model_Ptr();
+</pre>
+        </blockquote>
+
+        <p>which will query the user for a specific model and
+        assign a pointer to a new instance of that model. For
+        example, if the first of these statements were executed, then
+        the user would see,</p>
+
+        <blockquote>
+          <pre>
+-- Available BRDF_Model Classes --
+(A) &lt;MENU&gt; Roughness_BRDF_Model
+(B) &lt;MENU&gt; Facet_BRDF_Model
+(C) &lt;MENU&gt; Lambertian_BRDF_Model
+(D) &lt;MENU&gt; Local_BRDF_Model
+(E) &lt;MENU&gt; Instrument_BRDF_Model
+(F) First_Diffuse_BRDF_Model
+
+(?) Turn on descriptions
+
+Choose one &lt;A&gt; :
+</pre>
+        </blockquote>
+
+        <p>The
+        user can either enter the letter preceeding the choice or
+        the entire name of the class. The <tt>&lt;MENU&gt;</tt>
+        indication tells the user that there are more models under
+        that menu item. For example, if the user types <b>A</b> and
+        return, then he will see the menu</p>
+
+        <blockquote>
+          <pre>
+-- Available Roughness_BRDF_Model Classes --
+(A) Microroughness_BRDF_Model
+(B) Correlated_Roughness_BRDF_Model
+(C) &lt;MENU&gt; Roughness_Stack_BRDF_Model
+(D) Two_Face_BRDF_Model
+
+(?) Turn on descriptions
+(^) Return to previous menu
+
+Choose one &lt;A&gt; :
+</pre>
+        </blockquote>
+
+        <p>When
+        one is not in the top level listing of models, then one can
+        return to the previous menu by typing a caret (^) and
+        return. By typing a question mark (?) and return, one can
+        get more descriptive names of the models:</p>
+
+        <blockquote>
+          <pre>
+-- Available BRDF_Model Classes --
+(A) &lt;MENU&gt; Roughness_BRDF_Model.............Models requiring a power spectrum.
+(B) &lt;MENU&gt; Facet_BRDF_Model.................Specular point approximation.
+(C) &lt;MENU&gt; Lambertian_BRDF_Model............A constant, fully-depolarizing
+                                            BRDF.
+(D) &lt;MENU&gt; Local_BRDF_Model.................All models for discrete defects.
+(E) &lt;MENU&gt; Instrument_BRDF_Model............A virtual class for effective BRDF
+                                            models for instrument functions
+(F) First_Diffuse_BRDF_Model................Model for the single scattering
+                                            from a diffuse material.
+
+(?) Turn off descriptions
+(^) Return to previous menu
+
+Choose one &lt;A&gt; :
+</pre>
+        </blockquote>
+
+        <p>The
+        user can type the full name of any model shown or hidden in
+        a lower level menu. For example, the following response
+        will cause the program to use <a href=
+        "./microroughbrdf.htm">Microroughness_BRDF_Model</a>:</p>
+
+        <blockquote>
+          <pre>
+-- Available BRDF_Model Classes --
+(A) &lt;MENU&gt; Roughness_BRDF_Model
+(B) &lt;MENU&gt; Facet_BRDF_Model
+(C) &lt;MENU&gt; Lambertian_BRDF_Model
+(D) &lt;MENU&gt; Local_BRDF_Model
+(E) &lt;MENU&gt; Instrument_BRDF_Model
+(F) First_Diffuse_BRDF_Model
+
+(?) Turn on descriptions
+
+Choose one &lt;A&gt; :<font color=
+"#000000">Microroughness_BRDF_Model</font>
+</pre>
+        </blockquote>
+
+	<a href="#top"><span class="totop">Top of Page</span>.</a>
+
+
+
+        <h2><a name="environment" id="environment">Searching for files</a></h2>
+
+        <p>As mentioned above, in order to obtain information about
+        optical properties or film stacks,
+        some routines may attempt to access a file during
+        execution. These routines will search in the current
+        directory for the file. If the file is not found in the
+        current directory, an attempt will be made to access the
+        environment variable <tt>SCATMECH</tt>. If it exists the
+        routines will use its contents to search for the file. The environment variable should
+	contain a list of directories to search, separated by semicolons, and each directory should
+	include the final directory delimiter (&quot;\&quot; or &quot;/&quot;).  For example, in Windows
+	the SCATMECH variable might be set to something like<br>
+	<pre>
+	C:\DATA\OPTPROP\;C:\DATA\GRATINGS\
+</pre>
+        <p>In a UNIX-like system, the SCATMECH variable might be set to something like</br>
+	<pre>
+	~/data/optprop/;~/data/gratings/
+</pre>
+
+        <br>
+        <a href="#top"><span class="totop">Top of Page</span>.</a></p>
+	
+<!-- START FOOTER -->
+<hr>
+<h2>For More Information</h2>
+
+<p>
+<a href="http://www.nist.gov/pml/div685/grp06/germer.cfm">SCATMECH Technical Information and Questions</a><br>
+<a href="http://www.nist.gov/pml/div685/index.cfm" target="_top">Sensor Science Division Home Page</a><br>
+<a href="mailto:fraser@nist.gov">Sensor Science Division Inquiries</a><br>
+<a href="mailto:thomas.germer@nist.gov">Website Comments</a>
+
+<p>
+Current SCATMECH version: <a href="./download.htm">7.00 (January 2015)</a><br>
+This page first online: Version 4.00 (July 2003) <br>
+This page last modified: Version 7.00 (January 2015) <br>
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+</td>
+</tr>
+</table>
+
+</body>
+</html>

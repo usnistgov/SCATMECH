@@ -1,0 +1,383 @@
+<html>
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Cygwin (vers 1st September 2004), see www.w3.org">
+   <link rel="STYLESHEET" href="style.css" type="text/css">
+
+  <title>SCATMECH: Table</title>
+<script language="JavaScript" id="_fed_an_js_tag" src="/js/federated-analytics.all.min.js?agency=NIST&subagency=pml&pua=UA-37115410-46&yt=true"></script>
+</head>
+
+<body>
+  <a name="top" id="top"><!-- --></a>
+
+  <table width="98%" border="0" cellpadding="0" cellspacing="0"
+  align="center">
+    <tr>
+      <td>
+        <p class="nav"><a href="index.htm">SCATMECH</a> &gt; <a href=
+        "classes.htm">Classes and Functions</a> &gt;
+        <a href="classes.htm#Utility">Utility</a> &gt; Table</p>
+
+	<h1>class Table</h1>
+        
+        <hr>
+	<p>
+	The class <b>Table</b> handles the storage and interpolation of a table of values or a functional dependence.  
+        The table may be assigned a single value, a functional form, or a table of numbers retrieved from a file. 
+	Three file formats are available for storing the data in a file. These formats, along with the functional form, are described <a href="#formats">below</a>. Note that
+	files are read into an internal cache. A call to <b>ClearTableCache()</b> must be made to clear that cache, if the file is known to change during program execution.
+	<p>
+	Whether the <b>Table</b> contains a single value, a functional form, or a table of numbers, it is treated as if it were a table of values, with the first column being
+	the independent variable and subsequent columns being dependent variables. By default, the program will read the second column as the dependent variable. 
+
+	<h2>Include file:</h2>
+
+<pre>
+#include "<a href="../code/scattabl.h">scattabl.h</a>"
+</pre>
+        <h2>Source code:</h2>
+
+<pre>
+<a href="../code/scattabl.h">scattabl.cpp</a>
+</pre>
+        <h2>See also:</h2>
+
+        <p><a href="index.htm">SCATMECH Home</a>, &nbsp;
+        <a href="dielfunc.htm">dielectric_function</a>
+        &nbsp;</p>
+
+	<h2>Definition of public elements:</h2>
+
+<pre>
+class Table 
+{
+     <a href="#Table">Table</a>(const string&amp; filename, int col=2);
+     <a href="#Table">Table</a>(const char* filename, int col=2);
+     <a href="#Table">Table</a>(double singlevalue=0.);
+     <a href="#Table">Table</a>(double *x,double *y,int n);
+     <a href="#Table">Table</a>(const std::vector&lt;double&gt;& x,const std::vector&lt;double&gt;& y);
+     <a href="#Table">Table</a>(const std::vector&lt;pair&lt;double,double&gt; &gt; v);
+
+     double <a href="#value">value</a>(double l) const;
+
+     int <a href="#read">set</a>(const std::string&amp; filename, int ycol=2);
+
+     enum <a href="#InterpolationMode">InterpolationMode</a> {
+        LIN,
+        LOG,
+        SPLINE,
+        LOGSPLINE
+     };
+
+     const std::string& get_name() const;
+     friend std::ostream& operator<<(std::ostream& os,const Table& t);
+     const VECTOR& get_table() const;
+
+     enum <a href="#InterpolationMode">InterpolationMode</a> { LIN, LOG, SPLINE, LOGSPLINE };
+     void <a href="#set_interp">set_interpolationx</a>(<a href="#InterpolationMode">InterpolationMode</a> m);
+     <a href="#InterpolationMode">InterpolationMode</a> <a href="#set_interp">get_interpolationx</a>();
+     void <a href="#set_interp">set_interpolationy</a>(<a href="#InterpolationMode">InterpolationMode</a> m);
+     <a href="#InterpolationMode">InterpolationMode</a> <a href="#set_interp">get_interpolationy</a>();
+
+     void <a href="#setparameter">set_parameter</a>(const std::string& param,const std::string& value);
+     std::string <a href="#setparameter">get_parameter</a>(const std::string& param) const;
+
+     static Table <a href="#AskUser">AskUser</a>(const string&amp; prompt,const string&amp; deflt);
+     static Table <a href="#AskUser">AskUser</a>(const string&amp; prompt,double deflt);
+}
+
+void <a href="#ClearTableCache">ClearTableCache</a>();
+</pre>
+
+        <hr>
+
+	<a name="formats" id="formats">
+	<h2>File Formats</h2>
+	</a>
+	<blockquote>
+	<p>When a <b>Table</b> is assigned a value, it may be assigned a single constant (double-precision) value, a functional form, or the name of a file. A single value can be assigned as in 
+	one of the following two statements:
+
+<pre>
+  Table table1 = 1234.5678;
+  Table table2 = "9876.5432";
+</pre>
+
+        <p>The first of the above statements simply assigns the value 1234.5678 to <tt>table1</tt>.  The second is a string assignment. If the string cannot be interpreted as a single 
+        number, then interpretation by one of the alternative expressions, given below, will be attempted.
+
+        <p>A <b>Table</b> may also be assigned a simple functional form:
+
+<pre>
+  Table table3 = "@x:1+x^2+x^3";
+  Table table4 = "@y:(sin(y),cos(y))";
+</pre>
+        <p>This simple functional form must start with an ampersand (<tt>@</tt>), be followed by a variable name (in the examples, <tt>x</tt> and <tt>y</tt>), a colon (<tt>:</tt>), and an expression. The second of the 
+        two examples returns two values. By default, only the first of the two values is used. However, if the <b>Table</b> is directed to use the third column, then the second value will be used. When 
+        a <b>Table</b> is used by a <a href="dielfunc.htm">dielectric_function</a>, two values will be needed.  
+
+	<p>The given function will be evaluated each time it is needed. That is, the values are not tabulated and there is is no interpolation.
+
+        <p>If the string cannot be interpreted as a single value or a simple function, it will be interpreted to be the name of a file and the software will attempt to read that file. If the filename is followed 
+	  by an exclamation point (<tt>!</tt>) and a number, say <i>n</i>, the <i>n</i>-th column will be used. 
+
+	<p>There are three file formats recognized by this
+	class. The <a href="#simple">first</a> is a simple
+	whitespace-delimited table of values, 
+	the <a href="#function">second</a> generates a table from a
+	function, and the <a href="#function2">third</a> contains a simple functional form as described above with optional parameters. Each of these formats accepts comments, which is any text
+	following a semicolon and continuing to the end of the line. 
+	 When opening a file, the software first looks in the current directory of the application for the file. If the file does not exist, it uses the <tt>SCATMECH</tt> environment variable to 
+	  find the file. The formats are described in more detail below.
+
+	<a name="simple" id="simple">
+	<h3>Simple Table Format</h3>
+	</a>
+
+
+	  <p>The simple table format has two or more columns.  Each row contains the same number of columns. The columns are separated by whitespace (space, tab, etc.).  An example of a simple table is:
+<pre>
+; These data are being used for an example...
+  0   2    7   9
+  0.1 2.2  6.8 9.9
+  0.2 2.5  6.5 10.3 ; This is the third row
+  0.3 2.8  6.1 10.9
+  0.4 3.1  5.8 11.2
+</pre>
+        <p>Notice the two comments. Each row must have the same number of columns.  Text preceding the first row containing only numbers (aside from comments) is treated as a header. The file may have
+        blank rows, which are ignored. Any row not having as many columns as the first row will be ignored.
+	
+	<a name="function" id="function">
+	<h3>Function Table Format</h3>
+	</a>
+
+	  <p>The function table format creates a table using a functional
+	  form.  The function can have parameters, which are given
+	  default values that can be changed at a later
+	  time. The following example creates a generic Cauchy formula
+	  with three columns and three parameters:
+
+<pre>
+PARAMETERS
+   b 1.4580    ; The Cauchy B parameter
+   c 0.00354   ; The Cauchy C parameter
+   d 0         ; The Cauchy D parameter
+END
+
+; The wavelength is scanned from 0.2 um to 1.6 um in steps of 10 nm.
+FOR lambda FROM 0.2 TO 1.6 BY 0.01
+
+WORKING
+   term1   b
+   term2   c/lambda^2
+   term3   d/lambda^4
+   n       term1+term2+term3
+   k       0
+END
+
+VALUES
+   lambda  ; The first column
+   n       ; The second column
+   k       ; The third column
+END
+</pre>
+         <p>There are four blocks (PARAMETERS, FOR, WORKING, and VALUES) in the file. 
+
+         <p>In the PARAMETERS block, each of the parameters and their default values are listed. The block ends with the word END.
+
+         <p>The second block iterates a variable (in the example: <tt>lambda</tt>)
+         from a starting value, to an ending value, with an increment
+         value. In this example, the variable is used as the first
+         column in the table, but that does not have to be the case.
+
+         <p>The third block (WORKING) contains pairs of variables and
+         expressions.  Each expression, which cannot contain spaces
+         unless surrounded by double-quotation marks, is evaluated and
+         assigned to the variable. The WORKING block must end with the word END.
+
+         <p>The fourth block (VALUES) defines the values that make up the
+         columns in the table. In this example, three values (lambda,
+         n, and k) make up the table columns. The VALUES block must
+         end with the word END.
+
+         <p>Whitespace and linefeeds are ignored in the file, except insofar as they delimit words, and comments end at the next linefeed.
+
+         <p>The parameters can be assigned different values later by using the <a href="#setparameter">set_parameter</a> function. If the <b>Table</b> is
+	   a member of a <b>Model</b> class, then the parameters can be assigned through the <b>Model</b>'s <tt>set_parameter</tt> function, as if the
+	   parameters were sub-parameters (e.g., via <tt>table.a</tt>, <tt>table.b</tt>, and <tt>table.c</tt>).
+
+	<a name="function2" id="function2">
+	<h3>Simple Function Format</h3>
+
+	<p>The simple function format does not create a lookup table. Instead, each time the function is needed, an expression is evaluated. An example for the simple function format, 
+	  using the Cauchy formula above, is
+
+<pre>
+PARAMETERS
+   b 1.4580    ; The Cauchy B parameter
+   c 0.00354   ; The Cauchy C parameter
+   d 0         ; The Cauchy D parameter
+END
+
+@lambda:(b+c/lambda^2+d/lambda^4,0)
+</pre>
+
+         <p>There are only two blocks (PARAMETERS and the function itself) in the file. 
+
+         <p>In the PARAMETERS block, each of the parameters and their default values are listed. The block ends with the word END.
+	  
+	   <p>The function itself uses the format described above. That is, the functional form must start with an ampersand (<tt>@</tt>), be followed by an independent variable name 
+	     (in the example, <tt>lambda</tt>), a colon (<tt>:</tt>), and an expression. The expression can have multiple values, separated by commas and optionally in parentheses. The 
+	     first value is treated as if it were the second column in a table, etc. The independent variable is treated as the first column in the table.
+
+	 <p>This example can be used as a <a href="dielfunc.htm">dielectric_function</a>, since the function returns two values, corresponding to columns 2 and 3 of a table (column 1 is <tt>lambda</tt>).
+
+         <p>Whitespace and linefeeds are ignored in the file, except insofar as they delimit words, and comments end at the next linefeed.
+
+         <p>The parameters can be assigned different values later by using the <a href="#setparameter">set_parameter</a> function. If the <b>Table</b> is
+	   a member of a <b>Model</b> class, then the parameters can be assigned through the <b>Model</b>'s <tt>set_parameter</tt> function, as if the
+	   parameters were sub-parameters (e.g., via <tt>table.a</tt>, <tt>table.b</tt>, and <tt>table.c</tt>.)
+
+        <p>Notice that there is no WORKING section, so intermediate, temporary variables cannot be used.
+
+<hr>
+
+        <h3>
+	  <a name="Table" id="Table">
+	    Table(const std::string&amp; filename, int col=2);  <br>
+	    Table(const char* filename, int col=2);  <br>
+	    Table(double singlevalue=0.);  <br>
+	    Table(double *x,double *y,int n);  <br>
+	    Table(const std::vector&lt;double&gt;& x,const std::vector&lt;double&gt;&amp y);  <br>
+	    Table(const std::vector&lt;pair&lt;double,double&gt; &gt;&amp v); </a></h3>
+
+        <blockquote><p> Class constructors. In
+          the first two constructors, the class will read columns 1
+          and <b>col</b> of the file given by <b>filename</b>.  In the third
+          constructor, the class will be initialized with a constant
+          value <b>singlevalue</b>.  In the fourth constructor, two
+          arrays of length <b>n</b>, <b>x</b> and <b>y</b> will be
+          used to fill the table.  In the fifth and sixth
+          constructors, vectors <b>x</b> and <b>y</b> or a vector of
+          pairs <b>v</b> are used to fill the table. Note that the 
+	    latter arrays must be of the same length.
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+	<h3><a name="value" id="value">
+	    double value(double lambda) const</a> </h3>
+
+        <blockquote><p>
+          Functions which evaluates the table at a specific value <b>lambda</b>.
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+	<h3><a name="read" id=
+        "read">int set(const string&amp; filename, int
+        ycol=2)</a></h3>
+
+        <blockquote><p>
+          Function which will set the table contents based upon the string <b>filename.</b>.  The function will read columns <b>1</b> and <b>ycol</b>.
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+	<h3><a name="InterpolationMode" id="InterpolationMode">
+	      enum <a href="#InterpolationMode">InterpolationMode</a> { LIN, LOG, SPLINE, LOGSPLINE } 
+	      </a></h3>
+
+	  <blockquote><p>
+	    By default, a table is interpolated linearly. Other choices are available to the user.
+	    The independent variable (x) may be interpolated linearly (LIN) or logarithmically (LOG).
+	    The dependent variable (y) may be interpolated linearly (LIN), logarithmically (LOG), as 
+	    a cubic spline (SPLINE), or as a cubic spline on a logarithmic scale (LOGSPLINE).
+	      </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+	  <h3><a name="set_interp" id="set_interp">
+	      void set_interpolationx(<a href="#InterpolationMode">InterpolationMode</a> m)<br>
+	      <a href="#InterpolationMode">InterpolationMode</a> get_interpolationx()<br>
+	      void set_interpolationy(<a href="#InterpolationMode">InterpolationMode</a> m)<br>
+	      <a href="#InterpolationMode">InterpolationMode</a> get_interpolationy()<br>
+	    </a></h3>
+
+	  <blockquote><p>
+	      Functions to set and get the interpolation mode for each of the axes of the <b>Table</b>.
+	    By default, a <b>Table</b> is interpolated linearly for both the <i>x</i. and <i>y</i> axes.  
+	    The independent variable (<i>x</i>) may be interpolated linearly (LIN) or logarithmically (LOG).
+	    The dependent variable (<i>y</i>) may be interpolated linearly (LIN), logarithmically (LOG), as 
+	    a cubic spline (SPLINE), or as a cubic spline on a logarithmic scale (LOGSPLINE).
+	  </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+	<h3><a name="setparameter" id ="setparameter">
+	    void set_parameter(const std::string& param,const std::string& value) <br>
+            std::string get_parameter(const std::string& param) const
+	    </a></h3>
+	<blockquote>
+	  Functions to set and get parameters of the Table. The parameters may be <b>interpolationx</b>, <b>interpolationy</b>, or, if
+	  the Table is read in from a formula file, any of the parameters in the formula file.<p>
+	  </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+	<h3><a name="AskUser"
+        id="AskUser">static Table AskUser(const string&amp;
+        prompt,const string&amp; deflt)<br>
+        static Table AskUser(const string&amp; prompt,double
+        deflt)</a></h3>
+
+        <blockquote><p>
+          Functions which prompt the user for either a value or a
+          filename.
+
+	<h4>Example:</h4>
+
+          <pre>
+Table reflectance = Table::AskUser("Reflectance","reflectance.dat");
+</pre>
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+	<h3><a name="ClearTableCache" id="#ClearTableCache">void ClearTableCache()</a></h3>
+
+	<blockquote><p> When table files are read, their information
+	    is read into a cache, increasing the speed at which
+	    subsequent calls are made or when reading multiple
+	    columns. This function clears that cache. Clearing the cache is useful,
+	    if it is known that the file needs to be read in again or memory needs to be freed.
+
+        </blockquote>
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+
+<!-- START FOOTER -->
+<hr>
+<h2>For More Information</h2>
+
+<p>
+<a href="http://www.nist.gov/pml/div685/grp06/germer.cfm">SCATMECH Technical Information and Questions</a><br>
+<a href="http://www.nist.gov/pml/div685/index.cfm" target="_top">Sensor Science Division Home Page</a><br>
+<a href="mailto:fraser@nist.gov">Sensor Science Division Inquiries</a><br>
+<a href="mailto:thomas.germer@nist.gov">Website Comments</a>
+
+<p>
+Current SCATMECH version: <a href="./download.htm">7.00 (January 2015)</a><br>
+This page first online: Version 3.00 (December 2001) <br>
+This page last modified: Version 7.00 (January 2015) <br>
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+</td>
+</tr>
+</table>
+
+</body>
+</html>
