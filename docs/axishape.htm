@@ -1,0 +1,695 @@
+<html>
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Cygwin (vers 1st September 2004), see www.w3.org">
+   <link rel="STYLESHEET" href="style.css" type="text/css">
+
+  <title>SCATMECH: Axisymmetric_Shape</title>
+<script language="JavaScript" id="_fed_an_js_tag" src="/js/federated-analytics.all.min.js?agency=NIST&subagency=pml&pua=UA-37115410-46&yt=true"></script>
+</head>
+
+<body>
+  <a name="top" id="top"><!-- --></a>
+
+  <table width="98%" border="0" cellpadding="0" cellspacing="0"
+  align="center">
+    <tr>
+      <td>
+        <p class="nav"><a href="index.htm">SCATMECH</a> &gt; <a href=
+        "classes.htm">Classes and Functions</a> &gt;
+        <a href="classes.htm#PropertyModels">Property Models</a>
+        &gt; Axisymmetric_Shape</p>
+
+	<h1>Abstract class Axisymmetric_Shape</h1>
+
+        
+        <hr>
+	<p>
+        The abstract class <b>Axisymmetric_Shape</b> is used by <a href=
+        "tscat.htm">TMatrix_Axisymmetric_Scatterer</a> and <a href=
+        "axipart.htm">Axisymmetric_Particle_BRDF_Model</a> to
+        describe the shape of a particle having a vertical axis of
+        rotation.
+
+        <h2>Instantiable Models and Their Parameters:</h2>
+
+        <table border="1" cellpadding="5">
+          <tr>
+            <th>Parameter</th>
+
+            <th>Data
+            Type</th>
+
+            <th>Description</th>
+
+            <th>Default</th>
+          </tr>
+
+          <tr>
+            <td colspan="4" class="model">
+              <b>Ellipsoid_Axisymmetric_Shape</b>:
+              An oblate or prolate ellipsoidal particle.<br>
+
+              <center>
+                <img src=
+                "Images/ellipsoid.gif" width="400" height="360"
+                alt="Diagram showing a ellipsoidal particle.">
+              </center>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="parameter">npts</td>
+            <td class="datatype">int</td>
+            <td class="description">The
+            number of sampled points of the shape needed for the
+            line integrals in the T-Matrix calculation. This value should be significantly larger than the polar order of the calculation.<br>
+            (Inherited from Axisymmetric_Shape.)</td>
+
+            <td class="default">100</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">vertical</td>
+            <td class="datatype">double</td>
+            <td class="description">The
+            length of the vertical semi-axis of the ellipsoid
+            [&#181;m].</td>
+            <td class="default">0.05</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">horizontal</td>
+            <td class="datatype">double</td>
+            <td class="description">The
+            length of the horizontal semi-axis of the ellipsoid
+            [&#181;m]. If <tt>horizontal</tt> &gt; <tt>vertical</tt>, then the ellipsoid is oblate.
+            If <tt>horizontal</tt> &lt; <tt>vertical</tt>, then the ellipsoid is
+            prolate.</td>
+
+            <td class="default">0.05</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">offset</td>
+            <td class="datatype">double</td>
+            <td class="description">Origin
+            offset for the calculation [&#181;m]. Changing the
+            origin should not have an effect on the scattered
+            intensity, but will change the convergence properties
+            of the calculation. A positive value corresponds to the origin moving closer to the surface, when using 
+	    one of the surface scattering models.
+	    </td>
+
+            <td class="default">0</td>
+          </tr>
+
+          <tr>
+            <td colspan="4" class="model">
+              <b>Cylinder_Axisymmetric_Shape</b>:
+              A right circular cylinder with optionally rounded
+              corners.<br>
+
+              <center>
+                <img src=
+                "Images/cylinder.gif" width="400" height="315" alt=
+                "Diagram showing a cylindrical particle.">
+              </center>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="parameter">npts</td>
+
+            <td class="datatype">int</td>
+
+            <td class="description">The
+            number of sampled points of the shape needed for the
+            line integrals in the T-Matrix calculation. This value should be significantly larger than the polar order of the calculation.<br>
+            (Inherited from Axisymmetric_Shape.)</td>
+
+            <td class="default">100</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">radius</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The
+            radius of the cylinder [&#181;m].</td>
+
+            <td class="default">0.05</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">length</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The
+            length of the cylinder [&#181;m].</td>
+
+            <td class="default">0.1</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">corner</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The
+            radius of curvature of the corners
+            [&#181;m].</td>
+
+            <td class="default">0</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">renorm</td>
+
+            <td class="datatype">int</td>
+
+            <td class="description">If this
+            parameter is non-zero, then the volume of the particle
+            is renormalized to that of a cylinder with
+            <b>corner</b> equal to zero.</td>
+
+            <td class="default">0</td>
+          </tr>
+
+          <tr>
+            <td colspan="4" class="model">
+              <b>Conical_Axisymmetric_Shape</b>:
+              A right circular cone with optionally rounded
+              corners.<br>
+
+              <center>
+                <img src=
+                "Images/cone.gif" width="400" height="357" alt=
+                "Diagram showing a conical particle.">
+              </center>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="parameter">npts</td>
+
+            <td class="datatype">int</td>
+
+            <td class="description">The
+            number of sampled points of the shape needed for the
+            line integrals in the T-Matrix calculation. This value should be significantly larger than the polar order of the calculation.<br>
+            (Inherited from Axisymmetric_Shape.)</td>
+
+            <td class="default">100</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">radius</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The
+            radius of the base of the cone [&#181;m].</td>
+
+            <td class="default">0.05</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">height</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The
+            height of the cone [&#181;m].</td>
+
+            <td class="default">0.1</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">offset</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">By
+            default, the origin of the particle is positioned at
+            one-third of its height. To change the location of the
+            origin, set the value of <b>offset</b> to a non-zero
+            value [&#181;m]. If this position is positive, the
+            origin is moved towards the base of the cone. Changing
+            the origin should not have an effect on the scattered
+            intensity, but will change the convergence properties
+            of the calculation.</td>
+
+            <td class="default">0</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">corner_base</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The
+            radius of curvature of the corners at the base of the
+            cone [&#181;m].</td>
+
+            <td class="default">0</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">corner_apex</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The
+            radius of curvature of the apex of the cone
+            [&#181;m].</td>
+
+            <td class="default">0</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">updown</td>
+
+            <td class="datatype">int</td>
+
+            <td class="description">If this
+            parameter is zero, the cone is pointing up (positive
+            z-direction). If this parameter is non-zero, it is
+            pointing down.</td>
+
+            <td class="default">0</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">renorm</td>
+
+            <td class="datatype">int</td>
+
+            <td class="description">If this
+            parameter is non-zero, then the volume of the particle
+            is renormalized to that of a cone with
+            <b>corner_base</b> and <b>corner_apex</b> set to
+            zero.</td>
+
+            <td class="default">0</td>
+          </tr>
+
+          <tr>
+            <td colspan="4" class="model">
+              <b>Double_Conical_Axisymmetric_Shape</b>:
+              A particle having a diamond-shaped cross section,
+              with optionally rounded corners.<br>
+
+              <center>
+                <img src=
+                "Images/dcone.gif" width="400" height="400" alt=
+                "Diagram showing a double-conical particle.">
+              </center>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="parameter">npts</td>
+
+            <td class="datatype">int</td>
+
+            <td class="description">The
+            number of sampled points of the shape needed for the
+            line integrals in the T-Matrix calculation. This value should be significantly larger than the polar order of the calculation.<br>
+            (Inherited from Axisymmetric_Shape.)</td>
+
+            <td class="default">100</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">height</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The total
+            height of the particle [&#181;m].</td>
+
+            <td class="default">0.1</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">radius</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The
+            radius at the waist of the particle
+            [&#181;m].</td>
+
+            <td class="default">0.05</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">corner_apex</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The
+            radius of curvature of the corners at the apexes of the
+            particle [&#181;m].</td>
+
+            <td class="default">0</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">corner_waist</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The
+            radius of curvature of the waist of the cone
+            [&#181;m].</td>
+
+            <td class="default">0</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">renorm</td>
+
+            <td class="datatype">int</td>
+
+            <td class="description">If this
+            parameter is non-zero, then the volume of the particle
+            is renormalized to that of a double-cone with
+            <b>corner_waist</b> and <b>corner_apex</b> set to
+            zero.</td>
+
+            <td class="default">0</td>
+          </tr>
+
+          <tr>
+            <td colspan="4" class="model">
+              <b>Chebyshev_Axisymmetric_Shape</b>:
+              An axisymmetric shape whose radial function (radius
+              as a function of angle theta) is that of an
+              ellipsoid, multiplied by the factor
+              (1+amplitude*cos(n*theta)). This implementation
+              allows a fraction of the ellipsoid to be unperturbed,
+              in a manner which keeps the derivative of the radial
+              function continuous.<br>
+
+              <center>
+                <img src=
+                "Images/chebyshev.gif" width="400" height="400"
+                alt="Diagram showing a Chebyshev particle.">
+              </center>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="parameter">npts</td>
+
+            <td class="datatype">int</td>
+
+            <td class="description">The
+            number of sampled points of the shape needed for the
+            line integrals in the T-Matrix calculation. This value should be significantly larger than the polar order of the calculation.<br>
+            (Inherited from Axisymmetric_Shape.)</td>
+
+            <td class="default">100</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">vertical</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The
+            length of the vertical semi-axis of the ellipsoid
+            [&#181;m].</td>
+
+            <td class="default">0.05</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">horizontal</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The
+            length of the horizontal semi-axis of the ellipsoid
+            [&#181;m]. If <tt>horizontal</tt> &gt; <tt>vertical</tt>, then the ellipsoid is oblate.
+            If <tt>horizontal</tt> &lt; <tt>vertical</tt>, then the ellipsoid is
+            prolate.</td>
+
+            <td class="default">0.05</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">amplitude</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The
+            relative amplitude of the oscillations.</td>
+
+            <td class="default">0.01</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">n</td>
+
+            <td class="datatype">int</td>
+
+            <td class="description">The
+            number of half-cycles.</td>
+
+            <td class="default">8</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">start</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The angle
+            [rad] at which the oscillations begin.</td>
+
+            <td class="default">0</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">end</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The angle
+            [rad] at which the oscillations end.</td>
+
+            <td class="default">3.14159265</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">renorm</td>
+
+            <td class="datatype">int</td>
+
+            <td class="description">If this
+            parameter is non-zero, then the volume of the particle
+            is renormalized to that of the ellipsoid with
+            <b>amplitude</b> set to zero.</td>
+
+            <td class="default">0</td>
+          </tr>
+
+          <tr>
+            <td colspan="4" class="model">
+              <b>Indented_Ellipsoid_Axisymmetric_Shape</b>:
+              An indented ellipsoidal particle.<br>
+
+              <center>
+                <img src=
+                "Images/indent.gif" width="400" height="349" alt=
+                "Diagram showing an indented ellipsoidal particle.">
+                
+              </center>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="parameter">npts</td>
+
+            <td class="datatype">int</td>
+
+            <td class="description">The
+            number of sampled points of the shape needed for the
+            line integrals in the T-Matrix calculation. This value should be significantly larger than the polar order of the calculation.<br>
+            (Inherited from Axisymmetric_Shape.)</td>
+
+            <td class="default">100</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">vertical</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The
+            length of the vertical semi-axis of the ellipsoid
+            [&#181;m].</td>
+
+            <td class="default">0.05</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">horizontal</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The
+            length of the horizontal semi-axis of the ellipsoid
+            [&#181;m]. If <tt>horizontal</tt> &gt; <tt>vertical</tt>, then the ellipsoid is oblate.
+            If <tt>horizontal</tt> &lt; <tt>vertical</tt>, then the ellipsoid is
+            prolate.</td>
+
+            <td class="default">0.05</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">indent</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The depth
+            of the indentation [&#181;m].</td>
+
+            <td class="default">0.01</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">updown</td>
+
+            <td class="datatype">int</td>
+
+            <td class="description">(0) if
+            the flat indentation is down (towards the surface) or
+            (1) if the flat is up.</td>
+
+            <td class="default">0</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">renorm</td>
+
+            <td class="datatype">int</td>
+
+            <td class="description">(0) if
+            the particle dimensions are held fixed or (1) if the
+            particle volume is to be renormalized to the volume of
+            the un-indented ellipse.</td>
+
+            <td class="default">0</td>
+          </tr>
+
+          <tr>
+            <td colspan="4" class="model">
+              <b>Table_Axisymmetric_Shape</b>:
+              A shape specified by a table of values, radius versus
+              angle [deg], usually specified by a file.<br>
+
+              <center>
+                <img src=
+                "Images/tableaxi.gif" width="400" height="400" alt=
+                "Diagram showing an arbitrary axisymmetric particle.">
+                
+              </center>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="parameter">npts</td>
+
+            <td class="datatype">int</td>
+
+            <td class="description">The
+            number of sampled points of the shape needed for the
+            line integrals in the T-Matrix calculation. This value should be significantly larger than the polar order of the calculation.<br>
+            (Inherited from Axisymmetric_Shape.)</td>
+
+            <td class="default">100</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">table</td>
+
+            <td class="datatype"><a href="scattabl.htm">Table</a></td>
+
+            <td class="description">The table
+            containing the radius versus angle [deg].</td>
+
+            <td class="default">0.05</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">scale</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">If
+            <b>scale</b> is negative, the particle's size is
+            renormalized so that its volume is that of a sphere 
+            having a radius abs(<b>scale</b>). If <b>scale</b> is
+            positive, then the radius from the table is multiplied
+            by <b>scale</b> to obtain the radius used. if this
+            parameter is zero, then the size of the particle is not
+            renormalized.</td>
+
+            <td class="default">1</td>
+          </tr>
+        </table>
+
+        <h2>See also:</h2>
+
+        <p><a href=
+        "index.htm">SCATMECH Home</a>, &nbsp; <a href=
+        "convent.htm">Conventions</a>, &nbsp; <a href=
+        "tscat.htm">TMatrix_Axisymmetric_Scatterer</a>, &nbsp;
+        <a href=
+        "axipart.htm">Axisymmetric_Particle_BRDF_Model</a>
+
+        <h2>Include file:</h2>
+
+          <pre>
+#include "<a href="../code/tmatrix.h">tmatrix.h</a>"
+</pre>
+        <h2>Source code:</h2>
+
+          <pre>
+<a href="../code/axisym.cpp">axisym.cpp</a>
+</pre>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+        <hr>
+
+<!-- START FOOTER -->
+<hr>
+<h2>For More Information</h2>
+
+<p>
+<a href="http://www.nist.gov/pml/div685/grp06/germer.cfm">SCATMECH Technical Information and Questions</a><br>
+<a href="http://www.nist.gov/pml/div685/index.cfm" target="_top">Sensor Science Division Home Page</a><br>
+<a href="mailto:fraser@nist.gov">Sensor Science Division Inquiries</a><br>
+<a href="mailto:thomas.germer@nist.gov">Website Comments</a>
+
+<p>
+Current SCATMECH version: <a href="./download.htm">7.00 (January 2015)</a><br>
+This page first online: Version 5.00 (July 2005) <br>
+This page last modified: Version 7.00 (January 2015) <br>
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+</td>
+</tr>
+</table>
+
+</body>
+</html>

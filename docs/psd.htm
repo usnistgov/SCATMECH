@@ -1,0 +1,585 @@
+<html>
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Cygwin (vers 1st September 2004), see www.w3.org">
+   <link rel="STYLESHEET" href="style.css" type="text/css">
+
+  <title>SCATMECH: PSD_Function</title>
+<script language="JavaScript" id="_fed_an_js_tag" src="/js/federated-analytics.all.min.js?agency=NIST&subagency=pml&pua=UA-37115410-46&yt=true"></script>
+</head>
+
+<body>
+  <a name="top" id="top"><!-- --></a>
+
+  <table width="98%" border="0" cellpadding="0" cellspacing="0"
+  align="center">
+    <tr>
+      <td>
+        <p class="nav"><a href="index.htm">SCATMECH</a> &gt; <a href=
+        "classes.htm">Classes and Functions</a> &gt;
+        <a href="classes.htm#PropertyModels">Property Models</a>
+        &gt; PSD_Function</p>
+
+	<h1>Abstract class PSD_Function</h1>
+        
+        <hr>
+
+	<p>
+        The abstract class <b>PSD_Function</b> is used by <a href=
+        "roughbrdf.htm">Roughness_BRDF_Model</a> to store
+        information about the power spectral density (PSD) function
+        of the surface height function. The user may provide other
+        PSD functions for <a href=
+        "roughbrdf.htm">Roughness_BRDF_Model</a> by creating
+        classes inheriting the properties of <b>PSD_Function</b>.
+        There are several classes inheriting the properties of
+        <b>Slope_Distribution_Function</b>.
+
+        <h2>Instantiable Models and Their Parameters:</h2>
+
+        <table border="1" cellpadding="5">
+          <tr>
+            <th>Parameter</th>
+
+            <th>Data
+            Type</th>
+
+            <th>Description</th>
+
+            <th>Default</th>
+          </tr>
+
+          <tr>
+            <td colspan="4" class="model"><b>Unit_PSD_Function</b>:<br>
+            A trivial power spectral density function that is
+            uniform with unit value. It is not normalized, and so any model using
+            it will not have absolute scaling. It is useful when
+            one would like to evaluate the scattering <i>per unit
+            of power spectral density</i>.</td>
+          </tr>
+
+          <tr>
+            <td colspan="4" class="model"><i>Unit_PSD_Function has no
+            parameters.</i></td>
+          </tr>
+
+          <tr>
+            <td colspan="4" class="model"><b>ABC_PSD_Function</b>:<br>
+            A power spectrum that is given by
+            <i>S</i><sub>2</sub>(<i>f</i>)&nbsp;=&nbsp;<i>A</i>&nbsp;/&nbsp;[1&nbsp;+&nbsp;(<i>
+            Bf</i>)<sup>2</sup>]<sup><i>C</i>/2</sup>.</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">A</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">Parameter
+            A [&#181;m<sup>4</sup>]</td>
+
+            <td class="default">0.01</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">B</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">Parameter
+            B [&#181;m]</td>
+
+            <td class="default">362</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">C</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">Parameter
+            C</td>
+
+            <td class="default">2.5</td>
+          </tr>
+
+          <tr>
+            <td colspan="4" class="model"><b>Table_PSD_Function</b>:<br>
+            A power spectrum that is interpolated from a table of
+            values.</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">T</td>
+
+            <td class="datatype"><a href="scattabl.htm">Table</a></td>
+
+            <td class="description">The table
+            containing the PSD.</td>
+
+            <td class="default">1</td>
+          </tr>
+
+          <tr>
+            <td colspan="4" class="model"><b>Fractal_PSD_Function</b>:<br>
+            A power spectrum that is given by
+            <i>S</i><sub>2</sub>(<i>f</i>)&nbsp;=&nbsp;<i>A</i>&nbsp;/&nbsp;<i>
+            f</i><sup>exponent</sup>.</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">A</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">Power
+            spectrum amplitude factor
+            [&#181;m<sup>4</sup>]</td>
+
+            <td class="default">0.01</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">exponent</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The
+            fractal exponent.</td>
+
+            <td class="default">2.5</td>
+          </tr>
+
+          <tr>
+            <td colspan="4" class="model"><b>Gaussian_PSD_Function</b>:<br>
+            A power spectrum appropriate for a Gaussian rough
+            surface.</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">sigma</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The
+            standard deviation of the surface height
+            [&#181;m]</td>
+
+            <td class="default">0.05</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">length</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The
+            lateral correlation length [&#181;m]</td>
+
+            <td class="default">5</td>
+          </tr>
+
+          <tr>
+            <td colspan="4" class="model"><b>Elliptical_Mesa_PSD_Function</b>:<br>
+            A power spectrum appropriate for elliptical mesas. That
+            is, the surface is assumed to be zero everywhere
+            outside of the ellipse, and a given height inside of
+              it. The surface is assumed to be covered with a given density of these features.  </td>
+          </tr>
+
+          <tr>
+            <td class="parameter">axisx</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The
+            length of the axis of the ellipse along the x-direction
+            [&#181;m]</td>
+
+            <td class="default">1.5</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">axisy</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The
+            length of the axis of the ellipse along the y-direction
+            [&#181;m]</td>
+
+            <td class="default">1.5</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">height</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The
+            height or depth of the mesas [&#181;m]</td>
+
+            <td class="default">0.01</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">density</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The
+            surface number density of the ellipses
+            [&#181;m<sup>-2</sup>]</td>
+
+            <td class="default">0.01</td>
+          </tr>
+
+          <tr>
+            <td colspan="4" class="model"><b>Rectangular_Mesa_PSD_Function</b>:<br>
+            A power spectrum appropriate for rectangular mesas.
+            That is, the surface is assumed to be zero everywhere
+            outside of the rectangle, and a given height inside of
+            it.  The surface is assumed to be covered with a given density of these features.</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">lengthx</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The
+            length of the rectangle along the x-direction
+            [&#181;m]</td>
+
+            <td class="default">1.5</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">lengthy</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The
+            length of the rectangle along the y-direction
+            [&#181;m]</td>
+
+            <td class="default">1.5</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">height</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The
+            height or depth of the mesas [&#181;m]</td>
+
+            <td class="default">0.01</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">density</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The
+            surface number density of the rectangles
+            [&#181;m<sup>-2</sup>]</td>
+
+            <td class="default">0.01</td>
+          </tr>
+
+          <tr>
+            <td colspan="4" class="model"><b>Triangular_Mesa_PSD_Function</b>:<br>
+            A power spectrum appropriate for equilateral triangular
+            mesas. That is, the surface is assumed to be zero
+            everywhere outside of the equilateral triangle, and a
+            given height inside of it.  The surface is assumed to be covered with a given density of these features.</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">side</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The
+            length of the sides of the triangle
+            [&#181;m]</td>
+
+            <td class="default">1.5</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">height</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The
+            height or depth of the mesas [&#181;m]</td>
+
+            <td class="default">0.01</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">density</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The
+            surface number density of triangles
+            [&#181;m<sup>-2</sup>]</td>
+
+            <td class="default">0.01</td>
+          </tr>
+
+          <tr>
+            <td colspan="4" class="model"><b>Rectangular_Pyramid_PSD_Function</b>:<br>
+            A power spectrum appropriate for rectangular
+            pyramids. The surface is assumed to be covered with a given density of these features.</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">lengthx</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The
+            length of the rectangular base along the x-direction
+            [&#181;m]</td>
+
+            <td class="default">1.5</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">lengthy</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The
+            length of the rectangular base along the y-direction
+            [&#181;m]</td>
+
+            <td class="default">1.5</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">height</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The
+            height or depth of the pyramids [&#181;m]</td>
+
+            <td class="default">0.01</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">density</td>
+
+            <td class="datatype">double</td>
+	    
+            <td class="description">The
+            surface number density of the pyramids
+            [&#181;m<sup>-2</sup>]</td>
+
+            <td class="default">0.01</td>
+          </tr>
+
+          <tr>
+            <td colspan="4" class="model"><b>Triangular_Pyramid_PSD_Function</b>:<br>
+            A power spectrum appropriate for pyramids with triangular base.
+	      The surface is assumed to be covered with a given density of these features.</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">side</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The
+            length of the sides of the triangular base
+            [&#181;m]</td>
+
+            <td class="default">1.5</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">height</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The
+            height or depth of the pyramids [&#181;m]</td>
+
+            <td class="default">0.01</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">density</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The
+            surface number density of pyramids
+            [&#181;m<sup>-2</sup>]</td>
+
+            <td class="default">0.01</td>
+          </tr>
+
+          <tr>
+            <td colspan="4" class="model"><b>Parabolic_Dimple_PSD_Function</b>:<br>
+            A power spectrum appropriate for elliptical features, whose profile is parabolic
+	      in nature.  That
+            is, the surface is assumed to be zero everywhere
+            outside of the ellipse, has a maximum height or depth at its center, and decays parabolically to the 
+	      edge of the ellipse. For small heights, this surface approximates ellipsoidal dimples or mounds.
+	      The surface is assumed to be covered with a given density of these features.</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">axisx</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The
+            length of the axis of the ellipse along the x-direction
+            [&#181;m]</td>
+
+            <td class="default">1.5</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">axisy</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The
+            length of the axis of the ellipse along the y-direction
+            [&#181;m]</td>
+
+            <td class="default">1.5</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">height</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The
+            height or depth of the dimple or mound [&#181;m]</td>
+
+            <td class="default">0.01</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">density</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The
+            surface number density of the features.
+            [&#181;m<sup>-2</sup>]</td>
+
+            <td class="default">0.01</td>
+          </tr>
+
+          <tr>
+            <td colspan="4" class="model"><b>Double_PSD_Function</b>:<br>
+            A power spectrum given by the sum of any two other
+            power spectra. </td>
+          </tr>
+
+          <tr>
+            <td class="parameter">psd1</td>
+
+            <td class="datatype">PSD_Function_Ptr</td>
+
+            <td class="description">The first
+            power spectrum.</td>
+
+            <td class="default">ABC_PSD_Function</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">psd2</td>
+
+            <td class="datatype">PSD_Function_Ptr</td>
+
+            <td class="description">The
+            second power spectrum.</td>
+
+            <td class="default">ABC_PSD_Function</td>
+          </tr>
+        </table>
+
+        <h2>See also:</h2>
+
+        <p><a href=
+        "index.htm">SCATMECH Home</a>, &nbsp; <a href=
+        "convent.htm">Conventions</a>, &nbsp; <a href=
+        "roughbrdf.htm">Roughness_BRDF_Model</a>
+        &nbsp;</p>
+
+	<h2>Include file:</h2>
+
+          <pre>
+#include "<a href="../code/rough.h">rough.h</a>"
+</pre>
+        <h2>Source code:</h2>
+
+          <pre>
+<a href="../code/rough.cpp">rough.cpp</a>
+</pre>
+        <h2>Definition of public elements:</h2>
+
+          <pre>
+class PSD_Function : public <a href=
+"model.htm">Model</a> {
+    virtual double <a href=
+"#f">PSD</a>(double freqx, double freqy) = 0;
+};
+
+typedef <a href=
+"modelptr.htm">Model_Ptr</a>&lt;PSD_Function&gt; PSD_Function_Ptr;
+</pre>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+        <hr>
+
+        <h3><a name="f" id="f">double PSD(double freqx,double
+        freqy)</a></h3>
+
+        <blockquote><p>
+          This function evaluates the PSD function at the
+          two-dimensional spatial frequency
+          (<b>freqx</b>,<b>freqy</b>). This function is defined as
+          the two-dimensional PSD function, evaluated along the
+          (<i>x</i>,<i>y</i>) direction.
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+<!-- START FOOTER -->
+<hr>
+<h2>For More Information</h2>
+
+<p>
+<a href="http://www.nist.gov/pml/div685/grp06/germer.cfm">SCATMECH Technical Information and Questions</a><br>
+<a href="http://www.nist.gov/pml/div685/index.cfm" target="_top">Sensor Science Division Home Page</a><br>
+<a href="mailto:fraser@nist.gov">Sensor Science Division Inquiries</a><br>
+<a href="mailto:thomas.germer@nist.gov">Website Comments</a>
+
+<p>
+Current SCATMECH version: <a href="./download.htm">7.00 (January 2015)</a><br>
+This page first online: Version 3.00 (December 2001) <br>
+This page last modified: Version 7.00 (January 2015) <br>
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+</td>
+</tr>
+</table>
+
+</body>
+</html>

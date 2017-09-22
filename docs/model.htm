@@ -1,0 +1,340 @@
+<html>
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Cygwin (vers 1st September 2004), see www.w3.org">
+   <link rel="STYLESHEET" href="style.css" type="text/css">
+
+  <title>SCATMECH: Model</title>
+<script language="JavaScript" id="_fed_an_js_tag" src="/js/federated-analytics.all.min.js?agency=NIST&subagency=pml&pua=UA-37115410-46&yt=true"></script>
+</head>
+
+<body>
+  <a name="top" id="top"><!-- --></a>
+
+  <table width="98%" border="0" cellpadding="0" cellspacing="0"
+  align="center">
+    <tr>
+      <td>
+        <p class="nav"><a href="index.htm">SCATMECH</a> &gt; <a href=
+        "classes.htm">Classes and Functions</a> &gt;
+        <a href="classes.htm#Utility">Utility</a> &gt;
+        Model</p>
+
+	<h1>Abstract class Model</h1>
+
+        
+        <hr>
+        <p>The class <b>Model</b> is an abstract class that all models in SCATMECH
+        inherit. It provides a number of run-time services to these models, including
+	  <ul>
+	    <li>error handling,</li>
+	    <li>tools for passing values to model parameters and keeping track of changes,</li>
+	    <li>instantiation of new classes,</li>
+	    <li>providing lists of availble parameters, and </li>
+	    <li>providing information about parent and available child classes.</li>
+	    </ul>
+
+	<h2>Include file:</h2>
+
+          <pre>
+#include "<a href="../code/inherit.h">inherit.h</a>"
+</pre>
+        <h2>Source code:</h2>
+
+          <pre>
+<a href="../code/inherit.cpp">inherit.cpp</a>
+<a href="../code/models.cpp">models.cpp</a>
+</pre>
+        <h2>See also:</h2>
+
+        <p><a href="index.htm">SCATMECH Home</a>,&nbsp;
+	<a href="inherit.htm">Inheritance</a>,&nbsp;
+	<a href="modelptr.htm">Model_Ptr&lt;model&gt;</a>
+
+	<h2>Definition of
+        public and protected elements:</h2>
+
+          <pre>
+class Model
+{
+public:
+    Model();
+    void <a href="#AskUser">AskUser</a>();
+    void <a href="#init">init</a>();
+
+    void <a href="#parameter">set_parameter</a>(const std::string&amp; name,const std::string&amp; value);
+    void <a href="#parameter">set_parameter</a>(const std::string&amp; name,const char* value);
+    template &lt;class TYPE&gt; void <a href="#parameter">set_parameter</a>(const std::string&amp; parameter, const TYPE&amp value);
+
+    std::string <a href="#get_parameter">get_parameter</a>(const std::string&amp; parameter) const;
+
+    void <a href="#print_parameters">print_parameters</a>(std::ostream&amp; os,const std::string& prefex="") const;
+    void <a href="#get_parameter_names">get_parameter_names</a>(std::deque<std::string>&amp; plist) const;   
+    ParameterInfo <a href="#get_parameter_info">get_parameter_info</a>(const std::string& parameter) const;
+
+    static <a href="inherit.htm">Inheritance</a> <a href="#Inheritance">inheritance</a>;
+    virtual const <a href="inherit.htm">Inheritance</a>& <a href="#Inheritance">get_inheritance</a>() const;
+
+    void <a href="#recalc">set_recalc</a>(int _recalc=0xFF);
+    virtual int <a href="#recalc">get_recalc</a>() const;
+
+    static void <a href="#quiet">set_quiet</a>(int _quiet);
+    static int <a href="#quiet">get_quiet</a>();
+
+    void <a href="#SETUP">SETUP</a>();
+
+protected:
+    virtual void <a href="#setup">setup</a>();
+
+    virutal void <a href="#virtualfunctions">set_parameter_base</a>(const std::string&amp; name,const std::string&amp; value);
+    virtual std::string <a href="#virtualfunctions">get_parameter_base</a>(const std::string&amp; parameter) const;
+    virtual void <a href="#virtualfunctions">get_parameter_names_base</a>(std::deque<std::string>&amp; plist, const std::string&amp; prefix) const;
+    virtual void <a href="#virtualfunctions">print_parameters_base</a>(std::ostream&amp; os,const std::string& prefex="") const;
+
+    void <a href="#message">message</a>(const std::string&amp s);
+    void <a href="#error">error</a>(const std::string& message);
+
+    int <a href="#recalc">RECALC</a>;
+};
+</pre> 
+
+        <hr>
+
+	<h3><a name="AskUser" id="AskUser">void AskUser()</a></h3>
+
+        <blockquote><p>
+          The function <tt>AskUser</tt> queries the user for all
+          parameters needed by the specific model, usually using the standard input (<tt>std::cin</tt>) and unbuffered output (<tt>std::cerr</tt>). 
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+	<h3>void <a name="init" id="init">init</a>()</h3>
+	
+	<blockquote>
+	 <p>Function that sets all parameters to their default values.
+	 </blockquote>
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+	<h3><a name="parameter" id="parameter">
+	void set_parameter(const std::string&amp; name,const std::string&amp; value)</a><br>
+	void set_parameter(const std::string&amp; name,const char* value)</a><br>
+	template &lt;class TYPE&gt; void set_parameter(const std::string&amp; parameter, const TYPE&amp; value)</h3>
+
+        <blockquote><p>
+          The virtual function <tt>set_parameter</tt> allows one to
+          change any model parameter by name. The string
+          <tt>name</tt> is the name of the parameter.  For those
+          parameters that take their own subparameters, the parameter
+          name is followed by a period, followed by the subparameter's name. 
+	  In the first two functions, <tt>value</tt> contains the parameter
+          encoded as a string. If the parameter does not exist for the
+          current model, then an exception of type <a href=
+          "except.htm">SCATMECH_exception</a> is thrown.  The third function converts <tt>value</tt>
+	  to a string before sending that string to the model.
+        <h4>Example:</h4>
+
+          <pre>
+MicroroughnessBRDF_Model model;
+model.set_parameter("substrate","(1.46,0.02)");
+model.set_parameter("psd","ABC_PSD_Function");
+model.set_parameter("psd.A",0.03);
+</pre>
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+	<h3>string <a name="get_parameter" id="get_parameter">
+	get_parameter</a>(const string&amp; parameter)</h3>
+
+	<blockquote>
+	<p>Function that returns a string representation of a specific parameter. For numeric parameters, the
+	  string representation of that value is returned. For pointers to models (i.e., <a href="./modelptr.htm">Model_Ptr&lt;model&gt;</a>), this
+	  function returns the name of the model assigned to the parameter. Subparameters of those models can be accessed by using the "<tt>parameter.subparameter</tt>" notation.
+
+	<h4>Example:</h4>
+	<pre>
+MicroroughnessBRDF_Model model;
+model.AskUser();
+cout << model.get_parameter("substrate") << endl;
+cout << model.get_parameter("psd") << endl;
+cout << model.get_parameter("psd.A") << endl;
+</pre>
+	</blockquote>
+
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+	<h3>void <a name="print_parameters" id="print_parameters">print_parameters</a>(ostream&amp; os)</h3>
+
+	<blockquote>
+	<p>Function that prints a complete list of parameter names, current values, descriptions, and types to a stream.
+	</blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+	<h3>void <a name="get_parameter_names" id="get_parameter_names">get_parameter_names</a>(StringList&amp; plist) const</h3>
+
+	<blockquote>
+	<p>Function that retrieves a list of all valid parameters for a given model.  The data type <tt>StringList</tt> is a typedef for <tt>std::deque&lt;std::string&gt;</tt>. 
+	  The list (actually, a double-ended queue) contains all the valid input parameters that can be used in the above <a href="#parameter">set_parameter</a> and <a href="#get_parameter">get_parameter</a> functions.
+	</blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+
+	<h3>ParameterInfo <a name="#get_parameter_info" id="#get_parameter_info">get_parameter_info</a>(const string& parameter) const</h3>
+
+	<blockquote>
+	<p>Function that returns static information about a particular parameter.  <tt>ParameterInfo</tt> is a structure defined as
+
+	<pre>
+struct ParameterInfo {
+    string name;         // The name of the parameter...
+    string description;  // A description of the parameter...
+    string type;         // The data type for external programs...
+    string defaultvalue; // The default value for the parameter...
+};
+</pre>
+
+	</blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+	<h3><a name="Inheritance" id="Inheritance">static Inheritance
+        inheritance</a><br>
+	virtual const Inheritance& get_inheritance()</h3>
+
+        <blockquote>
+          <p>Every class inheriting <tt>Model</tt> has a static
+          member named <tt>inheritance</tt> of type <a href=
+          "inherit.htm">Inheritance</a>, which keeps track of all
+          models which inherit it and its parameters. It enables run-time generation
+          of instances of a class and dynamic access to parameters by name.  Accessing a specific model's <tt>inheritance</tt> directly will
+	  allow access to that specific model's parameters, but not those of a child model.  Accessing the model's <tt>inheritance</tt> through the 
+          function <tt>get_inheritance()</tt> will allow access to the parameters of the specific instantiation of the model.  In the case of accessing
+	  <tt>inheritance</tt> directly, one does not need an instance of the class, while in the case of using <tt>get_inheritance</tt> one needs an instance.
+	  
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+	
+
+	<h3><a name="recalc" id="recalc">
+	void set_recalc(int _recalc=0xFF)<br>
+        virtual int get_recalc()<br>
+	int RECALC</a></h3>
+
+        <blockquote><p>
+          A private integer variable <tt>recalc</tt> is set whenever any
+          model parameter is modified. It signals that something has changed and that the function
+          <a href="#setup">setup()</a> needs to be run. These functions provide access to <tt>recalc</tt>. The <tt>set_recalc</tt> performs
+	  a bitwise OR with the current value of <tt>recalc</tt>. 
+	  If a model has parameters which are models in themselves (i.e., <a href="./modelptr.htm">Model_Ptr&lt;model&gt;</a>), the
+	  model must override this function to call not only the parent's function <tt>get_recalc</tt>, but also each of
+	  its model parameters' <tt>get_recalc</tt>. 
+	  Within <a href="#setup">setup()</a>, the value of <tt>recalc</tt> should be accessed through the variable <tt>RECALC</tt>.
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+	<h3><a name="quiet" id="quiet">
+	static void set_quiet(int _quiet)<br>
+        static int get_quiet()</a></h3>
+
+        <blockquote><p>
+	  Many models provide progress indicators [using <a href="#message">message()</a>] that let the user know 
+	  what the model is working on. If one calls <tt>set_quiet(1)</tt>, these messages will be disabled. They can 
+	  be turned back on with <tt>set_quiet(0)</tt>. This function applies to all models. 
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+	<h3><a name="setup" id="setup">virtual void setup()</a></h3>
+
+        <blockquote><p>
+          The function <tt>setup()</tt> is called if the model is
+          evaluated with nonzero <a href="#recalc">recalc</a>. Any model that has one-time computations that can
+	  enhance its performance when parameters have changed should override this function and provide those computations
+	  it it.  A model's <tt>setup()</tt> should always begin by calling its parent's
+	  <tt>setup()</tt>.
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+	<h3><a name="SETUP" id="SETUP">void SETUP()</a></h3>
+
+        <blockquote><p>
+          The function <b>SETUP()</b> should always be called at the beginning of
+	  any model function that depends upon the parameters.  It checks to see if <a href="#recalc">recalc</a> is nonzero.  If so,
+	  it will call the function <b>setup()</b>.  
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+	<h3><a name="message" id="message">void message</a>(const std::string&amp s)</h3>
+
+	<blockquote>
+	<p>The protected function <tt>message</tt> provides member models a means for communicating simple progress reports or warning messages.  
+	  If the value of <tt>quiet</tt> is true, then the message
+	will not be printed. The message, if <tt>quiet</tt> is false, will be printed to the standard error stream, by default.
+
+	</blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+	<h3><a name="errro" id="error">void error</a>(const std::string&amp s)</h3>
+
+	<blockquote>
+	<p>The protected function <tt>error</tt> will throw a <a href="./except.htm">SCATMECH_exception</a> with text <tt>s</tt>. The exception text will also include the output of 
+	  <a href="#print_parameters">print_parameters</a>. This function should be used by all models to report errors.
+
+	</blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+	<h3><a name="virtualfunctions" id="virtualfunctions">
+   virutal void set_parameter_base(const std::string& name,const std::string& value)<br>
+    virtual std::string get_parameter_base(const std::string& parameter) const;<br>
+    virtual void get_parameter_names_base(std::deque& plist, const std::string& prefix) const <br>
+    virtual void print_parameters_base(std::ostream& os,const std::string& prefex="") const </h3>
+
+	<blockquote>
+	  These four protected virtual functions provide the functionality for the similarly-named public functions
+	  <a href="#parameter">set_parameter</a>, 
+	  <a href="#get_parameter">get_parameter</a>, 
+	  <a href="#get_parameter_names">set_parameter_names</a>, and	  
+	  <a href="#print_parameters">print_parameters</a>, respectively.
+	  These functions do not normally need to be overridden.  However, if the model has parameters that are 
+	  not recorded in the parameter database, these functions should be overridden. For example, <a href="./grating.htm#generic">Generic_Grating</a> 
+	  has parameters that are dynamically determined at run-time. 
+	</blockquote>
+	  
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+		
+
+
+<!-- START FOOTER -->
+<hr>
+<h2>For More Information</h2>
+
+<p>
+<a href="http://www.nist.gov/pml/div685/grp06/germer.cfm">SCATMECH Technical Information and Questions</a><br>
+<a href="http://www.nist.gov/pml/div685/index.cfm" target="_top">Sensor Science Division Home Page</a><br>
+<a href="mailto:fraser@nist.gov">Sensor Science Division Inquiries</a><br>
+<a href="mailto:thomas.germer@nist.gov">Website Comments</a>
+
+<p>
+Current SCATMECH version: <a href="./download.htm">7.00 (January 2015)</a><br>
+This page first online: Version 4.00 (July 2003) <br>
+This page last modified: Version 7.00 (January 2015) <br>
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+</td>
+</tr>
+</table>
+
+</body>
+</html>

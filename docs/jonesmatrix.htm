@@ -1,0 +1,418 @@
+<html>
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Cygwin (vers 1st September 2004), see www.w3.org">
+   <link rel="STYLESHEET" href="style.css" type="text/css">
+
+  <title>SCATMECH: JonesMatrix</title>
+<script language="JavaScript" id="_fed_an_js_tag" src="/js/federated-analytics.all.min.js?agency=NIST&subagency=pml&pua=UA-37115410-46&yt=true"></script>
+</head>
+
+<body>
+  <a name="top" id="top"><!-- --></a>
+
+  <table width="98%" border="0" cellpadding="0" cellspacing="0" align="center">
+    <tr>
+      <td>
+        <p class="nav"><a href="index.htm">SCATMECH</a> &gt; <a href=
+        "classes.htm">Classes and Functions</a> &gt;
+        <a href="classes.htm#Pol">Polarization</a> &gt;
+        JonesMatrix</p>
+
+        <h1>class JonesMatrix</h1>
+
+        <hr>
+
+        <p>The class <b>JonesMatrix</b> represents a Jones matrix in a
+        Jones representation of polarization states. Arithmetic
+        operations between Jones matrices and Jones vectors,
+        various properties of a Jones matrix, and transformation
+        operations are defined.
+
+	<h2>Include file:</h2>
+
+          <pre>
+#include "<a href="../code/mueller.h">mueller.h</a>"
+</pre>
+        <h2>Source code:</h2>
+
+          <pre>
+<a href="../code/jmatrix.cpp">jmatrix.cpp</a>
+</pre>
+
+        <h2>See also:</h2>
+
+        <p><a href="index.htm">SCATMECH Home</a>, &nbsp;
+        <a href="convent.htm">Conventions</a>, &nbsp; <a href=
+        "muellermatrix.htm">MuellerMatrix</a>, &nbsp; <a href=
+        "jonesvector.htm">JonesVector</a>, &nbsp; <a href=
+        "stokesvector.htm">StokesVector</a></p>
+
+        <p>C. F. Bohren and D. R. Huffman, <i>Absorption and
+        Scattering of Light by Small Particles</i>, (Wiley, New
+        York, 1983).<br>
+        H. C. van de Hulst, <i>Light Scattering by Small
+        Particles</i>, (Dover, New York, 1981).<br>
+        R. A. Chipman, "Polarimetry." in <i>Handbook of Optics</i>,
+        (McGraw-Hill, New York, 1995).
+
+	<h2>Definition of public
+        elements:</h2>
+
+          <pre>
+class JonesMatrix {
+    public:
+        <a href="#JonesMatrix()">JonesMatrix</a>();
+        <a href="#JonesMatrix(constJonesMatrix)">JonesMatrix</a>(const JonesMatrix&amp; x);
+        <a href="#JonesMatrix(constCOMPLEXconstCOMPLEXconstCOMPLEXconstCOMPLEX)">JonesMatrix</a>(const COMPLEX&amp; pp,const COMPLEX&amp; ss,const COMPLEX&amp; ps,const COMPLEX&amp; sp);
+        explicit <a href="#JonesMatrix(constMuellerMatrix)">JonesMatrix</a>(const <a href="muellermatrix.htm">MuellerMatrix</a>&amp; x);
+        JonesMatrix&amp; <a href="#operatore(constJonesMatrix)">operator=</a>(const JonesMatrix&amp; x);
+        JonesMatrix <a href="#operatort(constJonesMatrix)">operator*</a>(const JonesMatrix&amp; matrix) const;
+        JonesMatrix <a href="#operatort(constCOMPLEX)">operator*</a>(const COMPLEX&amp; x) const;
+        friend JonesMatrix <a href="#operatort(constCOMPLEXconstJonesMatrix)">operator*</a>(const COMPLEX&amp; x,const JonesMatrix&amp; y);
+        JonesMatrix <a href="#operatord(constCOMPLEX)">operator/</a>(const COMPLEX&amp; x) const;
+        JonesMatrix&amp; <a href="#operatorte(constJonesMatrix)">operator*=</a>(const JonesMatrix&amp; a);
+        JonesMatrix&amp; <a href="#operatorte(constCOMPLEX)">operator*=</a>(const COMPLEX&amp; a);
+        JonesMatrix&amp; <a href="#operatorde(constCOMPLEX)">operator/=</a>(const COMPLEX&amp; a);
+        <a href="jonesvector.htm">JonesVector</a> <a href="#operatort(constJonesVector)">operator*</a>(const <a href="jonesvector.htm">JonesVector</a>&amp; a) const;
+        JonesMatrix <a href="#operatorp(constJonesMatrix)">operator+</a>(const JonesMatrix&amp; a) const;
+        JonesMatrix <a href="#operatorm(constJonesMatrix)">operator-</a>(const JonesMatrix&amp; a) const;
+        JonesMatrix <a href="#operatorpe(constJonesMatrix)">operator+=</a>(const JonesMatrix&amp; a);
+        JonesMatrix <a href="#operatorme(constJonesMatrix)">operator-=</a>(const JonesMatrix&amp; a);
+        JonesMatrix <a href="#operatorm()">operator-</a>() const;
+        COMPLEX&amp; <a href="#operatorat(int)">operator[]</a>(int i);
+        const COMPLEX&amp; <a href="#operatorat(int)">operator[]</a>(int i) const;
+        JonesMatrix <a href="#rotate(doubleangle)">rotate</a>(double angle) const;
+        JonesMatrix <a href="#transpose()">transpose</a>() const;
+        COMPLEX&amp; <a href="#PP()">PP</a>();
+        COMPLEX <a href="#PP()">PP</a>() const ;
+        COMPLEX&amp; <a href="#SS()">SS</a>();
+        COMPLEX <a href="#SS()">SS</a>() const ;
+        COMPLEX&amp; <a href="#PS()">PS</a>();
+        COMPLEX <a href="#PS()">PS</a>() const ;
+        COMPLEX&amp; <a href="#SP()">SP</a>();
+        COMPLEX <a href="#SP()">SP</a>() const ;
+};
+
+ostream&amp; <a href="#operatorltlt">operator&lt;&lt;</a>(ostream&amp; os,const JonesMatrix&amp; j);
+istream&amp; <a href="#operatorgtgt">operator&gt;&gt;</a>(istream&amp; is, JonesMatrix&amp; j);
+</pre>
+
+        <hr>
+
+        <a name="JonesMatrix()" id="JonesMatrix()"><!-- --></a>
+	<h3>JonesMatrix()</h3>
+
+        <blockquote>
+          <p>Null  constructor.
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+	<a name= "JonesMatrix(constJonesMatrix)" id= "JonesMatrix(constJonesMatrix)"></a>
+	<h3>JonesMatrix(const JonesMatrix&amp; x)</h3>
+
+        <blockquote>
+        <p>Copy constructor.
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+	<a name="JonesMatrix(constCOMPLEXconstCOMPLEXconstCOMPLEXconstCOMPLEX)" id="JonesMatrix(constCOMPLEXCOMPLEXconstCOMPLEXCOMPLEX)"><!-- --></a>
+        <h3>JonesMatrix(const COMPLEX&amp; pp,const COMPLEX&amp; ss,const COMPLEX&amp; ps,const COMPLEX&amp; sp)</h3>
+
+        <blockquote>
+        <p>  Explicit constructor with <b>COMPLEX</b> elements. Note
+          that the order of the parameters is important. <b>ps</b>
+          is the p to s matrix element, while <b>sp</b> is the s to
+          p matrix element.
+        <h4>Example:</h4>
+
+          <pre>
+JonesMatrix a(COMPLEX(1,0),COMPLEX(1,0),0.,0.);
+</pre>
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+	
+	<a name="JonesMatrix(constMuellerMatrix)" id="JonesMatrix(constMuellerMatrix)"><!-- --></a>
+	<h3>explicit JonesMatrix(const MuellerMatrix&amp; x)</h3>
+
+        <blockquote>
+          <P>Explicit constructor that converts a <a href=
+          "muellermatrix.htm">MuellerMatrix</a> to a
+          <b>JonesMatrix</b>. This conversion is "improper" since a
+          <a href="muellermatrix.htm">MuellerMatrix</a> does not
+          maintain phase information and allows for depolarization.
+          The result is the <b>JonesMatrix</b> that corresponds to
+          the part of the <a href=
+          "muellermatrix.htm">MuellerMatrix</a> that is
+          polarization preserving.
+        <h4>Example:</h4>
+
+          <pre>
+MuellerMatrix m;
+JonesMatrix j(m);
+</pre>
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+	<a name= "operatore(constJonesMatrix)" id="operatore(constJonesMatrix)"><!-- --></a>
+	<h3>JonesMatrix&amp; operator=(const JonesMatrix&amp; x)</h3>
+
+        <blockquote>
+         <p> The assignment operator.
+        <h4>Example:</h4>
+
+          <pre>
+JonesMatrix j1,j2;
+j1=j2;
+</pre>
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+
+	<a name="operatort(constJonesMatrix)" id="operatort(constJonesMatrix)"><!-- --></a>
+	<h3>JonesMatrix operator*(const JonesMatrix&amp; matrix) const</h3>
+
+        <blockquote>
+        <p>  Multiplication of one <b>JonesMatrix</b> by another.
+        <h4>Example:</h4>
+
+          <pre>
+JonesMatrix j1,j2,j3;
+j3=j1*j2;
+</pre>
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+	<h3><a name="operatort(constCOMPLEX)" id="operatort(constCOMPLEX)"><!-- --></a>
+	  JonesMatrix operator*(const COMPLEX&amp; x) const<br>
+        <a name="operatort(constCOMPLEXconstJonesMatrix)" id="operator(constCOMPLEXconstJonesMatrix)">
+	  friend JonesMatrix operator*(const COMPLEX&amp; x,const JonesMatrix&amp; y)</a><br>
+        <a name="operatord(constCOMPLEX)" id="operatord(constCOMPLEX)">
+	  JonesMatrix operator/(const COMPLEX&amp; x) const</a><br>
+        <a name="operatorte(constJonesMatrix)" id="operatorte(constJonesMatrix)">
+	  JonesMatrix&amp; operator*=(const JonesMatrix&amp; a)</a><br>
+        <a name="operatorte(constCOMPLEX)" id="operatorte(constCOMPLEX)">
+	  JonesMatrix&amp; operator*=(const COMPLEX&amp; a)</a><br>
+        <a name="operatorde(constCOMPLEX)" id="operatorde(constCOMPLEX)">
+	  JonesMatrix&amp; operator/=(const COMPLEX&amp; a)</a></h3>
+
+        <blockquote>
+          <p>Multiplication and division of a <b>JonesMatrix</b> by a
+          scalar.
+        <h4>Example:</h4>
+
+          <pre>
+COMPLEX scalar;
+JonesMatrix matrix;
+matrix = matrix * scalar;
+matrix = scalar * matrix;
+matrix *= scalar;
+matrix = matrix / scalar;
+matrix = scalar / matrix; // Not allowed.
+matrix /= scalar;
+</pre>
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+	<a name="operatort(constJonesVector)" id="operatort(constJonesVector)"><!-- --></a>
+	<h3>JonesVector operator*(const JonesVector&amp; a) const</h3>
+
+        <blockquote><p>
+          Left multiplication of a <a href=
+          "jonesvector.htm">JonesVector</a> by a
+          <b>JonesMatrix</b>.
+        <h4>Example:</h4>
+
+          <pre>
+JonesMatrix matrix;
+JonesVector vector;
+vector = matrix*vector;
+</pre>
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+	<h3><a name="operatorp(constJonesMatrix)" id="operatorp(constJonesMatrix)">
+	    JonesMatrix operator+(const JonesMatrix&amp; a) const</a><br>
+        <a name="operatorm(constJonesMatrix)" id="operatorm(constJonesMatrix)">
+	  JonesMatrix operator-(const JonesMatrix&amp; a) const</a><br>
+        <a name="operatorpe(constJonesMatrix)" id="operatorpe(constJonesMatrix)">
+	  JonesMatrix operator+=(const JonesMatrix&amp; a)</a><br>
+        <a name="operatorme(constJonesMatrix)" id="operatorme(constJonesMatrix)">
+	  JonesMatrix operator-=(const JonesMatrix&amp; a)</a></h3>
+
+        <blockquote><p>
+          Addition and subtraction of two <b>JonesMatrix</b>
+          objects.
+        <h4>Example:</h4>
+
+          <pre>
+JonesMatrix matrix1,matrix2,matrix3;
+matrix3=matrix1+matrix2;
+matrix3=matrix1-matrix2;
+matrix1+=matrix2;
+matrix1-=matrix2;
+</pre>
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+	<a name="operatorm()" id="operatorm()"><!-- --></a>
+	<h3>JonesMatrix operator-() const</h3>
+
+        <blockquote><p>
+          Negation of a <b>JonesMatrix</b>.
+        <h4>Example:</h4>
+
+          <pre>
+JonesMatrix matrix;
+matrix= -matrix;
+</pre>
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+	<a name="operatorat(int)" id="operatorat(int)"><!-- --></a>
+	<h3>COMPLEX&amp; operator[](int i)<br>
+	  const COMPLEX&amp; operator[](int i) const</h3>
+
+        <blockquote><p>
+          Element referencing operator. The elements are defined in
+          the example.
+        <h4>Example:</h4>
+
+          <pre>
+JonesMatrix a;
+COMPLEX pp,ss,ps,sp;
+a[0]=pp;
+a[1]=ss;
+a[2]=ps;
+a[3]=sp;
+</pre>
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+	<a name=
+        "rotate(double)" id=
+        "rotate(double)"><!-- --></a>
+	<h3>JonesMatrix rotate(const double angle) const</h3>
+
+        <blockquote><p>
+          Function that returns a <b>JonesMatrix</b> rotated by
+          <b>angle</b> clockwise about the direction of
+          propagation.
+        <h4>Example:</h4>
+
+          <pre>
+JonesMatrix a,b;
+a = b.rotate(45.*PI/180.);
+</pre>
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+	
+	<a name="transpose()" id="transpose()"><!-- --></a>
+	<h3>JonesMatrix transpose() const</h3>
+
+        <blockquote>
+          <p>Function that returns the transpose of a
+          <b>JonesMatrix</b>.
+        <h4>Example:</h4>
+
+          <pre>
+JonesMatrix a,b;
+a = b.transpose();
+</pre>
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+	<h3><a name=
+        "PP()" id="PP()">COMPLEX&amp; PP()</a><br>
+        const COMPLEX&amp; PP() const<br>
+        <a name="SS()" id="SS()">COMPLEX&amp; SS()</a><br>
+        const COMPLEX&amp; SS() const<br>
+        <a name="PS()" id="PS()">COMPLEX&amp; PS()</a><br>
+        const COMPLEX&amp; PS() const<br>
+        <a name="SP()" id="SP()">COMPLEX&amp; SP()</a><br>
+	const  COMPLEX&amp; SP() const</h3>
+
+        <blockquote><p>
+          Element referencing by name.  <b>PS()</b> corresponds to the p-in/s-out configuration, and <b>SP()</b> corresponds to the s-in/p-out configuration.
+        <h4>Example:</h4>
+
+          <pre>
+JonesMatrix a;
+a.PP() = COMPLEX(1.,0.);
+cout &lt;&lt; a.SS() &lt;&lt; " " &lt;&lt; a.PS() &lt;&lt; endl
+     &lt;&lt; a.SP() &lt;&lt; " " &lt;&lt; a.PP() &lt;&lt; endl;
+</pre>
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+	<a name="operatorltlt" id= "operatorltlt"></a>
+	  <h3>ostream&amp; operator&lt;&lt;(ostream&amp; os,const JonesMatrix&amp; j)</h3>
+
+        <blockquote>
+         <p>Operator to output a <b>JonesMatrix</b> to an output
+          stream. The result is four complex numbers, separated by commas, and surrounded by parentheses, e.g., <tt>((1,2),(3,4),(5,6),(7,8))</tt>. 
+	   The order of the values is: P to P, S to S, P to S, S to P.
+	   <h4>Example:</h4>
+	   <pre>
+JonesMatrix J;
+cout << "J = " << J << endl;
+</pre>
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+        <a name= "operatorgtgt" id= "operatorgtgt"></a>
+	<h3>istream&amp; operator&gt;&gt;(istream&amp; is, JonesMatrix&amp; j)</h3>
+
+        <blockquote>
+         <p>Operator to input a <b>JonesMatrix</b> from an input
+          stream. The stream should contain four complex numbers, separated by commas, and surrounded by parentheses, e.g., <tt>((1,2),(3,4),(5,6),(7,8))</tt>. 
+	   The order of the values is: P to P, S to S, P to S, S to P.
+	   <h4>Example:</h4>
+	   <pre>
+JonesMatrix J;
+cin >> J;
+</pre>
+        </blockquote>
+
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+<!-- START FOOTER -->
+<hr>
+<h2>For More Information</h2>
+
+<p>
+<a href="http://www.nist.gov/pml/div685/grp06/germer.cfm">SCATMECH Technical Information and Questions</a><br>
+<a href="http://www.nist.gov/pml/div685/index.cfm" target="_top">Sensor Science Division Home Page</a><br>
+<a href="mailto:fraser@nist.gov">Sensor Science Division Inquiries</a><br>
+<a href="mailto:thomas.germer@nist.gov">Website Comments</a>
+
+<p>
+Current SCATMECH version: <a href="./download.htm">7.00 (January 2015)</a><br>
+This page first online: Version 1.00 (March 2000) <br>
+This page last modified: Version 7.00 (January 2015) <br>
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+</td>
+</tr>
+</table>
+
+</body>
+</html>

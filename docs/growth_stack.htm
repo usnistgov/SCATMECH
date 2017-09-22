@@ -1,0 +1,248 @@
+<html>
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Cygwin (vers 1st September 2004), see www.w3.org">
+   <link rel="STYLESHEET" href="style.css" type="text/css">
+
+  <title>SCATMECH: Growth_Roughness_Stack_BRDF_Model</title>
+</head>
+
+<body>
+  <a name="top" id="top"><!-- --></a>
+
+  <table width="98%" border="0" cellpadding="0" cellspacing="0"
+  align="center">
+    <tr>
+      <td>
+        <p class="nav"><a href="index.htm">SCATMECH</a> &gt; <a href=
+        "classes.htm">Classes and Functions</a> &gt;
+        <a href="classes.htm#SSM">Surface Scattering Models</a>
+        &gt; Growth_Roughness_Stack_BRDF_Model</p>
+
+	<h1>class Growth_Roughness_Stack_BRDF_Model</h1>
+
+        
+        <hr>
+
+        <p>The class
+        <strong>Growth_Roughness_Stack_BRDF_Model</strong> uses
+        <a href="roughnes.htm">Roughness_Stack_BRDF_Model</a> to calculate the scatter from a stack of films, whose roughness evolves from that of the substrate. The model employs a 
+	linear growth model to determine the roughness of each interface and the
+	cross-correlation statistics. The model takes two power spectral density (PSD) functions as input, one
+	for the substrate and one which is the intrinsic roughness of the coatings (in the large thickness limit). A
+	single intrinsic roughness is used and applies to all of the coating materials. A replication function 
+	with two adjustable parameters, a relaxation parameter and a spatial frequency exponent, is used to describe propagation
+	of roughness from one interface to the next and for development of the finite thickness intrinsic roughness.  This model is based upon
+	that of <a href="#RefStearns">Stearns</a>. The replication factor is given by 
+	  <center><tt>exp(-4&#960;<sup>2</sup><b>relaxation</b><sup>(<b>exponent</b>-1)</sup>d f<sup><b>exponent</b></sup>)</tt></center>
+	 <p>where <b>relaxation</b> is the relaxation parameter, <b>exponent</b> is the spatial frequency exponent, <tt>d</tt> is the
+	thickness of the layer, and <tt>f</tt> is the spatial frequency. <br><br>
+	  When <b>relaxation</b> and the intrinsic PSD are both zero, the results of the model will match that of <a href="./correlated_stack.htm">Correlated_Roughness_Stack_BRDF_Model</a>.  
+	  When <b>relaxation</b> is large and the intrinsic PSD is the same as the substrate PSD, the results of the model will match that of <a href="./uncorrelated_stack.htm">Uncorrelated_Roughness_Stack_BRDF_Model</a>
+	  
+      <br><br>
+
+        <center>
+          <img src="Images/corrstack.gif" width="600" height="127"
+          alt=
+          "Diagram showing a substrate with four conformally rough layers.">
+          </center>
+
+	   <h2>Parameters:</h2>
+
+
+        <table border="1" cellpadding="5">
+          <tr>
+            <th>Parameter</th>
+
+            <th>Data
+            Type</th>
+
+            <th>Description</th>
+
+            <th>Default</th>
+          </tr>
+
+          <tr>
+            <td class="parameter">lambda</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">Wavelength of the light
+            in vacuum [&#181;m].<br>
+            (Inherited from <a href=
+            "BRDF_Model.htm">BRDF_Model</a>).</td>
+
+            <td class="default">0.532</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">type</td>
+
+            <td class="datatype">int</td>
+
+            <td class="description">
+	      Indicates whether the light is incident from above the
+            substrate or from within the substrate and whether the
+            scattering is evaluated in reflection or transmission.
+            The choices are:<br>
+	      <b>0</b> : Light is incident from the above the substrate, and scattering is evaluated in reflection.<br>
+	      <b>1</b> : Light is incident from the above the substrate, and scattering is evaluated in transmission.<br>
+	      <b>2</b> : Light is incident from the within the substrate, and scattering is evaluated in reflection.<br>
+	      <b>3</b> : Light is incident from the within the substrate, and scattering is evaluated in transmission.<br>
+	      For <b>1</b>, <b>2</b>, and <b>3</b>, the substrate must be non-absorbing.<br>
+            (Inherited from <a href="BRDF_Model.htm">BRDF_Model</a>).</td>
+
+            <td class="default">0</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">substrate</td>
+
+            <td class="datatype"><a href="dielfunc.htm">dielectric_function</a></td>
+
+            <td class="description">The
+            optical constants of the substrate, expressed as a
+            complex number (n,k) or, optionally, as a function of
+            wavelength.<br>
+            (Inherited from <a href=
+            "BRDF_Model.htm">BRDF_Model</a>).</td>
+
+            <td class="default">(4.05,0.05)</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">psd</td>
+
+            <td class="datatype"><a href="psd.htm">PSD_Function_Ptr</a></td>
+
+            <td class="description">The
+            two-dimensional power spectrum of the surface height
+            function for the substrate [&#181;m<sup>4</sup>].<br>
+            (Inherited from <a href=
+            "roughbrdf.htm">Roughness_BRDF_Model</a>).</td>
+
+            <td class="default">ABC_PSD_Function</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">stack</td>
+
+            <td class="datatype"><a href="dielstack.htm">dielectric_stack</a></td>
+
+            <td class="description">Description of the stack
+            of films deposited on the substrate, usually specified
+            by a file.<br>
+            See <a href="dielstack.htm">dielectric_stack</a>, for
+            more information.</td>
+
+            <td class="default"><i>no
+            films</i></td>
+          </tr>
+
+          <tr>
+            <td class="parameter">intrinsic</td>
+
+            <td class="datatype"><a href="psd.htm">PSD_Function_Ptr</a></td>
+
+            <td class="description">The
+            two-dimensional power spectrum of the surface height
+            function for the coatings in the thick coating limit. Note that, for simplicity, this 
+	      function is assumed to be the same for all coating materials. [&#181;m<sup>4</sup>].</td>
+
+            <td class="default">ABC_PSD_Function</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">relaxation</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The relaxation parameter for growth process.  
+	      This corresponds to the characteristic length for which 
+	      roughness from preceeding layers is damped out. Note that, for simplicity, this 
+	      value is assumed to be the same for all coating materials. [&#181;m]</td>
+
+            <td class="default">0.05</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">exponent</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The relaxation exponent for the growth process. Different values of this parameter correspond to different 
+	      growth mechanisms: (1) indicates viscous flow, (2) indicates the condensation and re-evaporation, (3) indicates bulk diffusion, and 
+	      (4) indicates surface diffusion. Note that, for simplicity, this value is assumed to be the same for all coating materials. </td>
+
+            <td class="default">2</td>
+          </tr>
+          <tr>
+
+
+        </table>
+
+        <h2>See also:</h2>
+
+        <p><a href=
+        "index.htm">SCATMECH Home</a>, &nbsp; <a href=
+        "convent.htm">Conventions</a>, &nbsp; <a href=
+        "BRDF_Model.htm">BRDF_Model</a>, &nbsp; <a href=
+        "roughbrdf.htm">Roughness_BRDF_Model</a>, &nbsp; <a href=
+        "roughnes.htm">Roughness_Stack_BRDF_Model</a>, &nbsp;
+        <a href=
+        "dielstack.htm">dielectric_stack</a> <br><br>
+
+	<a id="RefStearns" name="RefStearns"></a>D.G. Stearns, "Stochastic model for thin film growth and erosion," Appl. Phys. Lett. <b>62</b>(15), 1745-1747 (1993). <br>
+	E. Spiller, D. Stearns, and M. Krumrey, "Multilayer x-ray mirrors: Interfacial roughness, scattering, and image quality," J. Appl. Phys. <b>74</b>(1), 107-118 (1993).<br>
+	J. M. Elson, "Multilayer-coated optics: guided-wave coupling and scattering by means of interface random roughness," J. Opt. Soc. Am. A <b>12</b>(4), 729 (1995).<br>
+	J. M. Elson, "Theory and Software for Light Scattering From Multilayer Optical Components with Interfacial Roughness," Naval Air Warfare Center Weapons Division (NAWCWPNS) Technical Publication 8084 (1992).<br>
+	T.A.Germer, "Measuring Interfacial Roughness by Polarized Optical Scattering," in <i>Light Scattering and Nanoscale Surface Roughness</i>, Ed. A.A. Maradudin, (Springer,New York, 2007).<br>
+	E. Spiller, S. Baker, E. Parra, and C. Tarrio, "Smoothing of mirror substrates by thin-film deposition," in <i>EUV, X-Ray, and Neutron Optics and Surfaces</i>, C.A. MacDonald, <i>et al.</i>, Eds., Proc. SPIE <b>3767</b>, 143-153 (1999).
+	</p>
+
+
+	<h2>Include file:</h2>
+
+          <pre>
+#include "<a href="../code/allrough.h">allrough.h</a>"
+</pre>
+        <h2>Source code:</h2>
+
+          <pre>
+<a href="../code/allrough.cpp">allrough.cpp</a>
+</pre>
+        <h2>Definition of public elements:</h2>
+
+          <pre>
+class Growth_Roughness_Stack_BRDF_Model
+ : public <a href="roughbrdf.htm">Roughness_BRDF_Model</a>
+{
+};
+
+</pre>
+
+<!-- START FOOTER -->
+<hr>
+<h2>For More Information</h2>
+
+<p>
+<a href="http://www.nist.gov/pml/div685/grp06/germer.cfm">SCATMECH Technical Information and Questions</a><br>
+<a href="http://www.nist.gov/pml/div685/index.cfm" target="_top">Sensor Science Division Home Page</a><br>
+<a href="mailto:fraser@nist.gov">Sensor Science Division Inquiries</a><br>
+<a href="mailto:thomas.germer@nist.gov">Website Comments</a>
+
+<p>
+Current SCATMECH version: <a href="./download.htm">7.00 (January 2015)</a><br>
+This page first online: Version 7.00 (January 2015) <br>
+This page last modified: Version 7.00 (January 2015) <br>
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+</td>
+</tr>
+</table>
+
+</body>
+</html>

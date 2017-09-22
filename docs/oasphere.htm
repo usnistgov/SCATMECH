@@ -1,0 +1,257 @@
+<html>
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Cygwin (vers 1st September 2004), see www.w3.org">
+   <link rel="STYLESHEET" href="style.css" type="text/css">
+
+  <title>SCATMECH: Optically_Active_Sphere_Scatterer</title>
+</head>
+
+<body>
+  <a name="top" id="top"><!-- --></a>
+
+  <table width="98%" border="0" cellpadding="0" cellspacing="0"
+  align="center">
+    <tr>
+      <td>
+        <p class="nav"><a href="index.htm">SCATMECH</a> &gt; <a href=
+        "classes.htm">Classes and Functions</a> &gt;
+        <a href="classes.htm#FSSM">Free-Space Scattering Models</a>
+        &gt; Optically_Active_Sphere_Scatterer</p>
+
+        <h1>class Optically_Active_Sphere_Scatterer</h1>
+
+        <hr>
+
+	<p><b>Optically_Active_Sphere_Scatterer</b> implements the Mie theory
+	  for a homogeneous optically active (circularly birefringent and/or circularly dichroic) sphere.  
+        
+	<h2>Parameters:</h2>
+
+        <table border="1" cellpadding="5">
+          <tr>
+            <th>Parameter</th>
+            <th>Data Type</th>
+            <th>Description</th>
+            <th>Default</th>
+          </tr>
+
+          <tr>
+            <td class="parameter">lambda</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">Wavelength of the light
+            [&#181;m].<br>
+            (Inherited from <a href=
+            "freescat.htm">Free_Space_Scatterer</a>.)</td>
+
+            <td class="default">0.532</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">medium</td>
+
+            <td class="datatype"><a href="dielfunc.htm">dielectric_function</a></td>
+
+            <td class="description">The
+            optical constants of the medium surrounding the sphere,
+            expressed as a complex number (n,k) or, optionally, as
+            a function of wavelength.<br>
+            (Inherited from <a href=
+            "freescat.htm">Free_Space_Scatterer</a>.)</td>
+
+            <td class="default">(1,0)</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">materialleft</td>
+
+            <td class="datatype"><a href="dielfunc.htm">dielectric_function</a></td>
+
+            <td class="description">The
+            optical constants of the sphere for left-handed circular polarization, expressed as a complex
+            number (n,k) or, optionally, as a function of
+            wavelength.</td>
+
+            <td class="default">(1.59,0)</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">materialright</td>
+
+            <td class="datatype"><a href="dielfunc.htm">dielectric_function</a></td>
+
+            <td class="description">The
+            optical constants of the sphere for right-handed circular polarization, expressed as a complex
+            number (n,k) or, optionally, as a function of
+            wavelength.</td>
+
+            <td class="default">(1.59,0)</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">radius</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">Radius of
+            the sphere [&#181;m].</td>
+
+            <td class="default">1</td>
+          </tr>
+        </table><br>
+
+        <h2>See also:</h2>
+
+        <p><a href="index.htm">SCATMECH Home</a>, &nbsp; 
+	  <a href="convent.htm">Conventions</a>, &nbsp; 
+	  <a href="sphrscat.htm">SphericalScatterer</a>, &nbsp; 
+	  <a href="miescat.htm">MieScatterer</a> &nbsp; </p>
+
+        <p>C. F. Bohren and D. R. Huffman, <i>Absorption and
+        Scattering of Light by Small Particles</i>, (Wiley, New
+        York, 1983). Section 8.3.</p>
+
+	<h2>Include file:</h2>
+
+          <pre>
+#include "<a href="../code/oasphere.h">oasphere.h</a>"
+</pre>
+        <h2>Source code:</h2>
+
+          <pre>
+<a href="../code/oasphere.cpp">oasphere.cpp</a>
+</pre>
+        <h2>Definition of public elements:</h2>
+
+          <pre>
+    class Optically_Active_Sphere_Scatterer: public <a href="freescat.htm">Free_Space_Scatterer</a> {
+        public:
+            virtual <a href="jonesmatrix.htm">JonesMatrix</a> <a href="#jones">jones</a>(const <a href="vector.htm">Vector</a>& kin,const <a href="vector.htm">Vector</a>& kout);
+        
+            double <a href="#CSL">CscaL</a>();
+            double <a href="#CSL">CextL</a>();
+            double <a href="#CSL">CbackL</a>();
+            double <a href="#CSL">CabsL</a>();
+
+            double <a href="#CSR">CscaR</a>();
+            double <a href="#CSR">CextR</a>(); 
+            double <a href="#CSR">CbackR</a>();
+            double <a href="#CSR">CabsR</a>();
+
+            double <a href="#effL">QscaL</a>();
+            double <a href="#effL">QextL</a>();
+            double <a href="#effL">QbackL</a>();
+            double <a href="#effL">QabsL</a>();
+
+            double <a href="#effL">QscaR</a>();
+            double <a href="#effL">QextR</a>(); 
+            double <a href="#effL">QbackR</a>();
+            double <a href="#effL">QabsR</a>();
+    };
+</pre>
+<hr>
+
+
+        <h3><a name="jones"
+        id="jones">virtual JonesMatrix jones(const Vector&amp;
+        kin,const Vector&amp; kout)</a></h3>
+
+        <blockquote><p>
+          This
+          function returns the Jones scattering matrix. The
+          parameter <b>kin</b> must be a unit vector in the
+          direction of propagation of the incident light, and the
+          parameter <b>kout</b> must be a unit vector in the
+          direction of propagation for the observed light.
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a>.</p>
+
+        <h3><a name="CSL" id="CSL">
+            double CscaL() </br>
+            double CextL() </br>
+            double CbackL() </br>
+            double CabsL()</a></h3>
+
+        <blockquote><p>
+          These functions return the scattering cross section [<tt>CscaL()</tt>], 
+	  the extinction cross section  [<tt>CextL()</tt>], 
+	  the backscattering cross section  [<tt>CbackL()</tt>], 
+	  and the absorption cross section  [<tt>CabsL()</tt>], respectively, for left-handed circular polarization.
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a>.</p>
+
+        <h3><a name="CSR" id="CSR">
+            double CscaR() </br>
+            double CextR() </br>
+            double CbackR() </br>
+            double CabsR()</a></h3>
+
+        <blockquote><p>
+          These functions return the scattering cross section [<tt>CscaR()</tt>], 
+	  the extinction cross section  [<tt>CextR()</tt>], 
+	  the backscattering cross section  [<tt>CbackR()</tt>], 
+	  and the absorption cross section  [<tt>CabsR()</tt>], respectively, for right-handed circular polarization.
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a>.</p>
+
+        <h3><a name="effL" id="effL">
+            double QscaL() </br>
+            double QextL() </br>
+            double QbackL() </br>
+            double QabsL()</a></h3>
+
+        <blockquote><p>
+          These functions return the scattering efficiency [<tt>QscaL()</tt>], 
+	  the extinction efficiency  [<tt>QextL()</tt>], 
+	  the backscattering efficiency  [<tt>QbackL()</tt>], 
+	  and the absorption efficiency  [<tt>QabsL()</tt>], respectively, for left-handed circular polarization.
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a>.</p>
+
+        <h3><a name="effR" id="effR">
+            double QscaR() </br>
+            double QextR() </br>
+            double QbackR() </br>
+            double QabsR()</a></h3>
+
+        <blockquote><p>
+          These functions return the scattering efficiency [<tt>QscaR()</tt>], 
+	  the extinction efficiency  [<tt>QextR()</tt>], 
+	  the backscattering efficiency  [<tt>QbackR()</tt>], 
+	  and the absorption efficiency  [<tt>QabsR()</tt>], respectively, for right-handed circular polarization.
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a>.</p>
+
+
+<!-- START FOOTER -->
+<hr>
+<h2>For More Information</h2>
+
+<p>
+<a href="http://www.nist.gov/pml/div685/grp06/germer.cfm">SCATMECH Technical Information and Questions</a><br>
+<a href="http://www.nist.gov/pml/div685/index.cfm" target="_top">Sensor Science Division Home Page</a><br>
+<a href="mailto:fraser@nist.gov">Sensor Science Division Inquiries</a><br>
+<a href="mailto:thomas.germer@nist.gov">Website Comments</a>
+
+
+<p>
+Current SCATMECH version: <a href="./download.htm">7.00 (January 2015)</a><br>
+This page first online: Version 1.00 (March 2000) <br>
+This page last modified: Version 7.00 (January 2015) <br>
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+</td>
+</tr>
+</table>
+
+</body>
+</html>

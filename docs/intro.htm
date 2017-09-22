@@ -1,0 +1,150 @@
+<html>
+<head>
+  <link rel="STYLESHEET" href="style.css" type="text/css">
+  <meta name="generator" content=
+  "HTML Tidy for Cygwin (vers 1st September 2004), see www.w3.org">
+
+  <title>SCATMECH: Introduction</title>
+<script language="JavaScript" id="_fed_an_js_tag" src="/js/federated-analytics.all.min.js?agency=NIST&subagency=pml&pua=UA-37115410-46&yt=true"></script>
+</head>
+
+<body>
+  <table width="98%" border="0" cellpadding="0" cellspacing="0"  align="center">
+    <tr>
+      <td>
+        <p class="nav"><a href="index.htm">SCATMECH</a> &gt; Introduction</p>
+
+        <h1>Introduction</h1>
+	<hr>
+
+        <p>While carrying out research on optical
+        scattering from surfaces, we have developed an extensive
+        amount of software to evaluate different theoretical models
+        for light scattering and other optical phenomena. To allow others to use the models
+        without their own extensive software development, we are
+        distributing the SCATMECH library.
+
+        <p>The SCATMECH library consists of a set of C++ object
+        classes that allow programmers to manipulate a number of complex optical quantities.
+        It adds to standard C++ code data types
+        corresponding to <a href="classes.htm#Pol">polarimetric
+        quantities</a> (such as <a href="jonesvector.htm">Jones vectors</a>, <a href="jonesmatrix.htm">Jones matrices</a>, 
+	  <a href="stokesvector.htm">Stokes vectors</a>, and <a href="muellermatrix.htm">Mueller matrices</a>), and <a href="classes.htm#OPM">optical
+        properties of materials</a> and information about stacks. A generalized class for all
+        models (<a href="model.htm">Model</a>) provides support for
+        run-time access to all the available models and their parameters. The class <a href=
+        "BRDF_Model.htm">BRDF_Model</a> acts as a base class for all surface
+        scattering models [models that calculate the bidirectional reflectance distribution function (BRDF)], and a variety of <a href=
+        "classes.htm#SSM">specific models</a>, e.g., particles,
+        subsurface defects, and microroughness, are provided.
+        Scattering by isolated particles can be calculated using the
+        class <a href="freescat.htm">Free_Space_Scatterer</a>, and specfic models
+	for the homogenious sphere (Mie scattering), spheres with coatings, optically-active spheres,
+	 and rotationally symmetric non-spherical particles are provided.
+        Simulation of gratings is provided through an implementation
+        of rigorous coupled-wave (RCW) analysis using the
+        class <a href="rcwmodel.htm">RCW_Model</a> for one-dimensional
+        gratings or the
+        class <a href="crossrcwmodel.htm">Cross_RCW_Model</a> for
+        two-dimensional gratings. All of these classes are designed to be
+        expandable, so that we and others can add new models and
+        functionality to the library.</p>
+
+
+	<p>Many of these models have parameters that are, in themselves,
+	models. For example, theories for scattering by surface
+	roughness require models to describe the surface
+	characteristics. A volume scattering model may need a volume
+	scattering phase function. And, a RCW model will need a
+	description of a grating.  Thus, there are models within the
+	library that describe the distribution of surface slopes, the
+	power spectral density function, the volume scattering phase
+	function, one- or two-dimensional gratings, etc.</p>
+
+
+        <p><a href="examples.htm">Examples</a> given in the
+        documentation demonstrate how relatively few lines of code
+        can be used to analyze some relatively complicated
+        concepts. The <a href="examples.htm#Example1">first
+        example</a> evaluates bidirectional reflectance
+        distribution function (BRDF) models, in a
+        manner that allows others to test the models for their
+        applications, to study the sensitivity of the model
+        predictions on specific parameters, or to compare the
+        models to their own data. The <a href=
+        "examples.htm#Example2">second example</a> demonstrates how
+        RCW simulations can be performed. The <a href=
+        "examples.htm#Example3">third example</a> demonstrates how
+        the class library can be used to calculate the reflectance of thin films. Finally, the <a href=
+        "examples.htm#Example4">fourth example</a> is a program that
+        calculates the Mie scattering by an isolated sphere.</p>
+
+        <p>Implementing light scattering calculations in an
+        object-oriented programming environment makes full use of
+        that environment. By using class inheritance, for example,
+        we have reduced the amount of code that must be written for
+        a number of different models. Some of the
+        particle-scattering models appear to have little executable
+        code, for example, since they only need to connect a
+        generalized surface/particle-scattering model to the
+        specific free-space model. Abstract classes significantly 
+	widen the functionality of many of the models.  Function overloading allows the
+        objects describing polarization parameters to be
+        manipulated as easily as scalar quantities. Lastly, the use
+        of abstract classes allows user programs to manipulate all
+        of the models in a unified manner. For example, since all
+        light-scattering models must evaluate the BRDF as a
+        function of the incident and scattering directions, the abstract
+	class <a href="BRDF_Model.htm">BRDF_Model</a> was developed that
+	returns this information.</p>
+
+        <p>This hypertext document, and those linked by it,
+        constitutes the documentation for the SCATMECH library. A
+        list of <a href="classes.htm">classes and functions</a> are
+        given, which provide links to pages describing each of
+        those classes and external functions. Four <a href=
+        "examples.htm">examples</a> are given of programs, which
+        make use of different features of the library.</p>
+
+        <p>This software was developed at the <a href=
+        "http://www.nist.gov">National Institute of Standards and
+        Technology</a> by employees of the Federal Government in
+        the course of their official duties. Pursuant to Title 17
+        Section 105 of the United States Code this software is not
+        subject to copyright protection and is in the public
+        domain. SCATMECH is an experimental system. NIST assumes no
+        responsibility whatsoever for its use by other parties, and
+        makes no guarantees, expressed or implied, about its
+        quality, reliability, or any other characteristic. We would
+        appreciate acknowledgment if the software is used. This
+        software can be redistributed and/or modified freely
+        provided that any derivative works bear some notice that
+        they are derived from it, and any modified versions bear
+        some notice that they have been modified.</p>
+
+	<p><a href="#top"><span class="totop">Return to top</span></a></p>
+
+<!-- START FOOTER -->
+<hr>
+<h2>For More Information</h2>
+
+<p>
+<a href="http://www.nist.gov/pml/div685/grp06/germer.cfm">SCATMECH Technical Information and Questions</a><br>
+<a href="http://www.nist.gov/pml/div685/index.cfm" target="_top">Sensor Science Division Home Page</a><br>
+<a href="mailto:fraser@nist.gov">Sensor Science Division Inquiries</a><br>
+<a href="mailto:thomas.germer@nist.gov">Website Comments</a>
+
+<p>
+Current SCATMECH version: <a href="./download.htm">7.00 (January 2015)</a><br>
+This page first online: Version 3.00 (December 2001) <br>
+This page last modified: Version 7.00 (January 2015) <br>
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+</td>
+</tr>
+</table>
+
+</body>
+</html>

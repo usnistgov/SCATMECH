@@ -1,0 +1,288 @@
+<html>
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Cygwin (vers 1st September 2004), see www.w3.org">
+   <link rel="STYLESHEET" href="style.css" type="text/css">
+
+  <title>SCATMECH: RCW_Model</title>
+<script language="JavaScript" id="_fed_an_js_tag" src="/js/federated-analytics.all.min.js?agency=NIST&subagency=pml&pua=UA-37115410-46&yt=true"></script>
+</head>
+
+<body>
+  <a name="top" id="top"><!-- --></a>
+
+  <table width="98%" border="0" cellpadding="0" cellspacing="0"
+  align="center">
+    <tr>
+      <td>
+        <p class="nav"><a href="index.htm">SCATMECH</a> &gt; <a href=
+        "classes.htm">Classes and Functions</a> &gt;
+        <a href="classes.htm#GM">Grating Models</a> &gt;
+        RCW_Model</p>
+
+        <h1>class RCW_Model</h1>
+
+        <hr>
+
+        <p>The class <b>RCW_Model</b> implements Rigorous Coupled-Wave
+        theory for a grating. It accepts a member variable of type
+        <a href="grating.htm">Grating</a>, which describes the
+        specific profile, and calculates fields in
+        reflection or transmission in either the "in-plane"
+        configuration or the conical configuration. The fields outside of the
+	grating are accessed through the function <a href="#GetAmplitude">GetAmplitude(int i)</a>, while
+	diffraction efficiencies are accessed through the function 
+	<a href="#GetIntensity">GetIntensity(int i)</a>.  Gratings can contain diagonally anisotropic and magnetic materials.
+
+        <h2>Parameters:</h2>
+
+        <table border="1" cellpadding="5">
+          <tr>
+            <th>Parameter</th>
+
+            <th>Data
+            Type</th>
+
+            <th>Description</th>
+
+            <th>Default</th>
+          </tr>
+
+          <tr>
+            <td class="parameter">order</td>
+
+            <td class="datatype">int</td>
+
+            <td class="description">The
+            Fourier order considered in the calculation. The
+            calculation will expand the dielectric function in a
+            layer from <b>-order</b> to <b>order</b>.  Convergence of the solution should be checked by 
+	    varying this parameter.  The calculation time will be proportional to the cube of <b>order</b>.</td>
+
+            <td class="default">25</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">type</td>
+            <td class="datatype">int</td>
+            <td class="description">
+	      Indicates whether the light is incident from above the
+            substrate or from within the substrate and whether the
+            scattering is evaluated in reflection or transmission.
+            The choices are:<br>
+	      <b>0</b> : Light is incident from the above the substrate, and scattering is evaluated in reflection.<br>
+	      <b>1</b> : Light is incident from the above the substrate, and scattering is evaluated in transmission.<br>
+	      <b>2</b> : Light is incident from the within the substrate, and scattering is evaluated in reflection.<br>
+	      <b>3</b> : Light is incident from the within the substrate, and scattering is evaluated in transmission.<br>
+	      For <b>1</b>, <b>2</b>, and <b>3</b>, the substrate must be non-absorbing.<br>
+            </td>
+            <td class="default">0</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">lambda</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The
+            wavelength of the light in vacuum
+            [&#181;m].</td>
+
+            <td class="default">0.532</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">thetai</td>
+
+           <td class="datatype">double</td>
+
+            <td class="description">The
+            incident angle, measured from the surface normal [degrees].</td>
+
+            <td class="default">0</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">rotation</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The
+            azimuthal rotation of the sample [degrees].  
+	    When <b>rotation</b> is non-zero, the 
+	    geometry is considered to be in the conical mount, and 
+	    the calculation time is longer.
+	    </td>
+
+            <td class="default">0</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">grating</td>
+
+            <td class="datatype"><a href="grating.htm">Grating_Ptr</a></td>
+
+            <td class="description">A
+            description of the grating profile and optical
+            properties.</td>
+
+            <td class="default">Single_Line_Grating</td>
+          </tr>
+        </table><br>
+
+        <h2>See also:</h2>
+
+        <p><a href="index.htm">SCATMECH Home</a>, &nbsp;
+        <a href="muellermatrix.htm">MuellerMatrix</a>, &nbsp;
+        <a href="jonesmatrix.htm">JonesMatrix</a>, &nbsp; <a href=
+        "grating.htm">Grating</a></p>
+
+        <p>M.G. Moharam, E.B. Grann, D.A. Pommet, and T.K. Gaylord,
+        &quot;Formulation for stable and efficient implementation of the
+        rigorous coupled-wave analysis of binary gratings,&quot; J. Opt.
+        Soc. Am. A <b>12</b>, 1068-1076 (1995).<br>
+        P. Lalanne and G.M. Morris, &quot;Highly improved convergence of
+        the coupled-wave method for TM polarization&quot; J. Opt. Soc.
+        Am. A <b>13</b>, 779-784 (1996).<br>
+	G. Granet and B. Buizal, &quot;Efficient implementation of the coupled-wave method 
+	for metallic lamellar gratings in TM polarization,&quot; J. Opt. Soc. Am. A <b>13</b>, 1019-1023 (1996).<br>
+	L. Li, &quot;Use of Fourier series in the analysis of discontinuous periodic structures,&quot; J. Opt. Soc. Am. A <b>13</b>, 1870-1876 (1996).</p>
+
+	<h2>Include file:</h2>
+
+          <pre>
+#include "<a href="../code/rcw.h">rcw.h</a>"
+</pre>
+        <h2>Source code:</h2>
+
+          <pre>
+<a href="../code/rcw.cpp">rcw.cpp</a>
+</pre>
+        <h2>Definition of public and protected elements:</h2>
+
+          <pre>
+class RCW_Model : public <a href=
+"model.htm">Model</a> {
+public:
+        <a href="jonesmatrix.htm">JonesMatrix</a> <a href="#GetAmplitude">GetAmplitude</a>(int i);      
+        <a href="muellermatrix.htm">MuellerMatrix</a> <a href="#GetIntensity">GetIntensity</a>(int i);
+        <a href="vector.htm">Vector</a> <a href="#GetDirection">GetDirection</a>(int i);
+        <a href="vector.htm">CVector</a> <a href="#GetPropagationVector">GetPropagationVector</a>(int i);
+
+        int <a href="#getorder">GetMinimumPropagatingOrder</a>();
+        int <a href="#getorder">GetMaximumPropagatingOrder</a>();
+
+        <a href="vector.htm">CVector</a> <a href="#GetEField">GetEField</a>(const <a href="jonesvector.htm">JonesVector</a>&amp; input, const <a href="vector.htm">Vector</a>&amp; pos);
+        <a href="vector.htm">CVector</a> <a href="#GetHField">GetHField</a>(const <a href="jonesvector.htm">JonesVector</a>&amp; input, const <a href="vector.htm">Vector</a>&amp; pos);
+        <a href="vector.htm">CVector</a> <a href="#GetDField">GetDField</a>(const <a href="jonesvector.htm">JonesVector</a>&amp; input, const <a href="vector.htm">Vector</a>&amp; pos);
+        <a href="vector.htm">CVector</a> <a href="#GetBField">GetBField</a>(const <a href="jonesvector.htm">JonesVector</a>&amp; input, const <a href="vector.htm">Vector</a>&amp; pos);
+};
+
+</pre>
+
+        <hr>
+
+        <h3><a name=
+        "GetAmplitude" id="GetAmplitude">JonesMatrix GetAmplitude(int
+        i)</a></h3>
+
+	<blockquote><p>
+          <b>GetAmplitude(i)</b>
+          returns the Jones matrix associated with the i-th order
+          diffraction.  The Jones matrix relates the amplitude of the diffracted plane wave
+	  to the amplitude of the incident plane wave.
+	  </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+	<h3><a name=
+        "#GetIntensity" id="#GetIntensity">MuellerMatrix</a> GetIntensity(int
+        i)</h3>
+
+        <blockquote><p>
+          <b>GetIntensity(i)</b> returns the Mueller matrix diffraction efficiency (reflectance, if <b>type</b>=0, or transmittance, if <b>type</b>=1) associated with the i-th
+          order diffraction.
+        </blockquote>
+
+        <p><a href=
+        "#top"><span class="totop">Top of Page</span></a></p>
+
+	<h3><a name="getorder"
+        id="getorder">int GetMinimumPropagatingOrder()</a><br>
+        int GetMaximumPropagatingOrder()</h3>
+
+        <blockquote><p>
+          These functions return the minimum and maximum orders for
+          which the reflectance or transmittance is propagating.
+        </blockquote>
+
+        <p><a href=
+        "#top"><span class="totop">Top of Page</span></a></p>
+
+	<h3><a name=
+        "GetDirection" id="GetDirection">
+        Vector GetDirection(int i)</a></h3>
+
+        <blockquote><p>
+          <b>GetDirection(i)</b> returns a unit vector in the
+          direction of propagation of the i-th diffraction order.
+          It returns a zero vector for those orders which are not
+          propagating.
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+	<h3>
+        <a name = "GetPropagationVector" id="GetPropagationVector">CVector GetPropagationVector(int i)</a>
+	</h3>
+
+        <blockquote><p>
+          <b>GetPropagationVector(i)</b> returns the complex propagation vector 
+          for the i-th diffraction order.
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+        <h3>
+	<a name="GetEField">CVector GetEField(const JonesVector&amp; input, const Vector&amp; pos)</a><br>
+	<a name="GetHField">CVector GetHField(const JonesVector&amp; input, const Vector&amp; pos)</a><br>
+	<a name="GetDField">CVector GetDField(const JonesVector&amp; input, const Vector&amp; pos)</a><br>
+	<a name="GetBField">CVector GetBField(const JonesVector&amp; input, const Vector&amp; pos)</a>
+	</h3>
+
+        <blockquote><p>
+          These functions return the amplitude of the electric field (<b>GetEField</b>), the magnetic field (<b>GetHField</b>), 
+	  the electric displacement (<b>GetDField</b>), and the magnetic induction (<b>GetBField</b>), evaluated at location <b>pos</b> for a 
+	  given incident Jones vector <b>input</b>. Locations are defined with respect to the top of the grating (incident beam side), with positive z coordinates 
+	  being in the incident half-space.  At this time, the fields can only be evaluated outside of the grating, and only in the region defined by parameter <b>type</b>. 
+	  That is, if <b>type</b> is 0, the fields can be evaluated above the grating, and if <b>type</b> is 1, the fields can be evaluated below the grating.
+
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+
+<!-- START FOOTER -->
+<hr>
+<h2>For More Information</h2>
+
+<p>
+<a href="http://www.nist.gov/pml/div685/grp06/germer.cfm">SCATMECH Technical Information and Questions</a><br>
+<a href="http://www.nist.gov/pml/div685/index.cfm" target="_top">Sensor Science Division Home Page</a><br>
+<a href="mailto:fraser@nist.gov">Sensor Science Division Inquiries</a><br>
+<a href="mailto:thomas.germer@nist.gov">Website Comments</a>
+
+<p>
+Current SCATMECH version: <a href="./download.htm">7.00 (January 2015)</a><br>
+This page first online: Version 6.00 (February 2008) <br>
+This page last modified: Version 7.00 (January 2015) <br>
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+</td>
+</tr>
+</table>
+
+</body>
+</html>

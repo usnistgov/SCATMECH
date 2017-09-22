@@ -1,0 +1,131 @@
+<html>
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Cygwin (vers 1st September 2004), see www.w3.org">
+   <link rel="STYLESHEET" href="style.css" type="text/css">
+
+  <title>SCATMECH: User interface functions</title>
+<script language="JavaScript" id="_fed_an_js_tag" src="/js/federated-analytics.all.min.js?agency=NIST&subagency=pml&pua=UA-37115410-46&yt=true"></script>
+</head>
+
+<body>
+  <a name="top" id="top"><!-- --></a>
+
+  <table width="98%" border="0" cellpadding="0" cellspacing="0"
+  align="center">
+    <tr>
+      <td>
+	<p class="nav"><a href=
+        "index.htm">SCATMECH</a> &gt; <a href=
+        "classes.htm">Classes and Functions</a> &gt;
+        <a href="classes.htm#Utility">Utility</a> &gt; User
+        interface functions
+
+        <h1>User interface functions</h1>
+
+
+        <hr>
+
+       <p> A set of functions which aid the programmer in querying the
+        user for values.
+
+        <h2>Include files:</h2>
+
+          <pre>
+#include "<a href="../code/askuser.h">askuser.h</a>"
+</pre>
+        <h2>Source code:</h2>
+
+          <pre>
+<a href="../code/askuser.cpp">askuser.cpp</a>
+</pre>
+        <h2>See also:</h2>
+
+        <p><a href="index.htm">SCATMECH Home</a>, &nbsp;
+        <a href="interface.htm">Console Interface</a>
+        &nbsp;</p>
+
+	<h2>Definition of functions:</h2>
+
+          <pre>
+template <class TYPE> TYPE <a href="#AskUser">AskUser</a>(const std::string& prompt, const TYPE& deflt	);
+string <a href="#AskUser">AskUser</a>(const std::string& prompt, const char* deflt);	
+void    <a href=
+"#AskUser_set_streams">SCATMECH_set_istream</a>(istream&amp; is);
+void    <a href=
+"#AskUser_set_streams">SCATMECH_set_ostream</a>(ostream&amp; os);
+</pre>
+
+        <hr>
+
+        <h3><a name="AskUser" id="AskUser">
+template <class TYPE> TYPE <a href="#AskUser">AskUser</a>(const std::string&amp; prompt, const TYPE&amp; deflt)</br>
+string <a href="#AskUser">AskUser</a>(const std::string&amp; prompt, const char* deflt)</a></h3>
+
+        <blockquote>
+          <p>These functions send the character string 
+          <strong>query</strong> to the output stream (which, by default, is <strong>cerr</strong>) and wait
+          for response from the user. If the user types only
+          "return," the function returns the default value <strong>deflt</strong>.
+          Otherwise, it returns the value typed in by the
+          user.</p>
+
+	  <p>Any data type <b>TYPE</b> may be used, provided that the binary operators &lt;&lt; and &gt;&gt; are defined
+	  for the input and output streams.  Thus, <b>TYPE</b> can be <a href="dielfunc.htm">dielectric_function</a> or 
+	  <a href="scattabl.htm">Table</a>.
+
+	<h4>Example:</h4>
+
+          <pre>
+double thetai = AskUser("Incident angle",45.);
+int npoints = AskUser("Number of points",100);
+string options = AskUser("Enter options","AB");
+dielectric_function df = AskUser("Optical constant of substrate",dielectric_function(17.22,0.415));
+</pre>
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+	<h3><a name=
+        "AskUser_set_streams" id="AskUser_set_streams">
+        void set_istream(istream &amp;is)<br>
+        void set_ostream(ostream &amp;os)</a></h3>
+
+        <blockquote>
+          <p>The above functions <strong>AskUser</strong> use a
+          predefined input stream and output stream. By default, these are <strong>cin</strong>, and
+          <strong>cerr</strong>, which are
+          adequate for simple console routines. However, it may be
+          useful for some routines to use different
+          <strong>iostreams</strong>.  These function can be used to set these functions differently.</p>
+        <h4>Example:</h4>
+
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+
+<!-- START FOOTER -->
+<hr>
+<h2>For More Information</h2>
+
+<p>
+<a href="http://www.nist.gov/pml/div685/grp06/germer.cfm">SCATMECH Technical Information and Questions</a><br>
+<a href="http://www.nist.gov/pml/div685/index.cfm" target="_top">Sensor Science Division Home Page</a><br>
+<a href="mailto:fraser@nist.gov">Sensor Science Division Inquiries</a><br>
+<a href="mailto:thomas.germer@nist.gov">Website Comments</a>
+
+<p>
+Current SCATMECH version: <a href="./download.htm">7.00 (January 2015)</a><br>
+This page first online: Version 1.00 (March 2000) <br>
+This page last modified: Version 7.00 (January 2015) <br>
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+</td>
+</tr>
+</table>
+
+</body>
+</html>

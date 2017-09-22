@@ -1,0 +1,1080 @@
+<html>
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Cygwin (vers 1st September 2004), see www.w3.org">
+   <link rel="STYLESHEET" href="style.css" type="text/css">
+
+  <title>SCATMECH: CrossGrating</title>
+</head>
+
+<body>
+  <a name="top" id="top"><!-- --></a>
+
+  <table width="98%" border="0" cellpadding="0" cellspacing="0"
+  align="center">
+    <tr>
+      <td>
+        <p class="nav"><a href="index.htm">SCATMECH</a> &gt; <a href=
+        "classes.htm">Classes and Functions</a> &gt;
+        <a href="classes.htm#PropertyModels">Property Models</a>
+        &gt; CrossGrating</p>
+
+	<h1>Abstract class CrossGrating</h1>
+        
+        <hr>
+	<p>
+        The abstract class <b>CrossGrating</b> is used by <a
+        href="crossrcwmodel.htm">CrossRCW_Model</a> to describe a
+        two-dimensionally periodic grating. A crossed grating is a grating with periodicity along two directions. The diagram below shows a simple two-dimensionally periodic structure (crossed grating), with the 
+	grating constants, <tt>d1</tt> and <tt>d2</tt>. The grating directions make an angle <tt>zeta</tt> from perpendicular. 
+	<center><a name="crossgrating"></a><img src="Images/crossgrating.jpg" width="500" alt="Top view of a simple crossed grating, showing the unit cell, the grating constants, d1 and d2, and the angle zeta."></center>
+	<p>There are several
+        instantiable models currently available that inherit
+        <b>CrossGrating</b>:
+	<ul>
+	<li><a href="#oned">OneD_CrossGrating</a>: A cross grating defined by a one dimensional grating, using <a href="grating.htm">Grating</a>.
+	<li><a href="#overlay">Overlaid_CrossGrating</a>: A cross grating created by overlaying two other cross gratings.
+	<li><a href="#overlay1d">Overlaid_1D_CrossGrating</a>: A cross grating created by overlaying two 1D gratings at a given angle.
+        <li><a href="#nullgrating">Null_CrossGrating</a>: A trivial grating consisting of no features.
+	  </ul>
+
+	 <p>A number of <b>CrossGrating</b>s inherit the properties of <b>Gridded_CrossGrating</b>, an abstract class that 
+	    handles the Fourier factorization of the grating structure on a grid:
+
+	<ul>
+	<li><a href="#generic">Generic_CrossGrating</a>: A crossed grating described by a <a href="#file">grating description file</a>. 
+	      This description is the most general and can describe a wide variety of crossed gratinged with sharp material boundaries.
+	<li><a href="#Cylinder_CrossGrating">Cylinder_CrossGrating</a>: A cross grating described by an array of vertical cylinders.
+	<li><a href="#Sphere_CrossGrating">Sphere_CrossGrating</a>: A cross grating described by an array of spheres embeded in a medium.
+	<li><a href="#Pyramidal_Pit_CrossGrating">Pyramidal_Pit_CrossGrating</a>: A cross grating described by an array of tetrahedral pits.
+	</ul>
+	<p>The <b>CrossGrating</b>s that inherit <b>Gridded_CrossGrating</b> discretize the dielectric function on a uniform grid. These gratings are therefore approximations of the desired grating, and the 
+	  results of <a href="crossrcwmodel.htm">CrossRCW_Model</a> may not be continuous in the grating parameters. 
+
+        <h2>Instantiable Models and Their Parameters:</h2>
+
+        <table border="1" cellpadding="5">
+          <tr>
+            <th>Parameter</th>
+            <th>Data Type</th>
+            <th>Description</th>
+            <th>Default</th>
+          </tr>
+
+          <tr>
+            <td colspan="4" class="model">
+            <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+	    <a name="oned"><b>OneD_CrossGrating</b></a>:
+		A cross grating defined by a one dimensional grating, using <a href="grating.htm">Grating</a>. The grating is aligned so that its grating vector is along the <i>x</i> direction 
+	    (see <a href="#crossgrating">diagram</a> above). The grating can be anisotropic, but not magnetic. <br>
+	    <center><img src="Images/oned_crossgrating.jpg" width="600" alt="Diagram showing a one-dimensional grating being represented as a two-dimensional grating."></center>
+           <br></td>
+          </tr>
+
+          <tr>
+            <td class="parameter">medium_i</td>
+            <td class="datatype"><a href="dielfunc.htm">dielectric_function</a></td>
+            <td class="description">The
+            optical constants of the incident medium, expressed as
+            a complex number (n,k) or, optionally, as a function of
+            wavelength. The material must be non-absorbing
+            (k=0). <br>
+	    (Inherited from <b>CrossGrating</b>.)<br>
+	    This parameter must match <tt>grating.medium_i</tt>.
+            <td class="default">1</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">medium_t</td>
+            <td class="datatype"><a href="dielfunc.htm">dielectric_function</a></td>
+            <td class="description">The
+            optical constants of the transmitted medium, expressed as
+            a complex number (n,k) or, optionally, as a function of
+            wavelength.<br>
+	    (Inherited from <b>CrossGrating</b>.)<br>
+	    This parameter must match <tt>grating.medium_t</tt>.
+            <td class="default">(4.05,0.05)</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">grating</td>
+            <td class="datatype"><a href="grating.htm">Grating_Ptr</a></td>
+            <td class="description">The one-dimensionally periodic grating. 
+	    This grating can be anisotropic but not magnetic.
+	    </td>
+            <td class="default">Single_Line_Grating</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">d2</td>
+            <td class="datatype">double</td>
+            <td class="description">The lattice constant in the second direction [&micro;m]. This parameter should have no effect, but a value is
+	      needed if this grating were overlaid with another cross grating using <a href="#overlay">Overlaid_CrossGrating</a>.  The lattice constant in the first direction is obtained from the period of
+	      the grating (<tt>d1</tt> = <tt>grating.period/cos(zeta)</tt>).
+	      </td>
+            <td class="default">0.5</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">zeta</td>
+            <td class="datatype">double</td>
+            <td class="description">The off-perpendicular angle of the unit cell [deg]. The angle zeta is zero for a rectangular unit cell. This parameter should have no effect, other than to rotate the grating, but a value is
+	      needed if this grating were overlaid with another cross grating using <a href="#overlay">Overlaid_CrossGrating</a>.  
+	      </td>
+            <td class="default">0</td>
+          </tr>
+
+          <tr>
+            <td colspan="4" class="model">
+            <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+	    <a name="overlay"><b>Overlaid_CrossGrating</b></a>:
+		A grating created by overlaying two other crossed gratings.  The two gratings must have identically shaped and 
+		sized unit cells. Also, the <tt>medium_i</tt> of the bottom grating must match the <tt>medium_t</tt> of the top grating.
+	    <br><center><img src="Images/overlaid_crossgrating.jpg" width="1000" alt="Diagram showing two gratings overlaid on top of one another."></center>
+           <br></td>
+          </tr>
+
+          <tr>
+            <td class="parameter">medium_i</td>
+            <td class="datatype"><a href="dielfunc.htm">dielectric_function</a></td>
+            <td class="description">The
+            optical constants of the incident medium, expressed as
+            a complex number (n,k) or, optionally, as a function of
+            wavelength. The material must be non-absorbing
+            (k=0). <br>
+	    (Inherited from <b>CrossGrating</b>.)<br>
+	      This parameter must match <tt>top.medium_i</tt>.
+            <td class="default">1</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">medium_t</td>
+            <td class="datatype"><a href="dielfunc.htm">dielectric_function</a></td>
+            <td class="description">The
+            optical constants of the transmitted medium, expressed as
+            a complex number (n,k) or, optionally, as a function of
+            wavelength.<br>
+	    (Inherited from <b>CrossGrating</b>.)<br>
+	      This parameter must match <tt>bottom.medium_t</tt>.
+            <td class="default">(4.05,0.05)</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">top</td>
+            <td class="datatype">CrossGrating_Ptr</td>
+            <td class="description">The top grating (the one farther from the substrate).<br>The parameter <tt>top.medium_i</tt> must match <tt>medium_i</tt>,
+	      and the parameter <tt>top.medium_t</tt> must match <tt>bottom.medium_i</tt>. The lattice parameters (<tt>d1</tt>, <tt>d2</tt>, and <tt>zeta</tt> must match those of <tt>bottom</tt>.</td>
+            <td class="default">OneD_CrossGrating</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">bottom</td>
+            <td class="datatype">CrossGrating_Ptr</td>
+            <td class="description">The bottom grating (the one closer to the substrate).<br>The parameter <tt>bottom.medium_i</tt> must match <tt>top.medium_t</tt>,
+	      and the parameter <tt>bottom.medium_t</tt> must match <tt>medium_t</tt>. The lattice parameters (<tt>d1</tt>, <tt>d2</tt>, and <tt>zeta</tt> must match those of <tt>top</tt>.</td>
+            <td class="default">OneD_CrossGrating</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">overlay1</td>
+            <td class="datatype">double</td>
+            <td class="description">The component of the overlay vector along the 1st coordinate [&#181;m] </td>
+            <td class="default">0</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">overlay2</td>
+            <td class="datatype">double</td>
+            <td class="description">The component of the overlay vector along the 2nd coordinate [&#181;m] </td>
+            <td class="default">0</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">separation</td>
+            <td class="datatype">double</td>
+            <td class="description">The vertical separation between the bottom and top gratings [&#181;m]. This separation is filled with
+	    <tt>bottom.medium_i</tt>, which must match <tt>top.medium_t</tt>.</td>
+            <td class="default">0</td>
+          </tr>
+
+
+          <tr>
+            <td colspan="4" class="model">
+            <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+	    <a name="overlay1d"><b>Overlaid_1D_CrossGrating</b></a>:
+		A grating created by overlaying two one dimensional ratings at a given angle.
+	        The <tt>medium_i</tt> of the bottom grating must match the <tt>medium_t</tt> of the top grating. The combined lattice parameters are <tt>d1=top.period/sin(angle)</tt>, 
+	       <tt>d2=bottom.period/sin(angle)</tt>, and <tt>zeta = 90-angle</tt>.
+	    <br><center><img src="Images/overlaid_1d_crossgrating.jpg" width="1000" alt="Diagram showing two one-dimensional gratings overlaid on top of one another."></center>
+           <br></td>
+          </tr>
+
+          <tr>
+            <td class="parameter">medium_i</td>
+            <td class="datatype"><a href="dielfunc.htm">dielectric_function</a></td>
+            <td class="description">The
+            optical constants of the incident medium, expressed as
+            a complex number (n,k) or, optionally, as a function of
+            wavelength. The material must be non-absorbing
+            (k=0). <br>
+	    (Inherited from <b>CrossGrating</b>.)<br>
+	      This must match <tt>top.medium_i</tt>.
+            <td class="default">1</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">medium_t</td>
+            <td class="datatype"><a href="dielfunc.htm">dielectric_function</a></td>
+            <td class="description">The
+            optical constants of the transmitted medium, expressed as
+            a complex number (n,k) or, optionally, as a function of
+            wavelength.<br>
+	    (Inherited from <b>CrossGrating</b>.)<br>
+	      This must match <tt>bottom.medium_t</tt>.
+            <td class="default">(4.05,0.05)</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">top</td>
+            <td class="datatype"><a href="grating.htm">Grating_Ptr</a></td>
+            <td class="description">The top grating (the one farther from the substrate). The grating direction of this grating is aligned along the
+	    second direction.  The period is used to define the period along the second direction of the 2D grating.
+	      <br>The parameter <tt>top.medium_i</tt> must match <tt>medium_i</tt>,
+	      and the parameter <tt>top.medium_t</tt> must match <tt>bottom.medium_i</tt>.</td>
+	    </td>
+            <td class="default">Single_Line_Grating</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">bottom</td>
+            <td class="datatype"><a href="grating.htm">Grating_Ptr</a></td>
+            <td class="description">The top grating (the one closer to the substrate). The grating direction of this grating is aligned along the
+	    first direction.  The period is used to define the period along the first direction of the 2D grating.
+	      <br>The parameter <tt>bottom.medium_t</tt> must match <tt>medium_t</tt>,
+	      and the parameter <tt>top.medium_t</tt> must match <tt>bottom.medium_i</tt>.</td>
+	    </td>
+            <td class="default">Single_Line_Grating</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">angle</td>
+            <td class="datatype">double</td>
+            <td class="description">The angle of the top grating with respect to the first grating [deg].  This angle cannot be zero.  An angle of 90 degrees means the two gratings are perpendicular 
+	    to one another.</td>
+            <td class="default">90</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">separation</td>
+            <td class="datatype">double</td>
+            <td class="description">The vertical separation between the bottom and top gratings [&#181;m]. This separation is filled with
+	    <tt>bottom.medium_i</tt>, which must match <tt>top.medium_t</tt>.</td>
+            <td class="default">0</td>
+          </tr>
+
+
+          <tr>
+            <td colspan="4" class="model">
+            <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+	    <a name="nullgrating"><b>Null_CrossGrating</b></a>:
+		A trivial cross grating consisting of no features.
+           <br></td>
+          </tr>
+
+          <tr>
+            <td class="parameter">medium_i</td>
+            <td class="datatype"><a href="dielfunc.htm">dielectric_function</a></td>
+            <td class="description">The
+            optical constants of the incident medium, expressed as
+            a complex number (n,k) or, optionally, as a function of
+            wavelength. The material must be non-absorbing
+            (k=0). <br>
+	    (Inherited from <b>CrossGrating</b>.)
+            <td class="default">1</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">medium_t</td>
+            <td class="datatype"><a href="dielfunc.htm">dielectric_function</a></td>
+            <td class="description">The
+            optical constants of the transmitted medium, expressed as
+            a complex number (n,k) or, optionally, as a function of
+            wavelength.<br>
+	    (Inherited from <b>CrossGrating</b>.)
+            <td class="default">(4.05,0.05)</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">d1</td>
+            <td class="datatype">double</td>
+            <td class="description">The lattice constant in the first direction [&micro;m]. This parameter should have no effect, but a value is
+	      needed if this grating were overlaid with another cross grating. </td>
+            <td class="default">0.5</td><br>
+          </tr>
+
+          <tr>
+            <td class="parameter">d2</td>
+            <td class="datatype">double</td>
+            <td class="description">The lattice constant in the second direction [&micro;m]. This parameter should have no effect, but a value is
+	      needed if this grating were overlaid with another cross grating.   </td>
+            <td class="default">0.5</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">zeta</td>
+            <td class="datatype">double</td>
+            <td class="description">The off-perpendicular angle of the unit cell [deg]. The angle zeta is zero for a rectangular unit cell. This parameter should have no effect, but a value is
+	      needed if this grating were overlaid with another cross grating. 
+	      </td>
+            <td class="default">0</td>
+          </tr>
+
+          <tr>
+            <td colspan="4" class="model">
+            <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+	    <a name="generic"><b>Generic_CrossGrating</b></a>:
+		A grating whose unit cell is described in a file.  The file format is described in detail <a href="#file">below</a>. Relatively complicated three-dimensional structures 
+	    can be created with this class. An example of a unit cell is given in the illustrating figure.
+	    <center><img src="Images/generic_crossgrating.jpg" width="500" alt="Complex structure which can be created with a Generic_CrossGrating."></center>
+           <br></td>
+          </tr>
+
+          <tr>
+            <td class="parameter">medium_i</td>
+            <td class="datatype"><a href="dielfunc.htm">dielectric_function</a></td>
+            <td class="description">The
+            optical constants of the incident medium, expressed as
+            a complex number (n,k) or, optionally, as a function of
+            wavelength. The material must be non-absorbing
+            (k=0). <br>
+	    (Inherited from <b>CrossGrating</b>.)
+            <td class="default">1</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">medium_t</td>
+            <td class="datatype"><a href="dielfunc.htm">dielectric_function</a></td>
+            <td class="description">The
+            optical constants of the transmitted medium, expressed as
+            a complex number (n,k) or, optionally, as a function of
+            wavelength.<br>
+	    (Inherited from <b>CrossGrating</b>.)
+            <td class="default">(4.05,0.05)</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">d1</td>
+            <td class="datatype">double</td>
+            <td class="description">The lattice constant along the 1st coordinate of the unit cell [&#181;m].
+	     The value of this parameter can be used within the grating specification file, but it can also be overridden by it.<br>
+	    (Inherited from <b>Gridded_CrossGrating</b>.)
+            <td class="default">0.5</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">d2</td>
+            <td class="datatype">double</td>
+            <td class="description">The lattice constant along the 2nd coordinate of the unit cell [&#181;m].
+	     The value of this parameter can be used within the grating specification file, but it can also be overridden by it.<br>
+	    (Inherited from <b>Gridded_CrossGrating</b>.)
+            <td class="default">0.5</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">zeta</td>
+            <td class="datatype">double</td>
+            <td class="description">The off-perpendicular angle of the unit cell [deg].  The angle zeta is zero for
+		a rectangular unit cell.
+	     The value of this parameter can be used within the grating specification file, but it can also be overridden by it.<br>
+	    (Inherited from <b>Gridded_CrossGrating</b>.)
+            <td class="default">0</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">grid1</td>
+            <td class="datatype">int</td>
+            <td class="description">The number of grid elements in the unit cell along the 1st coordinate. This parameter is optimally a power of 2. 
+	      However, the fast fourier transform algorithm that is used can accept any value, but its speed improves when the prime factors of <tt>grid1</tt> are small. <br>
+	    (Inherited from <b>Gridded_CrossGrating</b>.)
+            <td class="default">1024</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">grid2</td>
+            <td class="datatype">int</td>
+            <td class="description">The number of grid elements in the unit cell along the 2nd coordinate. This parameter is optimally a power of 2. 
+	      However, the fast fourier transform algorithm that is used can accept any value, but its speed improves when the prime factors of <tt>grid2</tt> are small. <br>
+	    (Inherited from <b>Gridded_CrossGrating</b>.)
+            <td class="default">1024</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">filename</td>
+            <td class="datatype">string</td>
+            <td class="description">The name of the file containing the description of the grating.  A description of the  format of this 
+		file is given <a href="#file">below</a>.
+            <td class="default">(blank)</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">pstring</td>
+            <td class="datatype">string</td>
+            <td class="description">A character string containing the values of the parameters for the grating.  The string 
+		must begin with a left parenthesis and end with a right parenthesis.  The values must be separated
+		by commas.  The number of parameters listed must be identical to the number of parameters listed in the file. The order
+	      of the parameters is the same as listed in the file.
+            <td class="default">(blank)</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">nlayers</td>
+            <td class="datatype">int</td>
+            <td class="description">The approximate number of layers into which to subdivide the structure. The actual number of layers used will depend upon the structure.
+            <td class="default">10</td>
+          </tr>
+
+
+          <tr>
+            <td colspan="4" class="model">
+	      <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+              <a name="Cylinder_CrossGrating"><b>Cylinder_CrossGrating</b></a>:
+              A grating consisting of cylinders of one index of refraction embedded in a film of another index of refraction.
+	    <br><center><img src="Images/cylinder_crossgrating.jpg" width="500" alt="Diagram showing a unit cell with a cylindrical hole."></center>
+		<br>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="parameter">medium_i</td>
+            <td class="datatype"><a href="dielfunc.htm">dielectric_function</a></td>
+            <td class="description">The
+            optical constants of the incident medium, expressed as
+            a complex number (n,k) or, optionally, as a function of
+            wavelength. The material must be non-absorbing
+            (k=0). <br>
+	    (Inherited from <b>CrossGrating</b>.)
+            <td class="default">1</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">medium_t</td>
+            <td class="datatype"><a href="dielfunc.htm">dielectric_function</a></td>
+            <td class="description">The
+            optical constants of the transmitted medium, expressed as
+            a complex number (n,k) or, optionally, as a function of
+            wavelength.<br>
+	    (Inherited from <b>CrossGrating</b>.)
+            <td class="default">(4.05,0.05)</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">d1</td>
+            <td class="datatype">double</td>
+            <td class="description">The lattice constant along the 1st coordinate of the unit cell [&#181;m].<br>
+	    (Inherited from <b>Gridded_CrossGrating</b>.)
+            <td class="default">0.5</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">d2</td>
+            <td class="datatype">double</td>
+            <td class="description">The lattice constant along the 2nd coordinate of the unit cell [&#181;m].<br>
+	    (Inherited from <b>Gridded_CrossGrating</b>.)
+            <td class="default">0.5</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">zeta</td>
+            <td class="datatype">double</td>
+            <td class="description">The off-perpendicular angle of the unit cell [deg].  The angle zeta is zero for
+		a rectangular unit cell.<br>
+	    (Inherited from <b>Gridded_CrossGrating</b>.)
+            <td class="default">0</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">grid1</td>
+            <td class="datatype">int</td>
+            <td class="description">The number of grid elements in the unit cell along the 1st coordinate. This parameter is optimally a power of 2. 
+	      However, the fast fourier transform algorithm that is used can accept any value, but its speed improves when the prime factors of <tt>grid1</tt> are small. <br>
+	    (Inherited from <b>Gridded_CrossGrating</b>.)
+            <td class="default">1024</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">grid2</td>
+            <td class="datatype">int</td>
+            <td class="description">The number of grid elements in the unit cell along the 2nd coordinate. This parameter is optimally a power of 2. 
+	      However, the fast fourier transform algorithm that is used can accept any value, but its speed improves when the prime factors of <tt>grid2</tt> are small. <br>
+	    (Inherited from <b>Gridded_CrossGrating</b>.)
+            <td class="default">1024</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">rtop</td>
+            <td class="datatype"><a href="scattabl.htm">Table</a></td>
+            <td class="description">The radius of the top of the cylinder as a function of angle (in degrees) 
+		around the cylinder [&#181;m].  If this value is a constant, then the top of the cylinder is a circle. If the radius exceeds the boundaries of the grating unit cell, the cylinder is truncated.
+            <td class="default">0.05</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">rbottom</td>
+            <td class="datatype"><a href="scattabl.htm">Table</a></td>
+            <td class="description">The radius of the bottom of the cylinder as a function of angle (in degrees) 
+		around the cylinder [&#181;m].  If this value is a constant, then the bottom of the cylinder is a circle. If the radius exceeds the boundaries of the grating unit cell, the cylinder is truncated.
+            <td class="default">0.05</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">thickness</td>
+            <td class="datatype">double</td>
+            <td class="description">The thickness of the layer, which is also the height of the cylinder [&#181;m].
+            <td class="default">0.05</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">nlevels</td>
+            <td class="datatype">int</td>
+            <td class="description">The number of levels in the structure.
+            <td class="default">10</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">inside</td>
+            <td class="datatype"><a href="dielfunc.htm">dielectric_function</a></td>
+            <td class="description">The
+            optical constants of the interior of the cylinder, expressed as
+            a complex number (n,k) or, optionally, as a function of
+            wavelength.
+            <td class="default">(4.05,0.05)</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">outside</td>
+            <td class="datatype"><a href="dielfunc.htm">dielectric_function</a></td>
+            <td class="description">The
+            optical constants of the exterior of the cylinder, expressed as
+            a complex number (n,k) or, optionally, as a function of
+            wavelength.
+            <td class="default">(4.05,0.05)</td>
+          </tr>
+
+          <tr>
+            <td colspan="4" class="model">
+	      <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+              <a name="Sphere_CrossGrating"><b>Sphere_CrossGrating</b></a>:
+              A grating consisting of a film in which an array of spheres is embedded.<br>
+	    <br><center><img src="Images/sphere_crossgrating.jpg" width="500" alt="Diagram showing a unit cell consisting of a layer with an embedded sphere."></center>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="parameter">medium_i</td>
+            <td class="datatype"><a href="dielfunc.htm">dielectric_function</a></td>
+            <td class="description">The
+            optical constants of the incident medium, expressed as
+            a complex number (n,k) or, optionally, as a function of
+            wavelength. The material must be non-absorbing
+            (k=0). <br>
+	    (Inherited from <b>CrossGrating</b>.)
+            <td class="default">1</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">medium_t</td>
+            <td class="datatype"><a href="dielfunc.htm">dielectric_function</a></td>
+            <td class="description">The
+            optical constants of the transmitted medium, expressed as
+            a complex number (n,k) or, optionally, as a function of
+            wavelength.<br>
+	    (Inherited from <b>CrossGrating</b>.)
+            <td class="default">(4.05,0.05)</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">d1</td>
+            <td class="datatype">double</td>
+            <td class="description">The lattice constant along the 1st coordinate of the unit cell [&#181;m].<br>
+	    (Inherited from <b>Gridded_CrossGrating</b>.)
+            <td class="default">0.5</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">d2</td>
+            <td class="datatype">double</td>
+            <td class="description">The lattice constant along the 2nd coordinate of the unit cell [&#181;m].<br>
+	    (Inherited from <b>Gridded_CrossGrating</b>.)
+            <td class="default">0.5</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">zeta</td>
+            <td class="datatype">double</td>
+            <td class="description">The off-perpendicular angle of the unit cell [deg].  The angle zeta is zero for
+		a rectangular unit cell.<br>
+	    (Inherited from <b>Gridded_CrossGrating</b>.)
+            <td class="default">0</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">grid1</td>
+            <td class="datatype">int</td>
+            <td class="description">The number of grid elements in the unit cell along the 1st coordinate. This parameter is optimally a power of 2. 
+	      However, the fast fourier transform algorithm that is used can accept any value, but its speed improves when the prime factors of <tt>grid1</tt> are small. <br>
+	    (Inherited from <b>Gridded_CrossGrating</b>.)
+            <td class="default">1024</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">grid2</td>
+            <td class="datatype">int</td>
+            <td class="description">The number of grid elements in the unit cell along the 2nd coordinate. This parameter is optimally a power of 2. 
+	      However, the fast fourier transform algorithm that is used can accept any value, but its speed improves when the prime factors of <tt>grid2</tt> are small. <br>
+	    (Inherited from <b>Gridded_CrossGrating</b>.)
+            <td class="default">1024</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">diameter</td>
+            <td class="datatype">double</td>
+            <td class="description">The diameter of the sphere [&#181;m].  If the diameter causes the sphere size to exceed that of the unit cell, the sphere will be truncated.
+            <td class="default">0.05</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">above</td>
+            <td class="datatype">double</td>
+            <td class="description">The thickness of the medium that the sphere is embedded in which is above the sphere [&#181m]. This value must be non-negative.
+            <td class="default">0.05</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">below</td>
+            <td class="datatype">double</td>
+            <td class="description">The thickness of the medium that the sphere is embedded in which is below the sphere [&#181m]. This value must be non-negative.
+            <td class="default">0.05</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">nlevels</td>
+            <td class="datatype">int</td>
+            <td class="description">The number of levels into which the sphere is divided. The total number of levels used in the simulation  will be the sum of <tt>nlevels</tt> 
+	      and one for each of <tt>above</tt> and <tt>below</tt> which are non-zero.
+            <td class="default">10</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">sphere</td>
+            <td class="datatype"><a href="dielfunc.htm">dielectric_function</a></td>
+            <td class="description">The
+            optical constants of the sphere, expressed as
+            a complex number (n,k) or, optionally, as a function of
+            wavelength.
+            <td class="default">(1.5,0)</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">surrounding</td>
+            <td class="datatype"><a href="dielfunc.htm">dielectric_function</a></td>
+            <td class="description">The
+            optical constants of the material in which the sphere is embedded, expressed as
+            a complex number (n,k) or, optionally, as a function of
+            wavelength.
+            <td class="default">(1.5,0)</td>
+          </tr>
+
+          <tr>
+            <td colspan="4" class="model">
+	      <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+              <a name="Pyramidal_Pit_CrossGrating"><b>Pyramidal_Pit_CrossGrating</b></a>:
+              A surface-relief grating consisting of an array of square pyramidal pits. The materials <tt>medium_i</tt> and
+	      <tt>medium_t</tt> are used to build this structure.
+	    <br><center><img src="Images/pyramidal_pit_crossgrating.jpg" width="500" alt="Diagram showing a unit cell consisting of pyramidal pit in the substrate."></center>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="parameter">medium_i</td>
+            <td class="datatype"><a href="dielfunc.htm">dielectric_function</a></td>
+            <td class="description">The
+            optical constants of the incident medium, expressed as
+            a complex number (n,k) or, optionally, as a function of
+            wavelength. The material must be non-absorbing
+            (k=0). <br>
+	    (Inherited from <b>CrossGrating</b>.)
+            <td class="default">1</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">medium_t</td>
+            <td class="datatype"><a href="dielfunc.htm">dielectric_function</a></td>
+            <td class="description">The
+            optical constants of the transmitted medium, expressed as
+            a complex number (n,k) or, optionally, as a function of
+            wavelength.<br>
+	    (Inherited from <b>CrossGrating</b>.)
+            <td class="default">(4.05,0.05)</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">d1</td>
+            <td class="datatype">double</td>
+            <td class="description">The lattice constant along the 1st coordinate of the unit cell [&#181;m].<br>
+	    (Inherited from <b>Gridded_CrossGrating</b>.)
+            <td class="default">0.5</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">d2</td>
+            <td class="datatype">double</td>
+            <td class="description">The lattice constant along the 2nd coordinate of the unit cell [&#181;m].<br>
+	    (Inherited from <b>Gridded_CrossGrating</b>.)
+            <td class="default">0.5</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">zeta</td>
+            <td class="datatype">double</td>
+            <td class="description">The off-perpendicular angle of the unit cell [deg].  The angle zeta is zero for
+		a rectangular unit cell.<br>
+	    (Inherited from <b>Gridded_CrossGrating</b>.)
+            <td class="default">0</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">grid1</td>
+            <td class="datatype">int</td>
+            <td class="description">The number of grid elements in the unit cell along the 1st coordinate. This parameter is optimally a power of 2. 
+	      However, the fast fourier transform algorithm that is used can accept any value, but its speed improves when the prime factors of <tt>grid1</tt> are small. <br>
+	    (Inherited from <b>Gridded_CrossGrating</b>.)
+            <td class="default">1024</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">grid2</td>
+            <td class="datatype">int</td>
+            <td class="description">The number of grid elements in the unit cell along the 2nd coordinate. This parameter is optimally a power of 2. 
+	      However, the fast fourier transform algorithm that is used can accept any value, but its speed improves when the prime factors of <tt>grid2</tt> are small. <br>
+	    (Inherited from <b>Gridded_CrossGrating</b>.)
+            <td class="default">1024</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">side</td>
+            <td class="datatype">double</td>
+            <td class="description">The length of the base of the pyramidal pit [&#181;m].
+            <td class="default">0.05</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">depth</td>
+            <td class="datatype">double</td>
+            <td class="description">The depth of the pits [&#181;m].
+            <td class="default">0.05</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">nlevels</td>
+            <td class="datatype">int</td>
+            <td class="description">The number of levels in which the pits are subdivided.
+            <td class="default">10</td>
+          </tr>
+
+
+        </table>
+
+        <h2>See also:</h2>
+
+        <p><a href=
+        "index.htm">SCATMECH Home</a>, &nbsp; <a href=
+        "crossrcwmodel.htm">CrossRCW_Model</a>, &nbsp; <a href=
+        "crossrcwbrdf.htm">CrossRCW_BRDF_Model</a></p
+
+        <p>L. Li, "New formulation of the Fourier modal method for crossed surface-relief gratings,"
+	J. Opt. Soc. Am. A <b>14</b>, 2758-2767 (1997).</p>
+
+
+	<h2>Include file:</h2>
+
+          <pre>
+#include "<a href="../code/crossgrating.h">crossgrating.h</a>"
+#include "<a href="../code/crossgrating2.h">crossgrating2.h</a>"
+#include "<a href="../code/gcross.h">gcross.h</a>"
+</pre>
+        <h2>Source code:</h2>
+
+          <pre>
+<a href="../code/crossgrating.cpp">crossgrating.cpp</a>
+<a href="../code/crossgrating2.cpp">crossgrating2.cpp</a>
+<a href="../code/gcross.cpp">gcross.cpp</a>
+</pre>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+	<a name="file" id="file"><!-- --></a>
+	<h3>File format for Generic_CrossGrating</h3>
+
+        <blockquote><p> This section describes the file format
+        required by <b>Generic_CrossGrating</b>. The file is a text
+        file. We will illustrate the format of the file using an
+        example grating structure, shown below.  Dimensions are
+        generic and parameters can be passed to the model at a later
+        time using the <b>pstring</b> parameter.  It is recommended
+        that users familiarize themselves with the <a href="grating.htm#file">description for one
+        dimensional gratings (in Generic_Grating)</a> before moving on
+        to two dimensional gratings.  The grating description for a
+        cross grating is very similar to that for a one dimensional
+        grating.  Instead of defining coordinates in two dimensions,
+        with line segments separating regions, a two-dimensional
+        grating requires coordinates in three dimensions, with
+        polygons separating regions.  While quite complicated structures can be described in this file format, the example we give below 
+        is fairly simple.  We will consider a
+        two-dimensional array of tetrahedral pits in a surface.  A
+        top-down view of this structure is shown below:
+              
+	  <center>
+               <img src=
+                "Images/FileCrossGrating.gif" alt=
+                "A diagram showing a structure with dimensions, materials, and vertices labeled.">
+             </center>
+
+	  <p>The solid black lines above denote the structure.  The heavy
+	  black dashed parallelogram denotes the unit cell. The
+	  dimensions of the structure are given by the parameters <b>P</b>
+	  (for the unit cell side length), <b>L</b> (the base of the
+	  tetrahedrons), and <b>D</b> (the depth of the tetrahedrons).  We assume for
+	  simplicity that the parallelogram is tilted by 30&deg; (inner
+	  angles of 60&deg; and 120&deg;).
+
+	  <p>Like the grating description file for one-dimensional
+	  gratings, the grating description file for two-dimensional
+	  gratings is a plain-text file.  In order to differentiate
+	  the two-dimensional grating from the one-dimensional grating
+	  description, the first word of the file must be
+	  <b>CROSSGRATING</b> for the two-dimensional grating.  There
+	  are five blocks (<b>PARAMETERS</b>, <b>WORKING</b>,
+	  <b>MATERIALS</b>, <b>VERTICES</b>, and <b>BOUNDARIES</b>, in
+	  that order) of data in the file, and each begins with the
+	  name of the block and ends with the word <b>END</b>. In the
+	  following, the five blocks are described. In the text file,
+	  these blocks of data are listed consecutively and in
+	  order. Comments can be located anywhere in the file, are
+	  delimited by a semicolon (;), and run to the end of the
+	  line. Except insofar as linefeeds mark the end of comments,
+	  linefeeds can be placed anywhere in the file.  The
+	  <b>PARAMETERS</b> section is essentially identical to that
+	  for a one-dimensional grating.  In our example we would use
+	  (including the <b>CROSSGRATING</b> statement):
+
+	  <pre>
+	  CROSSGRATING
+
+          PARAMETERS
+	        L     ; Length of base of pyramid
+	        P     ; Length of unit cell (pitch)
+	        D     ; Depth of pyramid
+          END
+          </pre>
+
+	  <h4>WORKING Section:</h4>
+
+	  <p>The <b>WORKING</b> section is also essentially identical to that
+	  for a one-dimensional grating.  The parameters <b>zeta</b>, <b>d1</b>, <b>d2</b>, and <b>lambda</b> 
+	  are predefined by the values given in the class parameters.  However, <b>zeta</b>, <b>d1</b>, and <b>d2</b> can be overridden in the <b>WORKING</b> section.  The value <b>zeta</b> 
+	  is the angle (in degrees) that the
+	  unit cell is tilted from rectangular (see figure above, a rectangular lattice has <b>zeta</b> equal to 0&deg;).
+	  The lattice constants are <b>d1</b> and <b>d2</b>, where <b>d1</b> is in
+	  the <i>x</i> (horizontal) direction, and <b>d2</b> is
+	  the other lattice constant.  The wavelength of the light is <b>lambda</b> and is assigned by <a href="crossrcwmodel.htm">CrossRCW_Model</a>.
+
+	    <p>In our example, we might use:
+	    <pre>
+         WORKING
+	     x1   0
+	     x6   L*cosd(60)
+	     x3   P*cosd(60)
+	     x5   L
+	     x2   P
+	     x4   x3+P
+	     x7   x6
+
+	     y1   0
+	     y2   0
+	     y5   0
+	     y7   L/2*tand(30)
+	     y6   L*sind(60)
+	     y3  P*sind(60)
+	     y4   y3
+
+	     z1   0
+	     z2   0
+	     z3   0
+	     z4   0
+	     z5   0
+	     z6   0
+	     z7   -D
+
+	     d1   P
+	     d2   P
+	     zeta 30
+         END
+          </pre>
+
+	    In our example, <tt>x6</tt> is the <i>x</i> coordinate of vertex <tt>v6</tt> in the diagram. One in not required to use this scheme for defining the 
+	    working variables; the author simply finds this scheme convenient when defining complex gratings.
+
+	  <h4>MATERIALS Section:</h4>
+
+	  <p>The <b>MATERIALS</b> section is also essentially identical to that
+	  for <a href="grating.htm#file">Generic_Grating</a>, with the exception that
+	    anisotropic or magnetic materials are not supported.
+	    As for the one-dimensional
+	  grating, the two materials <b>medium_i</b> and <b>medium_t</b> are
+	  predefined and determined by the class parameters.  Thus, for this simple grating, where we have no
+	  other materials, we would just use:
+
+	    <pre>
+            MATERIALS
+            END
+            </pre>
+
+	  <h4>VERTICES Section:</h4>
+
+	  <p>The <b>VERTICES</b> section is similar to that for a
+	  <a href="grating.htm#file">Generic_Grating</a>, except that all vertices must have
+	  three coordinates, instead of two. The three coordinates, <i>x</i>, <i>y</i>, and <i>z</i> form a right-handed coordinate system, with <i>x</i> along the <b>d1</b> side of the unit cell, and <i>z</i> pointing from
+	  the <b>medium_t</b> to <b>medium_i</b>. For our example, we
+	  would use: 
+
+	    <pre>
+            VERTICES 
+                  v1   (x1,y1,z1) 
+                  v2   (x2,y2,z2) 
+                  v3   (x3,y3,z3) 
+                  v4   (x4,y4,z4)
+                  v5   (x5,y5,z5) 
+                  v6   (x6,y6,z6) 
+                  v7   (x7,y7,z7) 
+            END
+            </pre>
+	    
+	    <p>Except for defining <tt>d1</tt>, <tt>d2</tt>, and <tt>zeta</tt>, we could have left out most of the variables in the <b>WORKING</b> section and defined the vertices by
+
+	    <pre>
+            VERTICES 
+                  v1   (0,0,0) 
+                  v2   (P,0,0) 
+                  v3   (P*cosd(60),P*sind(60),0) 
+                  v4   (P*cosd(60)+P,P*sind(60),0)
+                  v5   (0,L,0) 
+                  v6   (L*cosd(60),L*sind(60),0) 
+                  v7   (L*cosd(60),L*sind(60),-D) 
+            END
+	    </pre>
+
+	    <p>However, for a much more complicated grating, such a description can get very tedious.
+
+	  <h4>BOUNDARIES Section:</h4>
+
+	  <p>The <b>BOUNDARIES</b> section, like that for the one-dimensional
+	  grating, is used to define all of the boundaries between
+	  materials.  Unlike a one-dimensional grating, the boundaries
+	  must be defined with facets, rather than with line segments.
+	  There are two types of facets that are allowed: triangles
+	  and convex quadrangles.  The convex quadrangles are further
+	  subdivided by the software into triangles, but are included
+	  to make some grating definitions easier.  To define a
+	  triangle, for example, the one with vertices <b>v1</b>, <b>v5</b>, and <b>v7</b>,
+	  we would use:
+
+	    <pre>
+	       v1  v5  v7  material_t  material_i
+            </pre>
+
+	  <p>That is, we list the three vertices, followed by the two
+	  materials.  The order of the materials must correspond to
+	  the ordering of the vertices using a right-handed
+	  convention.  That is, as one goes from the first vertex to
+	  the second vertex and then to the third vertex, with a right
+	  hand, the thumb will point from the first material to the
+	  second material.  Reversing the two materials will create an
+	  error.
+
+	  <p>For a convex quadrangle, we use the flag <b>QUAD</b>, followed
+	  by four vertices, and followed again by the two materials.
+	  For example, the quadrangle defined by <b>v5</b>, <b>v2</b>, <b>v3</b>, and <b>v6</b>
+	  (see light dashed blue line in the figure above), we would
+	  use:
+
+	    <pre>
+	        QUAD  v5  v2  v3  v6  material_t  material_i
+            </pre>
+
+	  <p>The vertices must be listed according to adjacent
+	  vertices on the quadrangle, and the right-hand rule is used
+	  for the ordering of the materials.  Note that the quadrangle
+	  is divided into two triangles.  Thus, the above <b>QUAD</b>
+	  statement is equivalent to
+
+	    <pre>
+	        v5  v2  v3  material_t  material_i
+	        v2  v3  v6  material_t  material_i
+            </pre>
+
+	  <p>For that reason, it is best to ensure that all
+	  quadrangles are convex.  That is, no internal angles of the
+	  quadrangles should be greater than 180&deg;.  Furthermore, it is best to use the <b>QUAD</b> 
+	  designation only for vertices that are co-planar.
+
+	    <p>Thus, for the above structure, the <b>BOUNDARIES</b> section would be:
+
+	    <pre>
+                BOUNDARIES
+	              v1  v5  v7  material_t  material_i
+	              v7  v5  v6  material_t  material_i
+	              v1  v7  v6  material_t  material_i
+	              QUAD  v5  v2  v3  v6  material_t  material_i
+	              v2  v4  v3  material_t  material_i
+                END
+            </pre>
+
+	  <p>All boundaries within the unit cell must be defined.  Any
+	  line passing in the z direction must pass consistently
+	  through boundaries, starting below the grating with
+	  <b>material_t</b> and ending above the grating with <b>material_i</b>.
+	  Any line passing in the x or y directions must pass
+	  consistently through boundaries, starting and ending with
+	  the same material.  If a vertical boundary exists on the
+	  edge of the unit cell, then one should only specify the
+	  boundary on one side.
+
+
+
+	    </blockquote>
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+<!-- START FOOTER -->
+<hr>
+<h2>For More Information</h2>
+
+<p>
+<a href="http://www.nist.gov/pml/div685/grp06/germer.cfm">SCATMECH Technical Information and Questions</a><br>
+<a href="http://www.nist.gov/pml/div685/index.cfm" target="_top">Sensor Science Division Home Page</a><br>
+<a href="mailto:fraser@nist.gov">Sensor Science Division Inquiries</a><br>
+<a href="mailto:thomas.germer@nist.gov">Website Comments</a>
+
+<p>
+Current SCATMECH version: <a href="./download.htm">7.00 (January 2015)</a><br>
+This page first online: Version 7.00 (January 2015) <br>
+This page last modified: Version 7.00 (January 2015) <br>
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+</td>
+</tr>
+</table>
+
+</body>
+</html>

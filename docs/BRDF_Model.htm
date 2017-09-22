@@ -1,0 +1,488 @@
+<html>
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Cygwin (vers 1st September 2004), see www.w3.org">
+   <link rel="STYLESHEET" href="style.css" type="text/css">
+
+  <title>SCATMECH: BRDF_Model</title>
+<script language="JavaScript" id="_fed_an_js_tag" src="/js/federated-analytics.all.min.js?agency=NIST&subagency=pml&pua=UA-37115410-46&yt=true"></script>
+</head>
+
+<body>
+  <table width="98%" border="0" cellpadding="0" cellspacing="0" align="center" class="main">
+  <a name="top" id="top"><!-- --></a>
+
+    <tr>
+      <td>
+        <p class="nav">
+	<a href="index.htm">SCATMECH</a> &gt; <a href=
+        "classes.htm">Classes and Functions</a> &gt;
+        <a href="classes.htm#SSM">Surface Scattering Models</a>
+        &gt; BRDF_Model
+	</p>
+
+        <h1>Abstract class BRDF_Model</h1>
+
+
+        <hr>
+
+        <p>The abstract class <tt>BRDF_Model</tt> handles the generic
+        operations associated with any bidirectional reflectance distribution function (BRDF) scattering model and
+        acts as an interface by which programs can access different
+        models. A pointer to a <tt>BRDF_Model</tt> (or a
+        <tt>BRDF_Model_Ptr</tt>, which is a typedef to <a href="./modelptr.htm"><tt>Model_Ptr&lt;BRDF_Model&gt;</tt></a>) can point to one of any number of
+        specific models.
+
+        <p>The convention of <tt>BRDF_Model</tt> is that the function 
+	  <a href="#mueller"><tt>Mueller</tt></a> returns the Mueller matrix BRDF in 
+	  the desired geometry.  The function <a href="#jones"><tt>Jones</tt></a> returns
+	  a <a href="jonesmatrix.htm"><tt>JonesMatrix</tt></a> that upon typecasting to 
+	  <a href="muellermatrix.htm"><tt>MuellerMatrix</tt></a> is the Mueller matrix BRDF.
+	  Classes inheriting <tt>BRDF_Model</tt> are required to provide either a function 
+	  <tt>jones</tt> or <tt>mueller</tt>, returning these matrices.  The class <tt>BRDF_Model</tt> provides 
+	  these functions with four variables of type <tt>double</tt>: <tt>thetai</tt>, <tt>thetas</tt>, <tt>phis</tt>, and <tt>rotation</tt>, specifying
+	 the angles <img src="Images/theta.gif" alt="theta"><sub>i</sub>, 
+	  <img src="Images/theta.gif" alt="theta"><sub>s</sub>, 
+	  <img src="Images/phi.gif" alt="phi"><sub>s</sub>, and &beta;, respectively, defined in the figure
+        below.
+
+        <center>
+          <img src="Images/BRDF_Model.jpg" width="750" alt=
+          "Scattering geometry - see text for description.">
+        </center>
+
+	<p>The angle <img src="Images/theta.gif" alt=
+        "theta"><sub>i</sub>  (<tt>thetai</tt>) is defined as the angle that a vector
+        pointing to the source makes with respect to the surface
+        normal. The angle <img src="Images/theta.gif" alt=
+        "theta"><sub>s</sub> (<tt>thetas</tt>) is the angle that a vector pointing in
+        the scattering direction makes with respect to the surface
+        normal. The angle <img src="Images/phi.gif" alt=
+        "phi"><sub>s</sub> (<tt>phis</tt>) is the azimuthal angle of the scattered
+        light, measured in a right-handed fashion about the surface
+        normal from the plane defined by the incident direction and
+        the surface normal. Finally, the angle &beta; (<tt>rotation</tt>) represents the rotation of the 
+	sample in a counterclockwise fashion.</p>
+
+
+        <p>To write your own BRDF_Model class, see the outline
+        given in "<a href="userbrdf.htm">Writing your own BRDF
+        model</a>."</p>
+
+	<h2>Parameters:</h2>
+
+        <table border="1" cellpadding="5">
+          <tr>
+            <th>Parameter</th>
+            <th>Data Type</th>
+            <th>Description</th>
+            <th>Default</th>
+          </tr>
+
+          <tr>
+            <td class="parameter">lambda</td>
+            <td class="datatype">double</td>
+	    <td class="description">Wavelength of the light in vacuum [&#181;m].</td>
+	    <td class="default">0.532</td>
+          </tr>
+
+
+          <tr>
+            <td class="parameter">type</td>
+            <td class="datatype">int</td>
+	    <td class="description">
+	      Indicates whether the light is incident from above the
+            substrate or from within the substrate and whether the
+            scattering is evaluated in reflection or transmission.
+            The choices are:<br>
+	      <b>0</b> : Light is incident from the above the substrate, and scattering is evaluated in reflection.<br>
+	      <b>1</b> : Light is incident from the above the substrate, and scattering is evaluated in transmission.<br>
+	      <b>2</b> : Light is incident from within the substrate, and scattering is evaluated in reflection.<br>
+	      <b>3</b> : Light is incident from within the substrate, and scattering is evaluated in transmission.<br>
+	      For <b>1</b>, <b>2</b>, and <b>3</b>, the substrate must be non-absorbing.<br>
+	      Not all modes are supported for all models inheriting <tt>BRDF_Model</tt>.
+	      </td>
+	    <td class="default">0</td>
+          </tr>
+
+
+          <tr>
+            <td class="parameter">substrate</td>
+            <td class="datatype"><a href="dielfunc.htm">dielectric_function</a></td>
+	    <td class="description">The
+            optical constants of the substrate, expressed as a
+            complex number (n,k) or, optionally, as a function of
+            wavelength.</td>
+	    <td class="default">(4.05,0.05)</td>
+          </tr>
+
+        </table><br>
+        <br>
+        <h2>See also:</h2>
+
+        <p><a href="index.htm">SCATMECH Home</a>, &nbsp;
+        <a href="convent.htm">Conventions</a>, &nbsp; <a href=
+        "muellermatrix.htm">MuellerMatrix</a>, &nbsp; <a href=
+        "jonesmatrix.htm">JonesMatrix</a>, &nbsp; <a href=
+        "classes.htm#SSM">List of child classes</a></p>
+
+        <p>J. C. Stover, <i>Optical Scattering: Measurement and
+        Analysis</i>, (SPIE Optical Engineering Press, Bellingham,
+        WA, 1995).<br>
+        D. S. Flynn and C. Alexander, "Polarized surface scattering
+        expressed in terms of a bidirectional reflectance
+        distribution function matrix," Opt. Eng. <b>34</b>(6),
+        1646-1650 (1995).</p>
+
+	<h2>Include file:</h2>
+
+          <pre>
+#include "<a href="../code/brdf.h">brdf.h</a>"
+</pre>
+
+	<h2>Source code:</h2>
+
+          <pre>
+<a href="../code/brdf.cpp">brdf.cpp</a>
+<a href="../code/reg_brdf.cpp">reg_brdf.cpp</a>
+</pre>
+
+         <h2>Definition of public and protected elements:</h2>
+          <pre>
+class BRDF_Model : public <a href="model.htm">Model</a> {
+public:
+    enum <a href="#cs">Coordinate_System</a> {<a href="#cs">psps</a> = 0,<a href="#cs">xyxy</a> = 1,<a href="#cs">plane</a> = 2};
+    enum  {
+        Type_DOWNUP = 0,
+        Type_DOWNDOWN = 1,
+        Type_UPDOWN = 2,  
+        Type_UPUP = 3    
+	}; 
+
+    <a href="jonesmatrix.htm">JonesMatrix</a> <a href="#jones2">Jones</a>(double thetai,
+                      double thetas,
+                      double phis,
+                      double rotation,
+                      <a href="#cs">Coordinate_System</a> cs = <a href="#cs">psps</a>);
+
+    <a href="muellermatrix.htm">MuellerMatrix</a> <a href="#mueller2">Mueller</a>(double thetai,
+                          double thetas,
+                          double phis,
+                          double rotation,
+                          <a href="#cs">Coordinate_System</a> cs = <a href="#cs">psps</a>);
+
+    <a href="jonesmatrix.htm">JonesMatrix</a> <a href="#jones3">Jones</a>(<a href="vector.htm">Vector</a>&amp; source,
+                      <a href="vector.htm">Vector</a>&amp; viewer,
+                      <a href="vector.htm">Vector</a>&amp; normal,
+                      <a href="vector.htm">Vector</a>&amp; xaxis,
+                      <a href="#cs">Coordinate_System</a> cs = <a href="#cs">plane</a>);
+
+    <a href="muellermatrix.htm">MuellerMatrix</a> <a href="#mueller3">Mueller</a>(<a href="vector.htm">Vector</a>&amp; source,
+                          <a href="vector.htm">Vector</a>&amp; viewer,
+                          <a href="vector.htm">Vector</a>&amp; normal,
+                          <a href="vector.htm">Vector</a>&amp; xaxis,
+                          <a href="#cs">Coordinate_System</a> cs = <a href="#cs">plane</a>);
+
+    Coordinate_System <a href="#get_model_cs">get_model_cs</a>();
+
+protected:
+    virtual void <a href="#setup">setup</a>();
+    Coordinate_System <a href="#model_cs">model_cs</a>;
+    virtual <a href="jonesmatrix.htm">JonesMatrix</a> <a href="#jones">jones</a>();
+    virtual <a href="muellermatrix.htm">MuellerMatrix</a> <a href="#mueller">mueller</a>();
+
+    double <a href="#geometry">thetai</a>;
+    double <a href="#geometry">thetas</a>;
+    double <a href="#geometry">phii</a>;
+    double <a href="#geometry">rotation</a>;
+};
+
+typedef <a href="modelptr.htm">Model_Ptr</a>&lt;BRDF_Model&gt; <a href="#ptr">BRDF_Model_Ptr</a>;
+
+</pre>
+
+        <hr>
+        <h3><a name=
+        "geometry" id="geometry">double thetai</a><br>
+        double thetas<br>
+        double phis<br>
+        double rotation</h3>
+
+        <blockquote>
+          <p>These variables
+          represent the geometry for which the calculation is to be
+          performed. They are set by the public functions
+          <b>Mueller()</b> and <b>Jones()</b>. They are used by the
+          functions <b>mueller()</b> or <b>jones()</b>.
+
+          <p>The variable
+          <b>thetai</b> is the incident polar angle in
+          radians.</p>
+
+          <p>The variable
+          <b>thetas</b> is the scattering polar angle in
+          radians.</p>
+
+          <p>The variable
+          <b>phis</b> is the scattering azimuthal angle in
+          radians.</p>
+
+          <p>The variable
+          <b>rotation</b> is the rotation angle of the sample in
+          radians about the surface normal.</p>
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+	<h3><a name="cs" id=
+        "cs">enum Coordinate_System</a><br>
+        <a name="model_cs" id="model_cs">Coordinate_System
+        model_cs</a><br>
+        <a name="get_model_cs" id="get_model_cs">Coordinate_System
+        get_model_cs()</a></h3>
+
+        <blockquote>
+          <p>This variable stores the coordinate system for which the
+          scattering is defined in the code. By default, it is set
+          to <a href="#jones2">BRDF_Model::psps</a>. A scattering
+          model which inherits the properties of <b>BRDF_Model</b>
+          and which has its scattering defined with respect to
+          another coordinate system should set this variable in its
+          constructor. The value can be publicly queried using
+          <b>get_model_cs</b>.
+
+          <p>The different coordinate systems are:</p>
+
+          <p><b>BRDF_Model::psps</b> - This coordinate system uses
+          the standard {<b>s</b>,<b>p</b>,<b>k</b>} right-handed
+          basis vectors appropriate for both the incident and
+          scattered light. The <b>k</b> direction is the respective
+          direction of propagation, the <b>s</b> direction is
+          parallel to the plane defined by <b>k</b> and the surface
+          normal, and the <b>p</b> direction is perpendicular to
+          that plane. Most models are coded using this coordinate
+          system.</p>
+
+          <p><b>BRDF_Model::xyxy</b> - This coordinate system uses
+          the same coordinates as <b>BRDF_Model::psps</b> for the
+          incident light, but rotates the scattered light
+          coordinates by the angle <b>phis</b>. Near the surface
+          normal, this coordinate system is close to the directions
+          <b>x</b> and <b>y</b>, where <b>x</b> is a vector in the
+          plane of incidence and the plane of the sample, and
+          <b>y</b> is a vector perpendicular to the plane of
+          incidence. This coordinate system removes an apparent
+          singularity which exists at the surface normal using the
+          <b>BRDF_Model::psps</b> coordinate system.</p>
+
+          <p><b>BRDF_Model::plane</b> - This coordinate system is
+          defined by the plane which includes the incident and
+          scattered directions. The basis vectors are parallel and
+          perpendicular to this plane, respectively, for both the
+          incident and the scattered light. This coordinate system
+          may be more appropriate than the others for rendering
+          applications.</p>
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+	<h3><a name="jones2" id="jones2">JonesMatrix Jones(double&nbsp;thetai,
+        double&nbsp;thetas, double&nbsp;phis, double&nbsp;rotation,
+        Coordinate_System&nbsp;cs)</a><br>
+        <a name="mueller2" id="mueller2">MuellerMatrix
+        Mueller(double&nbsp;thetai, double&nbsp;thetas,
+        double&nbsp;phis, double&nbsp;rotation,
+        Coordinate_System&nbsp;cs)</a></h3>
+
+
+        <blockquote>
+          <p>These public functions return the Jones matrix or the
+          Mueller matrix associated with the model, as a function
+          of scattering geometry and polarization coordinate
+          system. The value of <b>cs</b> defines the coordinate
+          system for which the scattering matrix will be returned.
+        </blockquote><b><i>Example:</i></b>
+
+        <blockquote>
+          <pre>
+double ti,ts,ps;
+JonesVector incidentlight;
+BRDF_Model *model;
+JonesVector jones = model-&gt;Jones(ti,ts,ps,0,
+                                    BRDF_Model::plane)*incidentlight;
+</pre>
+        </blockquote>
+
+        <p><a href=
+        "#top"><span class="totop">Top of Page</span></a></p>
+	<h3><a name="jones3" id=
+        "jones3">JonesMatrix Jones(Vector&amp;&nbsp;source,
+        Vector&amp;&nbsp;viewer, Vector&amp;&nbsp;normal,
+        Vector&amp;&nbsp;xaxis,Coordinate_System&nbsp;cs)</a><br>
+        <a name="mueller3" id="mueller3">MuellerMatrix
+        Mueller(Vector&amp;&nbsp;source, Vector&amp;&nbsp;viewer,
+        Vector&amp;&nbsp;normal,
+        Vector&amp;&nbsp;xaxis,Coordinate_System&nbsp;cs)</a></h3>
+
+        <blockquote>
+          <p>These public functions return the Jones matrix or the
+          Mueller matrix associated with the model, as a function
+          of scattering geometry and polarization coordinate
+          system. The value of <b>cs</b> defines the coordinate
+          system for which the scattering matrix will be returned.
+          <b>source</b> is a <a href="vector.htm">Vector</a>
+          pointing from the sample to the light source.
+          <b>viewer</b> is a <a href="vector.htm">Vector</a>
+          pointing in the scattering direction. <b>normal</b> is a
+          <a href="vector.htm">Vector</a> pointing in the outward
+          surface normal. <b>xaxis</b> is a <a href=
+          "vector.htm">Vector</a> which must have a component along
+          the substrate surface, and defines the x-axis of that
+          surface.Neither <b>source</b>, <b>viewer</b>,
+          <b>normal</b>, or <b>xaxis</b> need be normalized. If
+          <b>xaxis</b> is the zero vector, the sample rotation will
+          be set to zero degrees.
+
+          <p>Note that the coordinate system defaults to
+          <b>BRDF_Model::plane</b>, which is most natural for
+          rendering applications.</p>
+        </blockquote><b><i>Example:</i></b>
+
+        <blockquote>
+          <p>The following is an example of how one might use the
+          <a href="vector.htm">Vector</a>-based Mueller function.
+          The sample is assumed to be tilted in the y-direction by
+          an angle <b>tilt</b>, while the light is incident at an
+          angle <b>thetai</b> and the receiver is collecting light
+          at a polar angle of <b>thetas</b> and azimuthal angle
+          <b>phis</b>.
+        </blockquote>
+
+        <blockquote>
+          <pre>
+Vector source(-sin(thetai),0.,cos(thetai));
+Vector receiver(sin(thetas)*cos(phis),sin(thetas)*sin(phis),cos(thetas));
+Vector normal(0.,sin(tilt),cos(tilt));
+StokesVector incidentlight;
+Some_BRDF_Model model; // Assume that Some_BRDF_Model is a BRDF_Model...
+StokesVector stokes = model.Mueller(source,
+                                     receiver,
+                                      normal,
+                                       Vector(0,0,0))*incidentlight;
+</pre>
+        </blockquote>
+
+        <p><a href=
+        "#top"><span class="totop">Top of Page</span></a></p>
+
+	<h3><a name="setup" id=
+        "setup">virtual void setup()</a></h3>
+
+        <blockquote>
+          <p>All functions that modify model parameters 
+          set  <a href="#recalc">Model::recalc</a> to a non-zero value. The function
+          <b>setup()</b> performs any housekeeping that is
+          necessary if parameters have been changed. All
+          inherited classes should have such a <b>setup()</b>
+          function if they require such operations. They should
+          all begin by calling the parent's <b>setup()</b> function.
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+
+	<h3><a name="jones" id=
+        "jones">virtual JonesMatrix jones()</a></h3>
+
+        <blockquote>
+          <p>This function returns the Jones scattering matrix. It
+          uses the variables <b>thetai</b>, <b>thetas</b>,
+          <b>phis</b>, and <b>rotation</b>, defined <a href=
+          "#geometry">above</a>. If this function is not defined
+          for an inherited class, it throws an exception if called.
+          One of the functions, <b>mueller</b> or <b>jones</b>,
+          must be defined by any inherited class.
+        </blockquote>
+
+        <p><a href=
+        "#top"><span class="totop">Top of Page</span></a></p>
+
+	<h3><a name="mueller" id=
+        "mueller">virtual MuellerMatrix mueller()</a></h3>
+
+        <blockquote>
+          <p>This function returns the Mueller matrix BRDF.
+          It uses the variables <b>thetai</b>, <b>thetas</b>,
+          <b>phis</b>, and <b>rotation</b>, defined <a href=
+          "#geometry">above</a>. If this function is not defined
+          for an inherited class, it defaults to a <a href=
+          "jonesmatrix.htm">JonesMatrix</a> to <a href=
+          "muellermatrix.htm">MuellerMatrix</a> conversion. One of
+          the functions, <b>mueller</b> or <b>jones</b>, must be
+          defined by any inherited class.</p>
+
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+	<h3><a name="ptr" id=
+        "ptr">typedef Model_Ptr&lt;BRDF_Model&gt;
+        BRDF_Model_Ptr</a></h3>
+
+        <blockquote>
+          <p>The typedef <b>BRDF_Model_Ptr</b> behaves like a pointer
+          to an instance of class <b>BRDF_Model</b>. The following
+          statement will query the user for an instance of class
+          <b>BRDF_Model</b>:
+        </blockquote>
+
+        <blockquote>
+          <pre>
+BRDF_Model_Ptr model = Get_Model_Ptr();
+</pre>
+        </blockquote>
+
+        <blockquote>
+          <p>The next
+          statement will also create an instance of class
+          <b>BRDF_Model</b>:
+        </blockquote>
+
+        <blockquote>
+          <pre>
+BRDF_Model_Ptr model = "Microroughness_BRDF_Model";
+</pre>
+        </blockquote>
+
+        <blockquote>
+          <p>See <a href=
+          "modelptr.htm">Model_Ptr&lt;model&gt;</a>.
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+<!-- START FOOTER -->
+<hr>
+<h2>For More Information</h2>
+
+<p>
+<a href="http://www.nist.gov/pml/div685/grp06/germer.cfm">SCATMECH Technical Information and Questions</a><br>
+<a href="http://www.nist.gov/pml/div685/index.cfm" target="_top">Sensor Science Division Home Page</a><br>
+<a href="mailto:fraser@nist.gov">Sensor Science Division Inquiries</a><br>
+<a href="mailto:thomas.germer@nist.gov">Website Comments</a>
+
+<p>
+Current SCATMECH version: <a href="./download.htm">7.00 (January 2015)</a><br>
+This page first online: Version 1.00 (March 2000) <br>
+This page last modified: Version 7.00 (January 2015) <br>
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+</td>
+</tr>
+</table>
+
+</body>
+</html>
+

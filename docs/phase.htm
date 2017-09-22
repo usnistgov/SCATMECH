@@ -1,0 +1,274 @@
+<html>
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Cygwin (vers 1st September 2004), see www.w3.org">
+   <link rel="STYLESHEET" href="style.css" type="text/css">
+
+  <title>SCATMECH: Phase_Function</title>
+<script language="JavaScript" id="_fed_an_js_tag" src="/js/federated-analytics.all.min.js?agency=NIST&subagency=pml&pua=UA-37115410-46&yt=true"></script>
+</head>
+
+<body>
+  <a name="top" id="top"><!-- --></a>
+
+  <table width="98%" border="0" cellpadding="0" cellspacing="0"
+  align="center">
+    <tr>
+      <td>
+        <p class="nav"><a href="index.htm">SCATMECH</a> &gt; <a href=
+        "classes.htm">Classes and Functions</a> &gt;
+        <a href="classes.htm#PropertyModels">Property Models</a>
+        &gt; Phase_Function</p>
+
+	<h1>Abstract class Phase_Function</h1>
+        
+        <hr>
+
+        <p>The abstract class <b>Phase_Function</b> is used by to store
+        information about the angular distribution of scattering in
+        bulk material, needed for example, by <a href=
+        "firstdiffuse.htm">First_Diffuse_BRDF_Model</a>. Five
+        specific classes inheriting its properties are provided.
+        The user may provide other phase functions by creating
+        classes inheriting the properties of <b>Phase_Function</b>.
+        The provided <b>Phase_Function</b>s are:
+
+        <h2>Instantiable Models and Their Parameters:</h2>
+
+        <table border="1" cellpadding="5">
+          <tr>
+            <th>Parameter</th>
+
+            <th>Data
+            Type</th>
+
+            <th>Description</th>
+
+            <th>Default</th>
+          </tr>
+
+          <tr>
+            <td colspan="4" class="model"><b>Henyey_Greenstein_Phase_Function</b>:<br>
+          The Henyey-Greenstein phase function is parameterized by
+          <b>g</b>, which is the average of the cosine of the
+          scattering angle. The parameter <b>g</b> must be between
+          -1 and 1. For <b>g</b>=0, the scattering is isotropic.
+          For <b>g</b> positive, the scattering is peaked in the
+          forward scattering direction. For <b>g</b> negative, the
+          scattering is peaked in the backward scattering
+          direction.
+	    </td>
+          </tr>
+
+          <tr>
+            <td class="parameter">g</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The
+            asymmetry parameter given by the average of the cosine
+            of the scattering angle.</td>
+
+            <td class="default">0.01</td>
+          </tr>
+
+          <tr>
+            <td colspan="4" class="model"><b>Double_Henyey_Greenstein_Phase_Function</b>:<br>
+          The double Henyey-Greenstein phase function is the sum of
+          two Henyey-Greenstein phase functions, one being forward
+          scattering, and the other being backward scattering. It
+          is parameterized by two parameters, <b>g</b>, which is
+          the average of the cosine of the scattering angle, and
+          <b>c</b>, which indicates the amount of forward or
+          backward scattering. For <b>c</b>=1, the function
+          simplifies to the single Henyey-Greenstein phase
+          function, while for <b>c</b>=-1, the function simplifies
+          to the single Henyey-Greenstein phase function in the
+          backscattering direction.</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">g</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The
+            asymmetry parameter given by the average of the cosine
+            of the scattering angle.</td>
+
+            <td class="default">0.01</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">c</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">A
+            parameter which indicates the amount of forward or
+            backward scattering. For c=1, the function simplifies
+            to the single Henyey-Greenstein phase function, while
+            for c=-1, the function simplifies to the single
+            Henyey-Greenstein phase function in the backscattering
+            direction.</td>
+
+            <td class="default">0.1</td>
+          </tr>
+
+          <tr>
+            <td colspan="4" class="model"><b>Isotropic_Phase_Function</b>:<br>          
+	    The isotropic phase function corresponds to scattering
+	    which is isotropic. It has no parameters.
+	  </td>
+          </tr>
+
+          <tr>
+            <td colspan="4" class="model"><i>Isotropic_Phase_Function
+            has no adjustable parameters.</i></td>
+          </tr>
+
+          <tr>
+            <td colspan="4" class="model"><b>Rayleigh_Phase_Function</b>:<br>
+          The Rayleigh phase function corresponds to scattering
+          which follows that expected for unpolarized Rayleigh
+          scattering. It has no parameters.
+	  </td>
+          </tr>
+
+          <tr>
+            <td colspan="4" class="model"><i>Rayleigh_Phase_Function
+            has no adjustable parameters.</i></td>
+          </tr>
+
+          <tr>
+            <td colspan="4" class="model"><b>Table_Phase_Function</b>:<br>
+          The class <b>Table_Phase_Function</b> allows the user to
+          provide a interpolation table of values for the phase
+          function. The ordinate is the angle in degrees, while the
+          absissa is the phase function, which is assumed to be
+          properly normalized. The parameter <b>table</b> is the
+          table of values (see <a href="scattabl.htm">Table</a>).
+	  </td>
+          </tr>
+
+          <tr>
+            <td class="parameter">table</td>
+
+            <td class="datatype">Table</td>
+
+            <td class="description">A look-up
+            table of phase function versus angle in
+            degrees.</td>
+
+            <td class="default">1</td>
+          </tr>
+        </table>
+
+        <h2>See also:</h2>
+
+        <p><a href="index.htm">SCATMECH Home</a>, &nbsp;
+        <a href="firstdiffuse.htm">First_Diffuse_BRDF_Model</a>
+        &nbsp;</p>
+
+        <p>H.C. van de Hulst, <i>Multiple Light Scattering: Tables,
+        Formulas, and Applications</i>, (Academic Press, New York,
+        1980), Volume 2, Chap. 10.<br>
+	  L.C. Henyey and J.L. Greenstein, "Diffuse radiation in the galaxy," Astrophys. J. <b>93</b>, 70-83 (1941).
+	</p>
+
+	<h2>Include file:</h2>
+
+          <pre>
+#include "<a href="../code/firstdiffuse.h">firstdiffuse.h</a>"
+</pre>
+        <h2>Source code:</h2>
+
+          <pre>
+<a href="../code/firstdiffuse.cpp">firstdiffuse.cpp</a>
+</pre>
+        <h2>Definition of public elements:</h2>
+
+          <pre>
+class Phase_Function : public <a href=
+"model.htm">Model</a> {
+public:
+    Phase_Function(int ask=0);
+    virtual double <a href="#f">f</a>(double theta)=0;
+    virtual <a href="model.htm">Model</a>* <a href=
+"model.htm#clone">clone</a>() const =0;
+    static <a href="inherit.htm">Inheritance</a> inheritance;
+    virtual void <a href=
+"model.htm#set_parameter">set_parameter</a>(const std::string&amp; name,const std::string&amp; value);
+};
+
+typedef <a href=
+"modelptr.htm">Model_Ptr</a>&lt;Phase_Function&gt; <a href=
+"#ptr">Phase_Function_Ptr</a>;
+</pre>
+
+        <hr>
+
+        <h3><a name="f" id="f">double f(double
+        theta)</a></h3>
+
+        <blockquote><p>
+          This
+          function evaluates the phase function for angle
+          <b>theta</b>. The angle <b>theta</b> is measured in
+          radians from the forward scattering direction. It should
+          be normalized so that the integral over the hemisphere is
+          one.
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+
+	<h3><a name="ptr" id=
+        "ptr">typedef Model_Ptr&lt;Phase_Function&gt;
+        Phase_Function_Ptr</a></h3>
+
+        <blockquote><p>
+          The typedef <b>Phase_Function_Ptr</b> behaves like a
+          pointer to an instance of class <b>Phase_Function</b>.
+          The following statement will query the user for an
+          instance of class <b>Phase_Function</b>:
+
+          <pre>
+Phase_Function_Ptr model = Get_Model_Ptr();
+</pre>
+
+          <p>The
+          next statement will also create an instance of class
+          <b>Phase_Function</b>:
+
+          <pre>
+Phase_Function_Ptr model = "Henyey_Greenstein_Phase_Function";
+</pre>
+          <p>See
+          <a href="modelptr.htm">Model_Ptr&lt;model&gt;</a>.
+        </blockquote>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+<!-- START FOOTER -->
+<hr>
+<h2>For More Information</h2>
+
+<p>
+<a href="http://www.nist.gov/pml/div685/grp06/germer.cfm">SCATMECH Technical Information and Questions</a><br>
+<a href="http://www.nist.gov/pml/div685/index.cfm" target="_top">Sensor Science Division Home Page</a><br>
+<a href="mailto:fraser@nist.gov">Sensor Science Division Inquiries</a><br>
+<a href="mailto:thomas.germer@nist.gov">Website Comments</a>
+
+<p>
+Current SCATMECH version: <a href="./download.htm">7.00 (January 2015)</a><br>
+This page first online: Version 4.00 (July 2003) <br>
+This page last modified: Version 7.00 (January 2015) <br>
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+</td>
+</tr>
+</table>
+
+</body>
+</html>

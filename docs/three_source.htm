@@ -1,0 +1,208 @@
+<html>
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Cygwin (vers 1st September 2004), see www.w3.org">
+   <link rel="STYLESHEET" href="style.css" type="text/css">
+
+  <title>SCATMECH: Three_Source_BRDF_Model</title>
+</head>
+
+<body>
+  <a name="top" id="top"><!-- --></a>
+
+  <table width="98%" border="0" cellpadding="0" cellspacing="0"
+  align="center">
+    <tr>
+      <td>
+        <p class="nav"><a href="index.htm">SCATMECH</a> &gt; <a href=
+        "classes.htm">Classes and Functions</a> &gt;
+        <a href="classes.htm#SSM">Surface Scattering Models</a>
+        &gt; Three_Source_BRDF_Model</p>
+
+	<h1>class Three_Source_BRDF_Model</h1>
+
+        <hr>
+	<p>
+        The class <strong>Three_Source_BRDF_Model</strong> provides a
+        means for adding three different scattering sources. </p>
+
+        <h2>Parameters:</h2>
+
+        <table border="1" cellpadding="5">
+          <tr>
+            <th>Parameter</th>
+
+            <th>Data
+            Type</th>
+
+            <th>Description</th>
+
+            <th>Default</th>
+          </tr>
+
+          <tr>
+            <td class="parameter">lambda</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">Wavelength of the light
+            in vacuum [&#181;m].<br>
+            (Inherited from <a href=
+            "BRDF_Model.htm">BRDF_Model</a>).<br>
+            Note: This parameter overrides the same parameter in
+            each of the two sources.</td>
+
+            <td class="default">0.532</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">type</td>
+            <td class="datatype">int</td>
+            <td class="description">
+	      Indicates whether the light is incident from above the
+            substrate or from within the substrate and whether the
+            scattering is evaluated in reflection or transmission.
+            The choices are:<br>
+	      <b>0</b> : Light is incident from the above the substrate, and scattering is evaluated in reflection.<br>
+	      <b>1</b> : Light is incident from the above the substrate, and scattering is evaluated in transmission.<br>
+	      <b>2</b> : Light is incident from the within the substrate, and scattering is evaluated in reflection.<br>
+	      <b>3</b> : Light is incident from the within the substrate, and scattering is evaluated in transmission.<br>
+	      For <b>1</b>, <b>2</b>, and <b>3</b>, the substrate must be non-absorbing.<br>
+	      Two_Source_BRDF_Model supports any types supported by both <span class="parameter">source1</span> and <span class="parameter">source2</span>.<br>
+            (Inherited from <a href=
+            "BRDF_Model.htm">BRDF_Model</a>).</td>
+            <td class="default">0</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">substrate</td>
+
+            <td class="datatype"><a href="dielfunc.htm">dielectric_function</a></td>
+
+            <td class="description">The
+            optical constants of the substrate, expressed as a
+            complex number (n,k) or, optionally, as a function of
+            wavelength.<br>
+            (Inherited from <a href=
+            "BRDF_Model.htm">BRDF_Model</a>).<br>
+            Note: This parameter overrides the same parameter in
+            each of the two sources.</td>
+
+            <td class="default">(4.05,0.05)</td>
+          </tr>
+
+	  <tr>
+	    <td class="parameter">factor1</td>
+	    
+	    <td class="datatype">double</td>
+	    
+	    <td class="description">The intensity scaling factor for the first scattering model.</td>
+
+	    <td class="default">1</td>
+          </tr>
+
+
+          <tr>
+            <td class="parameter">source1</td>
+
+            <td class="datatype"><a href="BRDF_Model.htm">BRDF_Model_Ptr</a></td>
+
+            <td class="description">The first
+            scattering model.<br>
+            Note: The parameters <tt>lambda</tt>, <tt>type</tt>, and <tt>substrate</tt> must match those of <tt>source1</tt>.</td>
+
+            <td class="default">Microroughness_BRDF_Model</td>
+          </tr>
+
+	  <tr>
+	    <td class="parameter">factor2</td>
+	    
+	    <td class="datatype">double</td>
+	    
+	    <td class="description">The intensity scaling factor for the second scattering model.</td>
+
+	    <td class="default">1</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">source2</td>
+
+            <td class="datatype"><a href="BRDF_Model.htm">BRDF_Model_Ptr</a></td>
+
+            <td class="description">The second scattering model.<br>
+            Note: The parameters <tt>lambda</tt>, <tt>type</tt>, and <tt>substrate</tt> must match those of <tt>source2</tt>.</td>
+
+            <td class="default">Microroughness_BRDF_Model</td>
+          </tr>
+
+	  <tr>
+	    <td class="parameter">factor3</td>
+	    
+	    <td class="datatype">double</td>
+	    
+	    <td class="description">The intensity scaling factor for the third scattering model.</td>
+
+	    <td class="default">1</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">source3</td>
+
+            <td class="datatype"><a href="BRDF_Model.htm">BRDF_Model_Ptr</a></td>
+
+            <td class="description">The third scattering model.<br>
+            Note: The parameters <tt>lambda</tt>, <tt>type</tt>, and <tt>substrate</tt> must match those of <tt>source3</tt>.</td>
+
+            <td class="default">Microroughness_BRDF_Model</td>
+          </tr>
+
+
+        </table>
+
+        <h2>See also:</h2>
+
+        <p><a href="index.htm">SCATMECH Home</a>, &nbsp; 
+	  <a href="convent.htm">Conventions</a>, &nbsp; 
+	  <a href="BRDF_Model.htm">BRDF_Model</a>, &nbsp; 
+	  <a href="two_source.htm">Two_Source_BRDF_Model</a>, &nbsp;
+	  <a href="four_source.htm">Four_Source_BRDF_Model</a></p>
+
+
+	<h2>Include file:</h2>
+
+          <pre>
+#include "<a href="../code/two_source.h">two_source.h</a>"
+</pre>
+        <h2>Source code:</h2>
+
+          <pre>
+<a href="../code/two_source.cpp">two_source.cpp</a>
+</pre>
+
+
+        <p><a href=
+        "#top"><span class="totop">Top of Page</span></a></p>
+<!-- START FOOTER -->
+<hr>
+<h2>For More Information</h2>
+
+<p>
+<a href="http://www.nist.gov/pml/div685/grp06/germer.cfm">SCATMECH Technical Information and Questions</a><br>
+<a href="http://www.nist.gov/pml/div685/index.cfm" target="_top">Sensor Science Division Home Page</a><br>
+<a href="mailto:fraser@nist.gov">Sensor Science Division Inquiries</a><br>
+<a href="mailto:thomas.germer@nist.gov">Website Comments</a>
+
+<p>
+Current SCATMECH version: <a href="./download.htm">7.00 (January 2015)</a><br>
+This page first online: Version 7.00 (January 2015) <br>
+This page last modified: Version 7.00 (January 2015) <br>
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+</td>
+</tr>
+</table>
+
+</body>
+</html>

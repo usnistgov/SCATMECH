@@ -1,0 +1,117 @@
+BODY {background: #FFFFFF;
+    font-family: times;    
+    font-size: small;
+}
+
+table {
+    font-size: medium
+}
+
+H1 {color: #330066; 
+    font-family: arial;
+    font-size: x-large
+    }
+
+H2 {color: #330066; 
+     font-family: arial; 
+     font-style: italic;
+     font-size: large
+   }
+
+H3 {color: black;
+    font-family: times; 
+    font-style: normal;
+    font-weight: bold;
+    font-size: medium
+   }
+
+H4 {color: gray;
+    font-family: times;
+    font-style: italic;
+    font-weight: bold;
+    font-size: medium
+}
+
+p {margin-left: 0.25in
+    }
+
+li {
+    margin-left: .25in
+}
+
+p tt {color: #990000
+}
+
+pre {color: #990000; 
+    margin-left: 0.25in;
+    }
+
+th {
+    font-family: arial;
+    font-style: bold
+}
+
+.abstract {}
+
+hr {
+	color: #330066 
+}
+
+.main {
+}
+
+ul {margin-left: 0.25in}
+
+p strong {}
+
+.sym {
+    font-family:symbol;
+    font-style: normal
+}
+
+.contents {
+	font-size:large
+}
+
+.nav {
+     color: #330066;
+     font-family: arial;
+     font-size: medium;
+     margin-left: 0.0in;
+     padding: 5px 5px 5px 5px;
+     font-weight: bold
+     }
+
+.parameter {
+    font-family:courier;
+    font-weight:bold
+}
+
+.default {
+    font-family:courier;
+    font-weight:bold
+}
+
+.description {
+    font-family:times
+}
+
+.datatype {
+    font-family:courier;
+    font-weight:bold
+}
+
+.model {
+    font-family:times
+}
+
+.totop {
+	font-family:arial;
+	font-weight:bold;
+	font-size:small;
+	padding: 2px 2px 2px 2px;
+	border-width:1px;
+	border-style:dashed;
+	background: #EEEEEE;
+	text-transform: capitalize
+}
