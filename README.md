@@ -1,4 +1,4 @@
-# SCATMECH: Polarized light scattering C++ class library
+# SCATMECH: Polarized Light Scattering C++ Class Library
 
 SCATMECH is an object-oriented C++ class library developed to distribute models for light scattering applications.
 Included in the library are models for diffuse surface scattering that predict the bidirectional reflectance 
@@ -7,10 +7,6 @@ transmission, and diffraction from gratings. Emphasis has been given to those di
 physics-based and which predict the polarization properties of the scattered light. The library also includes 
 a number of classes that are useful for working with polarized light or the optics of thin films. The library 
 is designed to enable expansion of new models.
-
-/code contains C++ code
-
-/docs contains documentation
 
 See <a href="https://thomas-germer.github.io/SCATMECH/">https://thomas-germer.github.io/SCATMECH/</a> for full documentation.
 
