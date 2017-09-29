@@ -12,8 +12,8 @@
 //** Version: 7.00 (January 2015)
 //**
 //******************************************************************************
-#ifndef SCATMECH_ALLROUGH_H
-#define SCATMECH_ALLROUGH_H
+#ifndef SCATMECH_GRADEDROUGH_H
+#define SCATMECH_GRADEDROUGH_H
 
 #include "roughnes.h"
 
@@ -26,7 +26,7 @@ namespace SCATMECH {
         public:
 
             DECLARE_MODEL();
-            DECLARE_PARAMETER(dielectric_stack,stack);
+            DECLARE_PARAMETER(StackModel_Ptr,stack);
 
         protected:
 
@@ -43,7 +43,7 @@ namespace SCATMECH {
         public:
 
             DECLARE_MODEL();
-            DECLARE_PARAMETER(dielectric_stack,stack);
+            DECLARE_PARAMETER(StackModel_Ptr,stack);
 
         protected:
 
@@ -60,7 +60,7 @@ namespace SCATMECH {
         public:
 
             DECLARE_MODEL();
-            DECLARE_PARAMETER(dielectric_stack,stack);
+            DECLARE_PARAMETER(StackModel_Ptr,stack);
             DECLARE_PARAMETER(double,relaxation);
             DECLARE_PARAMETER(double,exponent);
             DECLARE_PARAMETER(PSD_Function_Ptr,intrinsic);

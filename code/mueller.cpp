@@ -1,4 +1,4 @@
-//******************************************************************************
+//********ei**********************************************************************
 //** SCATMECH: Polarized Light Scattering C++ Class Library
 //**
 //** File: mueller.cpp
@@ -113,7 +113,7 @@ namespace SCATMECH {
         result[1][3] = (-imag(j2SPj1PP) + imag(j2SSj1PS) + imag(j2PPj1SP) - imag(j2PSj1SS))/2.;
         result[2][3] = ( imag(j2SSj1PP) + imag(j2SPj1PS) - imag(j2PSj1SP) - imag(j2PPj1SS))/2.;
         result[3][3] = ( real(j2SSj1PP) - real(j2SPj1PS) - real(j2PSj1SP) + real(j2PPj1SS))/2.;
-
+        
         return result;
     }
 
@@ -370,6 +370,17 @@ namespace SCATMECH {
     }
 
     MuellerMatrix
+    MuellerDiagonal(double m00,double m11, double m22, double m33)
+    {
+        MuellerMatrix m=MuellerZero();
+		m[0][0]=m00;
+		m[1][1]=m11;
+		m[2][2]=m22;
+		m[3][3]=m33;
+        return m;
+    }
+
+    MuellerMatrix
     MuellerPartialLinearPolarizer(double tmax, double tmin, double angle)
     {
         MuellerMatrix m;
@@ -591,15 +602,21 @@ namespace SCATMECH {
         }
     }
 
-    MuellerMatrix MuellerMatrix::Closest_NonDepolarizing() const
+    MuellerMatrix MuellerMatrix::Closest_NonDepolarizing(int rank) const
     {
         MuellerMatrix M1,M2,M3,M4;
         Cloude_Decomposition(M1,M2,M3,M4);
         MuellerMatrix &m1=M1,&m2=M2,&m3=M3,&m4=M4;
-        if (m4[0][0]>m3[0][0]) m3 = m4;
-        if (m3[0][0]>m2[0][0]) m2 = m3;
-        if (m2[0][0]>m1[0][0]) m1 = m2;
-        return m1;
+        if (m4[0][0]>m3[0][0]) swap(m3,m4);
+        if (m3[0][0]>m2[0][0]) swap(m2,m3);
+        if (m2[0][0]>m1[0][0]) swap(m1,m2);
+		if (rank==1) return m1;
+        if (m4[0][0]>m3[0][0]) swap(m3,m4);
+        if (m3[0][0]>m2[0][0]) swap(m2,m3);
+		if (rank==2) return m2;
+        if (m4[0][0]>m3[0][0]) swap(m3,m4);
+		if (rank==3) return m3;
+		return m4;
     }
 
     MuellerMatrix MuellerMatrix::log() const
@@ -901,6 +918,12 @@ namespace SCATMECH {
                 }
             }
         }
+		//for (int j=0;j<4;++j) {
+		//	if (depolarizer[j][j]<0) {
+		//		for (int i=0;i<4;++i) depolarizer[i][j] = -depolarizer[i][j];
+		//		for (int i=0;i<4;++i) retarder[j][i] = -retarder[j][i];
+		//	}
+		//}
     }
 
     MuellerMatrix

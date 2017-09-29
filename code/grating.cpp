@@ -258,7 +258,10 @@ namespace SCATMECH {
             }
             return false;
         }
-    }
+        bool tdiff(StackModel& a, StackModel& b) {
+			return tdiff(a.get_stack(),b.get_stack());
+		}
+	}
 
     void Dielectric_Stack_Grating::setup()
     {
@@ -273,51 +276,51 @@ namespace SCATMECH {
         materialmuz.clear();
         thickness.clear();
 
-        int n = stackepsx.get_n();
+        int n = stackepsx->get_n();
 
-        if (stackepsx.get_n()==0 && stackepsy.get_n()==0 && stackepsz.get_n()==0 &&
-                stackmux.get_n()==0 && stackmuy.get_n()==0 && stackmuz.get_n()==0) { // This is an empty stack
+        if (stackepsx->get_n()==0 && stackepsy->get_n()==0 && stackepsz->get_n()==0 &&
+                stackmux->get_n()==0 && stackmuy->get_n()==0 && stackmuz->get_n()==0) { // This is an empty stack
             return;
         }
 
-        if (stackepsy.get_n()==0 && stackepsz.get_n()==0 &&
-                stackmux.get_n()==0 && stackmuy.get_n()==0 && stackmuz.get_n()==0) { // This is an isotropic stack
-            materialx.resize(stackepsx.get_n());
-            thickness.resize(stackepsx.get_n());
-            position.resize(stackepsx.get_n());
-            for (int i=0; i<stackepsx.get_n(); ++i) {
+        if (stackepsy->get_n()==0 && stackepsz->get_n()==0 &&
+                stackmux->get_n()==0 && stackmuy->get_n()==0 && stackmuz->get_n()==0) { // This is an isotropic stack
+            materialx.resize(stackepsx->get_n());
+            thickness.resize(stackepsx->get_n());
+            position.resize(stackepsx->get_n());
+            for (int i=0; i<stackepsx->get_n(); ++i) {
                 int ii = n-i-1;
-                thickness[i]=stackepsx.get_t()[ii];
+                thickness[i]=stackepsx->get_t()[ii];
                 position[i].resize(2);
                 materialx[i].resize(2);
                 position[i][0] = 0;
                 position[i][1] = period;
-                materialx[i][0] = epsilon(stackepsx.get_e()[ii]);
+                materialx[i][0] = epsilon(stackepsx->get_e()[ii]);
                 materialx[i][1] = materialx[i][0];
             }
             materialz=materialy=materialx;
             return;
         }
-        if (stackepsy.get_n()==0 && stackepsz.get_n()==0 &&
-                stackmuy.get_n()==0 && stackmuz.get_n()==0) { // This is a isotropic magnetic material
-            if (tdiff(stackepsx,stackmux)) error("Layers inconsistent");
+        if (stackepsy->get_n()==0 && stackepsz->get_n()==0 &&
+                stackmuy->get_n()==0 && stackmuz->get_n()==0) { // This is a isotropic magnetic material
+            if (tdiff(*stackepsx,*stackmux)) error("Layers inconsistent");
             magnetic = true;
             // TODO: code for isotropic magnetic material
-            materialx.resize(stackepsx.get_n());
-            materialmux.resize(stackepsx.get_n());
-            thickness.resize(stackepsx.get_n());
-            position.resize(stackepsx.get_n());
-            for (int i=0; i<stackepsx.get_n(); ++i) {
+            materialx.resize(stackepsx->get_n());
+            materialmux.resize(stackepsx->get_n());
+            thickness.resize(stackepsx->get_n());
+            position.resize(stackepsx->get_n());
+            for (int i=0; i<stackepsx->get_n(); ++i) {
                 int ii = n-i-1;
-                thickness[i]=stackepsx.get_t()[ii];
+                thickness[i]=stackepsx->get_t()[ii];
                 position[i].resize(2);
                 materialx[i].resize(2);
                 materialmux[i].resize(2);
                 position[i][0] = 0;
                 position[i][1] = period;
-                materialx[i][0] = epsilon(stackepsx.get_e()[ii]);
+                materialx[i][0] = epsilon(stackepsx->get_e()[ii]);
                 materialx[i][1] = materialx[i][0];
-                materialmux[i][0] = epsilon(stackmux.get_e()[ii]);
+                materialmux[i][0] = epsilon(stackmux->get_e()[ii]);
                 materialmux[i][1] = materialmux[i][0];
             }
             materialz=materialy=materialx;
@@ -325,48 +328,48 @@ namespace SCATMECH {
             return;
         }
 
-        if (stackmux.get_n()==0 && stackmuy.get_n()==0 && stackmuz.get_n()==0) { // This is an anisotropic, but nonmagnetic, stack
-            if (tdiff(stackepsx,stackepsy) || tdiff(stackepsx,stackepsz)) error("Layers inconsistent");
+        if (stackmux->get_n()==0 && stackmuy->get_n()==0 && stackmuz->get_n()==0) { // This is an anisotropic, but nonmagnetic, stack
+            if (tdiff(*stackepsx,*stackepsy) || tdiff(*stackepsx,*stackepsz)) error("Layers inconsistent");
             anisotropic = true;
-            materialx.resize(stackepsx.get_n());
-            materialy.resize(stackepsx.get_n());
-            materialz.resize(stackepsx.get_n());
-            thickness.resize(stackepsx.get_n());
-            position.resize(stackepsx.get_n());
-            for (int i=0; i<stackepsx.get_n(); ++i) {
+            materialx.resize(stackepsx->get_n());
+            materialy.resize(stackepsx->get_n());
+            materialz.resize(stackepsx->get_n());
+            thickness.resize(stackepsx->get_n());
+            position.resize(stackepsx->get_n());
+            for (int i=0; i<stackepsx->get_n(); ++i) {
                 int ii = n-i-1;
-                thickness[i]=stackepsx.get_t()[ii];
+                thickness[i]=stackepsx->get_t()[ii];
                 position[i].resize(2);
                 materialx[i].resize(2);
                 materialy[i].resize(2);
                 materialz[i].resize(2);
                 position[i][0] = 0;
                 position[i][1] = period;
-                materialx[i][0] = epsilon(stackepsx.get_e()[ii]);
+                materialx[i][0] = epsilon(stackepsx->get_e()[ii]);
                 materialx[i][1] = materialx[i][0];
-                materialy[i][0] = epsilon(stackepsy.get_e()[ii]);
+                materialy[i][0] = epsilon(stackepsy->get_e()[ii]);
                 materialy[i][1] = materialy[i][0];
-                materialz[i][0] = epsilon(stackepsz.get_e()[ii]);
+                materialz[i][0] = epsilon(stackepsz->get_e()[ii]);
                 materialz[i][1] = materialz[i][0];
             }
             return;
         }
 
-        if (tdiff(stackepsx,stackepsy) || tdiff(stackepsx,stackepsz) || tdiff(stackepsx,stackmux) || tdiff(stackepsx,stackmuy) || tdiff(stackepsx,stackmuz)) error("Layersinconsistent");
+        if (tdiff(*stackepsx,*stackepsy) || tdiff(*stackepsx,*stackepsz) || tdiff(*stackepsx,*stackmux) || tdiff(*stackepsx,*stackmuy) || tdiff(*stackepsx,*stackmuz)) error("Layers inconsistent");
 
         magnetic = true;
         anisotropic = true;
-        materialx.resize(stackepsx.get_n());
-        materialy.resize(stackepsx.get_n());
-        materialz.resize(stackepsx.get_n());
-        materialmux.resize(stackepsx.get_n());
-        materialmuy.resize(stackepsx.get_n());
-        materialmuz.resize(stackepsx.get_n());
-        thickness.resize(stackepsx.get_n());
-        position.resize(stackepsx.get_n());
-        for (int i=0; i<stackepsx.get_n(); ++i) {
+        materialx.resize(stackepsx->get_n());
+        materialy.resize(stackepsx->get_n());
+        materialz.resize(stackepsx->get_n());
+        materialmux.resize(stackepsx->get_n());
+        materialmuy.resize(stackepsx->get_n());
+        materialmuz.resize(stackepsx->get_n());
+        thickness.resize(stackepsx->get_n());
+        position.resize(stackepsx->get_n());
+        for (int i=0; i<stackepsx->get_n(); ++i) {
             int ii = n-i-1;
-            thickness[i]=stackepsx.get_t()[ii];
+            thickness[i]=stackepsx->get_t()[ii];
             position[i].resize(2);
             materialx[i].resize(2);
             materialy[i].resize(2);
@@ -376,17 +379,17 @@ namespace SCATMECH {
             materialmuz[i].resize(2);
             position[i][0] = 0;
             position[i][1] = period;
-            materialx[i][0] = epsilon(stackepsx.get_e()[ii]);
+            materialx[i][0] = epsilon(stackepsx->get_e()[ii]);
             materialx[i][1] = materialx[i][0];
-            materialy[i][0] = epsilon(stackepsy.get_e()[ii]);
+            materialy[i][0] = epsilon(stackepsy->get_e()[ii]);
             materialy[i][1] = materialy[i][0];
-            materialz[i][0] = epsilon(stackepsz.get_e()[ii]);
+            materialz[i][0] = epsilon(stackepsz->get_e()[ii]);
             materialz[i][1] = materialz[i][0];
-            materialmux[i][0] = epsilon(stackmux.get_e()[ii]);
+            materialmux[i][0] = epsilon(stackmux->get_e()[ii]);
             materialmux[i][1] = materialmux[i][0];
-            materialmuy[i][0] = epsilon(stackmuy.get_e()[ii]);
+            materialmuy[i][0] = epsilon(stackmuy->get_e()[ii]);
             materialmuy[i][1] = materialmuy[i][0];
-            materialmuz[i][0] = epsilon(stackmuz.get_e()[ii]);
+            materialmuz[i][0] = epsilon(stackmuz->get_e()[ii]);
             materialmuz[i][1] = materialmuz[i][0];
         }
         return;
@@ -1576,12 +1579,12 @@ namespace SCATMECH {
     DEFINE_PARAMETER(Generic_Grating,int,nlayers,"Approximate number of levels","20",0xFF);
 
     DEFINE_MODEL(Dielectric_Stack_Grating,Grating,"A grating with zero layers.");
-    DEFINE_PARAMETER(Dielectric_Stack_Grating,dielectric_stack,stackepsx,"Stack of films","",0xFF);
-    DEFINE_PARAMETER(Dielectric_Stack_Grating,dielectric_stack,stackepsy,"Stack of films","",0xFF);
-    DEFINE_PARAMETER(Dielectric_Stack_Grating,dielectric_stack,stackepsz,"Stack of films","",0xFF);
-    DEFINE_PARAMETER(Dielectric_Stack_Grating,dielectric_stack,stackmux,"Stack of films","",0xFF);
-    DEFINE_PARAMETER(Dielectric_Stack_Grating,dielectric_stack,stackmuy,"Stack of films","",0xFF);
-    DEFINE_PARAMETER(Dielectric_Stack_Grating,dielectric_stack,stackmuz,"Stack of films","",0xFF);
+    DEFINE_PTRPARAMETER(Dielectric_Stack_Grating,StackModel_Ptr,stackepsx,"Stack of films","No_StackModel",0xFF);
+    DEFINE_PTRPARAMETER(Dielectric_Stack_Grating,StackModel_Ptr,stackepsy,"Stack of films","No_StackModel",0xFF);
+    DEFINE_PTRPARAMETER(Dielectric_Stack_Grating,StackModel_Ptr,stackepsz,"Stack of films","No_StackModel",0xFF);
+    DEFINE_PTRPARAMETER(Dielectric_Stack_Grating,StackModel_Ptr,stackmux,"Stack of films","No_StackModel",0xFF);
+    DEFINE_PTRPARAMETER(Dielectric_Stack_Grating,StackModel_Ptr,stackmuy,"Stack of films","No_StackModel",0xFF);
+    DEFINE_PTRPARAMETER(Dielectric_Stack_Grating,StackModel_Ptr,stackmuz,"Stack of films","No_StackModel",0xFF);
 
     DEFINE_MODEL(Overlaid_Grating,Grating,"One grating on top of another, with a specified offset");
     DEFINE_PTRPARAMETER(Overlaid_Grating,Grating_Ptr,top,"Top grating","Single_Line_Grating",0xFF);

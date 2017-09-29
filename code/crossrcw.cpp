@@ -805,6 +805,18 @@ namespace SCATMECH {
         return (type&0x01) ? T(i,j) : R(i,j);
     }
 
+	StokesVector CrossRCW_Model::GetAbsorption()
+	{
+		SETUP();
+		StokesVector result(0,0,0,0);
+		for (int i=1;i<=2*order1+1;++i) {
+			for (int j=1;j<=2*order2+1;++j) {
+				result += (T(i,j) + R(i,j)).transpose()*StokesVector(1,0,0,0);
+			}
+		}
+		return StokesVector(1,0,0,0)-result;
+	}
+
     CVector CrossRCW_Model::GetEField(const JonesVector& inpol, const Vector& pos, bool incident)
     {
         SETUP();

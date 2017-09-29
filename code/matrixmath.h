@@ -126,7 +126,21 @@ namespace SCATMECH {
                 #endif
                 return p[i-1];
             }
+            const T& operator()(int i) const
+            {
+                #ifdef _DEBUG
+                //checkbounds(i);
+                #endif
+                return p[i-1];
+            }
             T& operator()(int i,int j)
+            {
+                #ifdef _DEBUG
+                checkbounds(i,j);
+                #endif
+                return p[(i-1)+step[0]*(j-1)];
+            }
+            const T& operator()(int i,int j) const
             {
                 #ifdef _DEBUG
                 checkbounds(i,j);
@@ -140,7 +154,21 @@ namespace SCATMECH {
                 #endif
                 return p[(i-1)+step[0]*(j-1)+step[1]*(k-1)];
             }
+            const T& operator()(int i,int j,int k) const
+            {
+                #ifdef _DEBUG
+                checkbounds(i,j,k);
+                #endif
+                return p[(i-1)+step[0]*(j-1)+step[1]*(k-1)];
+            }
             T& operator()(int i,int j,int k,int l)
+            {
+                #ifdef _DEBUG
+                checkbounds(i,j,k,l);
+                #endif
+                return p[(i-1)+step[0]*(j-1)+step[1]*(k-1)+step[2]*(l-1)];
+            }
+            const T& operator()(int i,int j,int k,int l) const
             {
                 #ifdef _DEBUG
                 checkbounds(i,j,k,l);
@@ -154,7 +182,21 @@ namespace SCATMECH {
                 #endif
                 return p[(i-1)+step[0]*(j-1)+step[1]*(k-1)+step[2]*(l-1)+step[3]*(I-1)];
             }
+            const T& operator()(int i,int j,int k,int l,int I) const
+            {
+                #ifdef _DEBUG
+                checkbounds(i,j,k,l,I);
+                #endif
+                return p[(i-1)+step[0]*(j-1)+step[1]*(k-1)+step[2]*(l-1)+step[3]*(I-1)];
+            }
             T& operator()(int i,int j,int k,int l,int I,int J)
+            {
+                #ifdef _DEBUG
+                checkbounds(i,j,k,k,I,J);
+                #endif
+                return p[(i-1)+step[0]*(j-1)+step[1]*(k-1)+step[2]*(l-1)+step[3]*(I-1)+step[4]*(J-1)];
+            }
+            const T& operator()(int i,int j,int k,int l,int I,int J) const
             {
                 #ifdef _DEBUG
                 checkbounds(i,j,k,k,I,J);
@@ -168,7 +210,22 @@ namespace SCATMECH {
                 #endif
                 return p[(i-1)+step[0]*(j-1)+step[1]*(k-1)+step[2]*(l-1)+step[3]*(I-1)+step[4]*(J-1)+step[5]*(K-1)];
             }
+            const T& operator()(int i,int j,int k,int l,int I,int J,int K) const
+            {
+                #ifdef _DEBUG
+                checkbounds(i,j,k,l,I,J,K);
+                #endif
+                return p[(i-1)+step[0]*(j-1)+step[1]*(k-1)+step[2]*(l-1)+step[3]*(I-1)+step[4]*(J-1)+step[5]*(K-1)];
+            }
+
             T& operator()(int i,int j,int k,int l,int I,int J,int K,int L)
+            {
+                #ifdef _DEBUG
+                checkbounds(i,j,k,l,I,J,K,L);
+                #endif
+                return p[(i-1)+step[0]*(j-1)+step[1]*(k-1)+step[2]*(l-1)+step[3]*(I-1)+step[4]*(J-1)+step[5]*(K-1)+step[6]*(L-1)];
+            }
+            const T& operator()(int i,int j,int k,int l,int I,int J,int K,int L) const
             {
                 #ifdef _DEBUG
                 checkbounds(i,j,k,l,I,J,K,L);
@@ -179,9 +236,12 @@ namespace SCATMECH {
             T& operator[](int i) {
                 return p[i];
             }
+            const T& operator[](int i) const {
+                return p[i];
+            }
 
             #ifdef _DEBUG
-            void checkbounds(int i,int j=1,int k=1,int l=1,int I=1,int J=1,int K=1,int L=1) {
+            void checkbounds(int i,int j=1,int k=1,int l=1,int I=1,int J=1,int K=1,int L=1) const {
                 if (i>dims[0] || j>dims[1] || k>dims[2] || l>dims[3] || I>dims[4] || J>dims[5] || K>dims[6] || L>dims[7])
                     throw SCATMECH_exception("Array out of bounds in FARRAY");
             }

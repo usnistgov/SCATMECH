@@ -109,8 +109,8 @@ namespace SCATMECH {
                 if (end==string::npos) end = pname.size();
                 string directory = pname.substr(0,end);
                 if (directory[directory.size()-1] != delim) directory += delim;
-                string filename=directory+name;
-                ifstream file(filename.c_str());
+				string filename=directory+name;
+				ifstream file(filename.c_str());
                 if (file) return filename;
                 begin = end+1;
             }

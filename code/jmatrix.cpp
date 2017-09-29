@@ -196,21 +196,21 @@ namespace SCATMECH {
             double norm = sqrt(sqr(k.x)+sqr(k.y));
             double kx = k.x/norm;
             double ky = k.y/norm;
-            if (k.z>0)
+			if (k.z>0) 
                 x = -p*kx-s*ky;
             else
                 x = p*kx-s*ky;
         } else {
             x = Vector(1,0,0);
         }
-        y = perpto(k,x);
+        y = perpto(x,k); // {y,x,k} is right-handed.
     }
 
     void GetBasisVectorsParPerp(const Vector& kin,const Vector& kout, Vector& perp, Vector& parin, Vector& parout)
     {
         perp = perpto(kin,kout);
-        parin = perpto(perp,kin);
-        parout = perpto(perp,kout);
+        parin = perpto(kin,perp);
+        parout = perpto(kout,perp);
     }
 
     JonesMatrix GetJonesRotator(const Vector& xo, const Vector& yo, const Vector& xi, const Vector& yi)

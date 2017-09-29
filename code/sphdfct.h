@@ -45,7 +45,7 @@ namespace SCATMECH {
             // The dielectric function of the particle
             DECLARE_PARAMETER(dielectric_function,defect);
 
-            DECLARE_PARAMETER(dielectric_stack,stack);
+            DECLARE_PARAMETER(StackModel_Ptr,stack);
 
         protected:
 

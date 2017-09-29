@@ -35,8 +35,9 @@ namespace SCATMECH {
         public:
             CrossRCW_Model() : old_type(-1) {}
 
-            JonesMatrix GetAmplitude(int i,int j);
-            MuellerMatrix GetIntensity(int i,int j);
+            JonesMatrix GetAmplitude(int i,int j); 
+            MuellerMatrix GetIntensity(int i,int j); // Returns diffraction efficiency
+			StokesVector GetAbsorption(); // Returns Stokes absorption coefficient
             Vector GetDirection(int i,int j);
             CVector GetPropagationVector(int i,int j);
 

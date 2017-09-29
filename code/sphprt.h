@@ -58,7 +58,7 @@ namespace SCATMECH {
             DECLARE_PARAMETER(Free_Space_Scatterer_Ptr,scatterer);
 
             // Any dielectric layers on the surface...
-            DECLARE_PARAMETER(dielectric_stack,stack);
+            DECLARE_PARAMETER(StackModel_Ptr,stack);
 
             // The parameters for this virtual model are the Euler angles for the rotation of the
             // scatterer...

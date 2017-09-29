@@ -138,11 +138,11 @@ namespace SCATMECH {
             double iota = acos(cos_iota_i);
             COMPLEX ts,tp;
             if (is_forward()) {
-                ts = stack.ts12(iota,lambda,vacuum,substrate);
-                tp = stack.tp12(iota,lambda,vacuum,substrate);
+                ts = stack->ts12(iota,lambda,vacuum,substrate);
+                tp = stack->tp12(iota,lambda,vacuum,substrate);
             } else {
-                ts = stack.ts21i(iota,lambda,substrate,vacuum);
-                tp = stack.tp21i(iota,lambda,substrate,vacuum);
+                ts = stack->ts21i(iota,lambda,substrate,vacuum);
+                tp = stack->tp21i(iota,lambda,substrate,vacuum);
             }
 
             JonesMatrix j;
@@ -206,11 +206,11 @@ namespace SCATMECH {
 
             COMPLEX rsiota,rpiota;
             if (is_forward()) {
-                rsiota = stack.rs12(iota,lambda,vacuum,substrate);
-                rpiota = stack.rp12(iota,lambda,vacuum,substrate);
+                rsiota = stack->rs12(iota,lambda,vacuum,substrate);
+                rpiota = stack->rp12(iota,lambda,vacuum,substrate);
             } else {
-                rsiota = stack.rs21i(iota,lambda,substrate,vacuum);
-                rpiota = stack.rp21i(iota,lambda,substrate,vacuum);
+                rsiota = stack->rs21i(iota,lambda,substrate,vacuum);
+                rpiota = stack->rp21i(iota,lambda,substrate,vacuum);
             }
 
             double a1 = sqr(sin(2*iota));
@@ -434,7 +434,7 @@ namespace SCATMECH {
 
     DEFINE_PTRPARAMETER(Facet_BRDF_Model,Slope_Distribution_Function_Ptr,sdf,"Slope distribution function","Exponential_Slope_Distribution_Function",0xFF);
 
-    DEFINE_PARAMETER(Facet_BRDF_Model,dielectric_stack,stack,"Film stack on substrate","",0xFF);
+    DEFINE_PTRPARAMETER(Facet_BRDF_Model,StackModel_Ptr,stack,"Film stack on substrate","No_StackModel",0xFF);
 
     DEFINE_PARAMETER(Exponential_Slope_Distribution_Function,double,s,"RMS slope","0.1",0xFF);
 

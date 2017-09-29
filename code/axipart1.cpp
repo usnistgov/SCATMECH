@@ -144,8 +144,8 @@ namespace SCATMECH {
         }
 
         // Normal incidence reflection coefficients...
-        COMPLEX rsnormal = stack.rs12(0.,lambda,vacuum,substrate);
-        COMPLEX rpnormal = stack.rp12(0.,lambda,vacuum,substrate);
+        COMPLEX rsnormal = stack->rs12(0.,lambda,vacuum,substrate);
+        COMPLEX rpnormal = stack->rp12(0.,lambda,vacuum,substrate);
 
         vector<COMPLEX> reflect_s(npts);
         vector<COMPLEX> reflect_p(npts);
@@ -169,8 +169,8 @@ namespace SCATMECH {
                 reflect_s[j] = rsnormal;
                 reflect_p[j] = rpnormal;
             } else {               // Exact solution
-                reflect_s[j] = stack.rs12(alpha,lambda,vacuum,substrate);
-                reflect_p[j] = stack.rp12(alpha,lambda,vacuum,substrate);
+                reflect_s[j] = stack->rs12(alpha,lambda,vacuum,substrate);
+                reflect_p[j] = stack->rp12(alpha,lambda,vacuum,substrate);
             }
 
             // Calculate U, V, d+, and d- for each angle and (l,m) combination...
@@ -624,7 +624,7 @@ namespace SCATMECH {
             {
                 set_geometry(theta,theta,0.);
                 COMPLEX e = E(W,Z);
-                COMPLEX r = stack.r12(theta,lambda,vacuum,substrate)[pol];
+                COMPLEX r = stack->r12(theta,lambda,vacuum,substrate)[pol];
                 r *= exp(2.*cI*qq*cos(theta));
                 double R = norm(r);
                 return 4.*pi/k*COMPLEX(0.,-1.)*(e/r)*R;
@@ -641,7 +641,7 @@ namespace SCATMECH {
                 COMPLEX phase =  exp(cI*qq*(cos(theta)-index*cos(thetat)));
                 double factor = cos(thetat)/cos(theta);
                 e /= phase;
-                COMPLEX t = stack.t12(theta,lambda,vacuum,substrate)[pol];
+                COMPLEX t = stack->t12(theta,lambda,vacuum,substrate)[pol];
                 double T = norm(t)*factor*index;
                 return 4.*pi/k/sqrt(cube(index))/factor*COMPLEX(0.,-1.)*(e/t)*T;
             }
@@ -656,7 +656,7 @@ namespace SCATMECH {
                 COMPLEX cost = sqrt(1.-sqr(sint));
                 if (imag(cost)<0) cost = -cost;
 
-                COMPLEX r = stack.r21i(theta,lambda,substrate,vacuum)[pol];
+                COMPLEX r = stack->r21i(theta,lambda,substrate,vacuum)[pol];
                 double R = norm(r);
 
                 r *= exp(-2.*cI*qq*index*cos(theta));
@@ -680,7 +680,7 @@ namespace SCATMECH {
                 COMPLEX phase = exp(cI*qq*(cost-index*cos(theta)));
 
                 e /= phase;
-                COMPLEX t = stack.t21i(theta,lambda,substrate,vacuum)[pol];
+                COMPLEX t = stack->t21i(theta,lambda,substrate,vacuum)[pol];
                 double T = norm(t)/index/factor;
                 return 4.*pi/k*sqrt(index)*factor*COMPLEX(0.,-1.)*(e/t)*T;
             }
@@ -700,7 +700,7 @@ namespace SCATMECH {
                         "Particle Shape",
                         "Ellipsoid_Axisymmetric_Shape",0xFF);
     DEFINE_PARAMETER(Axisymmetric_Particle_BRDF_Model,dielectric_function,particle,"Particle optical properties","(1.59,0)",0xFF);
-    DEFINE_PARAMETER(Axisymmetric_Particle_BRDF_Model,dielectric_stack,stack,"Substrate films","",0xFF);
+    DEFINE_PTRPARAMETER(Axisymmetric_Particle_BRDF_Model,StackModel_Ptr,stack,"Substrate films","No_StackModel",0xFF);
     DEFINE_PARAMETER(Axisymmetric_Particle_BRDF_Model,double,delta,"Separation of particle from substrate [um] (in contact: 0)","0",0xFF);
     DEFINE_PARAMETER(Axisymmetric_Particle_BRDF_Model,int,lmax,"Maximum polar order (lmax)","0",0xFF);
     DEFINE_PARAMETER(Axisymmetric_Particle_BRDF_Model,int,mmax,"Maximum azimuthal order (mmax)","0",0xFF);

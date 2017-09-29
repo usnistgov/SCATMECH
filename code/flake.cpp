@@ -101,8 +101,8 @@ namespace SCATMECH {
 
         // The reflection coefficients are obtained from the
         // dielectric stack...
-        COMPLEX rsiota = stack.rs12(iota_external,lambda,overcoat,substrate);
-        COMPLEX rpiota = stack.rp12(iota_external,lambda,overcoat,substrate);
+        COMPLEX rsiota = stack->rs12(iota_external,lambda,overcoat,substrate);
+        COMPLEX rpiota = stack->rp12(iota_external,lambda,overcoat,substrate);
 
         // The local surface normal...
         Vector _nhat = nhat(thetai_internal,thetas_internal,phis);
@@ -135,12 +135,12 @@ namespace SCATMECH {
         }
 
         // The transmission matrices into and out of the overcoat...
-        JonesMatrix jti(overcoat_films.tp12(thetai,lambda,vacuum,epsilon),
-                        overcoat_films.ts12(thetai,lambda,vacuum,epsilon),
+        JonesMatrix jti(overcoat_films->tp12(thetai,lambda,vacuum,epsilon),
+                        overcoat_films->ts12(thetai,lambda,vacuum,epsilon),
                         (COMPLEX)(0.),(COMPLEX)(0.));
 
-        JonesMatrix jts(overcoat_films.tp12(thetas,lambda,vacuum,epsilon),
-                        overcoat_films.ts12(thetas,lambda,vacuum,epsilon),
+        JonesMatrix jts(overcoat_films->tp12(thetas,lambda,vacuum,epsilon),
+                        overcoat_films->ts12(thetas,lambda,vacuum,epsilon),
                         (COMPLEX)(0.),(COMPLEX)(0.));
 
         // Total Jones matrix
@@ -165,7 +165,7 @@ namespace SCATMECH {
 
     DEFINE_PARAMETER(Subsurface_Facet_BRDF_Model,dielectric_function,overcoat,"Overcoat","(1.59,0)",0xFF);
 
-    DEFINE_PARAMETER(Subsurface_Facet_BRDF_Model,dielectric_stack,overcoat_films,"Overcoat films","",0xFF);
+	DEFINE_PTRPARAMETER(Subsurface_Facet_BRDF_Model,StackModel_Ptr,overcoat_films,"Overcoat films","No_StackModel",0xFF);
 
 
 } // namespace SCATMECH

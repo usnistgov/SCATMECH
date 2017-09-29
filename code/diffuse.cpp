@@ -34,7 +34,6 @@ namespace SCATMECH {
     Diffuse_Subsurface_BRDF_Model::
     Diffuse_Subsurface_BRDF_Model()
     {
-        stack.wash();
     }
 
     MuellerMatrix Diffuse_Subsurface_BRDF_Model::
@@ -55,8 +54,8 @@ namespace SCATMECH {
 
         MuellerMatrix m = Lambertian_BRDF_Model::mueller();
 
-        return s*(((MuellerMatrix)(stack.t12(thetas,lambda,vacuum,substrate))*m)*
-                  (MuellerMatrix)(stack.t12(thetai,lambda,vacuum,substrate)));
+        return s*(((MuellerMatrix)(stack->t12(thetas,lambda,vacuum,substrate))*m)*
+                  (MuellerMatrix)(stack->t12(thetai,lambda,vacuum,substrate)));
     }
 
     void
@@ -76,7 +75,7 @@ namespace SCATMECH {
             COMPLEX ti = ArcSin((COMPLEX)(sin(theta)*substrate.n(lambda)));
 
             // Calculate reflectance...
-            JonesMatrix r = stack.r21(ti,lambda,substrate,vacuum);
+            JonesMatrix r = stack->r21(ti,lambda,substrate,vacuum);
             double rr=0.5*(norm(r[0])+norm(r[1]));
 
             // Integrate the reflectance...
@@ -95,7 +94,7 @@ namespace SCATMECH {
     DEFINE_MODEL(Diffuse_Subsurface_BRDF_Model,Lambertian_BRDF_Model,
                  "Totally diffuse scattering under a smooth surface.");
 
-    DEFINE_PARAMETER(Diffuse_Subsurface_BRDF_Model,dielectric_stack,stack,"Film stack on substrate","",0xFF);
+    DEFINE_PTRPARAMETER(Diffuse_Subsurface_BRDF_Model,StackModel_Ptr,stack,"Film stack on substrate","No_StackModel",0xFF);
 
 
 } // namespace SCATMECH

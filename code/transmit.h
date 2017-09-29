@@ -27,7 +27,7 @@ namespace SCATMECH {
 
             DECLARE_MODEL();
             DECLARE_PARAMETER(BRDF_Model_Ptr,model);
-            DECLARE_PARAMETER(dielectric_stack,films);
+            DECLARE_PARAMETER(StackModel_Ptr,films);
 
         protected:
             virtual MuellerMatrix mueller();

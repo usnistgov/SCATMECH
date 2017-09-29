@@ -694,16 +694,19 @@ namespace SCATMECH {
         }
 
         maps_mutex.lock();
-
         TableFileMap::iterator t =  tablefiles.find(filename2);
         FormulaFileMap::iterator f =  formulafiles.find(filename2);
-        if (t!=tablefiles.end()) {
+		TableFileMap::iterator tend = tablefiles.end();
+		FormulaFileMap::iterator fend = formulafiles.end();
+		maps_mutex.unlock();
+
+        if (t!=tend) {
             x = (t->second)[0];
             y = (t->second)[col-1];
             icol=col;
             params.clear();
             tablefile=&(t->second);
-        } else if (f!=formulafiles.end()) {
+        } else if (f!=fend) {
             x = f->second.get_column(1,params);
             y = f->second.get_column(col,params);
             params = f->second.get_parameter_map();
@@ -724,16 +727,20 @@ namespace SCATMECH {
                     if (word.size()==0) throw SCATMECH_exception("File " + filename + " is empty");
                 }
                 if (word=="PARAMETERS") {
+			        maps_mutex.lock();
                     formulafiles[filename2]=FormulaFile(filename2);
                     f = formulafiles.find(filename2);
+					maps_mutex.unlock();
                     x = f->second.get_column(1,params);
                     y = f->second.get_column(col,params);
                     params = f->second.get_parameter_map();
                     formulafile = &(f->second);
                     icol=col;
                 } else {
-                    tablefiles[filename2]=TableFile(filename2);
+					maps_mutex.lock();
+					tablefiles[filename2]=TableFile(filename2);
                     t=tablefiles.find(filename2);
+					maps_mutex.unlock();
                     x = (t->second)[0];
                     y = (t->second)[col-1];
                     params.clear();
@@ -743,7 +750,7 @@ namespace SCATMECH {
             }
         }
 
-        if (x.size()>0) {
+		if (x.size()>0) {
             values.resize(x.size());
 
             for (int i=0; i<(int)x.size(); ++i) {
@@ -759,8 +766,6 @@ namespace SCATMECH {
         ostringstream str;
         str << filename2 << " (col=" << col << ")";
         name = str.str();
-
-        maps_mutex.unlock();
 
         return 0;
     }
@@ -828,6 +833,7 @@ namespace SCATMECH {
             return;
         }
         params[param]=from_string<double>(value);
+		last.x=numeric_limits<double>::max();
     }
 
     string Table::get_parameter(const std::string& param) const

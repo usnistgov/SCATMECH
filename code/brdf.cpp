@@ -163,7 +163,17 @@ namespace SCATMECH {
 
         if (from==xyxy) {
             // Convert to BRDF_Model::psps
-            J = JonesRotator(phis)*J;
+			Vector ki = (type==0||type==1) ? Vector(sin(thetai),0.,-cos(thetai)) : Vector(sin(thetai),0.,cos(thetai));
+			Vector ko = (type==0||type==3) ? Vector(sin(thetas)*cos(phis),sin(thetas)*sin(phis),cos(thetas)) : Vector(sin(thetas)*cos(phis),sin(thetas)*sin(phis),-cos(thetas));
+			Vector xi,yi,xo,yo,si,pi,so,po;
+			GetBasisVectorsSP(ko,so,po);
+			GetBasisVectorsSP(ki,si,pi);
+			GetBasisVectorsXY(ko,xo,yo);
+			GetBasisVectorsXY(ki,xi,yi);
+			JonesMatrix ri = GetJonesRotator(yi,xi,si,pi);
+			JonesMatrix ro = GetJonesRotator(so,po,yo,xo);
+			J = ro*J*ri;
+
         } else if (from==plane) {
             // Convert to BRDF_Model::psps
             double psii,psis;
@@ -173,15 +183,38 @@ namespace SCATMECH {
 
         if (to == xyxy) {
             // Convert to BRDF_Model::xyxy
-            J = JonesRotator(-phis)*J;
+			Vector ki = (type==0||type==1) ? Vector(sin(thetai),0.,-cos(thetai)) : Vector(sin(thetai),0.,cos(thetai));
+			Vector ko = (type==0||type==3) ? Vector(sin(thetas)*cos(phis),sin(thetas)*sin(phis),cos(thetas)) : Vector(sin(thetas)*cos(phis),sin(thetas)*sin(phis),-cos(thetas));
+			Vector xi,yi,xo,yo,si,pi,so,po;
+			GetBasisVectorsSP(ko,so,po);
+			GetBasisVectorsSP(ki,si,pi);
+			GetBasisVectorsXY(ko,xo,yo);
+			GetBasisVectorsXY(ki,xi,yi);
+			JonesMatrix ri = GetJonesRotator(si,pi,yi,xi);
+			JonesMatrix ro = GetJonesRotator(yo,xo,so,po);
+			J = ro*J*ri;
+
+			//if (type==0||type==2) { // Added 21 March 2016
+			//	J = JonesRotator(-phis)*J;
+			//} else {
+			//	J = JonesRotator(phis)*J;
+			//}
         } else if (to==plane) {
             // Convert to BRDF_Model::plane
-            double psii,psis;
-            Coordinate_System_plane_angles(psii,psis,thetai,thetas,phis);
-            J = (JonesRotator(-psis)*J)*JonesRotator(-psii);
+			Vector ki = type==0||type==1 ? Vector(sin(thetai),0.,-cos(thetai)) : Vector(sin(thetai),0.,cos(thetai));
+			Vector ko = type==0||type==3 ? Vector(sin(thetas)*cos(phis),sin(thetas)*sin(phis),cos(thetas)) : Vector(sin(thetas)*cos(phis),sin(thetas)*sin(phis),-cos(thetas));
+			Vector si,pi,so,po,perp,parin,parout;
+			GetBasisVectorsSP(ko,so,po);
+			GetBasisVectorsSP(ki,si,pi);
+			GetBasisVectorsParPerp(ki,ko,perp,parin,parout);
+
+			J = (GetJonesRotator(perp,parout,so,po)*J)*GetJonesRotator(si,pi,perp,parin);
+            //double psii,psis;
+            //Coordinate_System_plane_angles(psii,psis,thetai,thetas,phis);
+            //J = (JonesRotator(-psis)*J)*JonesRotator(-psii);
         }
     }
-
+ 
     void
     BRDF_Model::
     convert(MuellerMatrix& M,Coordinate_System to) const
@@ -191,7 +224,16 @@ namespace SCATMECH {
 
         if (from==xyxy) {
             // Convert to BRDF_Model_psps
-            M = ((MuellerMatrix)JonesRotator(phis))*M;
+			Vector ki = (type==0||type==1) ? Vector(sin(thetai),0.,-cos(thetai)) : Vector(sin(thetai),0.,cos(thetai));
+			Vector ko = (type==0||type==3) ? Vector(sin(thetas)*cos(phis),sin(thetas)*sin(phis),cos(thetas)) : Vector(sin(thetas)*cos(phis),sin(thetas)*sin(phis),-cos(thetas));
+			Vector xi,yi,xo,yo,si,pi,so,po;
+			GetBasisVectorsSP(ko,so,po);
+			GetBasisVectorsSP(ki,si,pi);
+			GetBasisVectorsXY(ko,xo,yo);
+			GetBasisVectorsXY(ki,xi,yi);
+			MuellerMatrix ri = GetJonesRotator(yi,xi,si,pi);
+			MuellerMatrix ro = GetJonesRotator(so,po,yo,xo);
+			M = ro*M*ri;
         } else if (from==plane) {
             // Convert to BRDF_Model_psps
             double psii,psis;
@@ -202,13 +244,36 @@ namespace SCATMECH {
 
         if (to == xyxy) {
             // Convert to BRDF_Model_xyxy
-            M = ((MuellerMatrix)JonesRotator(-phis))*M;
+			Vector ki = (type==0||type==1) ? Vector(sin(thetai),0.,-cos(thetai)) : Vector(sin(thetai),0.,cos(thetai));
+			Vector ko = (type==0||type==3) ? Vector(sin(thetas)*cos(phis),sin(thetas)*sin(phis),cos(thetas)) : Vector(sin(thetas)*cos(phis),sin(thetas)*sin(phis),-cos(thetas));
+			Vector xi,yi,xo,yo,si,pi,so,po;
+			GetBasisVectorsSP(ko,so,po);
+			GetBasisVectorsSP(ki,si,pi);
+			GetBasisVectorsXY(ko,xo,yo);
+			GetBasisVectorsXY(ki,xi,yi);
+			MuellerMatrix ri = GetJonesRotator(si,pi,yi,xi);
+			MuellerMatrix ro = GetJonesRotator(yo,xo,so,po);
+			M = ro*M*ri;
+			//if (type==0 || type == 2) {
+	        //    M = ((MuellerMatrix)JonesRotator(-phis))*M;
+			//} else {
+	        //    M = ((MuellerMatrix)JonesRotator(phis))*M;
+			//}
         } else if (to==plane) {
             // Convert to BRDF_Model_plane
-            double psii,psis;
-            Coordinate_System_plane_angles(psii,psis,thetai,thetas,phis);
-            M= (((MuellerMatrix)JonesRotator(-psis))*M)*
-               ((MuellerMatrix)JonesRotator(-psii));
+            //double psii,psis;
+            //Coordinate_System_plane_angles(psii,psis,thetai,thetas,phis);
+            //M= (((MuellerMatrix)JonesRotator(-psis))*M)*
+            //   ((MuellerMatrix)JonesRotator(-psii));
+			Vector ki = type==0||type==1 ? Vector(sin(thetai),0.,-cos(thetai)) : Vector(sin(thetai),0.,cos(thetai));
+			Vector ko = type==0||type==3 ? Vector(sin(thetas)*cos(phis),sin(thetas)*sin(phis),cos(thetas)) : Vector(sin(thetas)*cos(phis),sin(thetas)*sin(phis),-cos(thetas));
+			Vector si,pi,so,po,perp,parin,parout;
+			GetBasisVectorsSP(ko,so,po);
+			GetBasisVectorsSP(ki,si,pi);
+			GetBasisVectorsParPerp(ki,ko,perp,parin,parout);
+
+			M = (MuellerMatrix(GetJonesRotator(perp,parout,so,po))*M)*MuellerMatrix(GetJonesRotator(si,pi,perp,parin));
+
         }
     }
 
@@ -297,7 +362,7 @@ namespace SCATMECH {
     DEFINE_VIRTUAL_MODEL(BRDF_Model,Model,"All BRDF models.");
     DEFINE_PARAMETER(BRDF_Model,double,lambda,"Wavelength [um]","0.532",0xFF);
     DEFINE_PARAMETER(BRDF_Model,dielectric_function,substrate,"Substrate","(4.05,0.05)",0xFF);
-    DEFINE_PARAMETER(BRDF_Model,int,type,"(0) for Forward/Reflection, (1) for Forward/Transmission, (2) for Backward/Reflection, or (3) for Backward/Transmission","0",0xFF);
+    DEFINE_PARAMETER(BRDF_Model,int,type,"(0) for Forward/Reflection, (1) for Forward/Transmission, (2) for Backward/Reflection, or (3) for Backward/Transmission","0",0x80);
 
     int get_model_depth=0;
 

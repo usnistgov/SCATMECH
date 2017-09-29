@@ -819,71 +819,71 @@
           <tr>
             <td class="parameter">stackepsx</td>
 
-            <td class="datatype"><a href="dielstack.htm">dielectric_stack</a></td>
+            <td class="datatype"><a href="stackmodel.htm">StackModel_Ptr</a></td>
 
             <td class="description">The description of any film stacks on the substrate.
 	      This particular stack corresponds to the dielectric function in the <i>x</i> direction (the grating direction).
-            <td class="default"><i>none</i></td>
+            <td class="default">No_StackModel</td>
           </tr>
 
           <tr>
             <td class="parameter">stackepsy</td>
 
-            <td class="datatype"><a href="dielstack.htm">dielectric_stack</a></td>
+            <td class="datatype"><a href="stackmodel.htm">StackModel_Ptr</a></td>
 
             <td class="description">The description of any film stacks on the substrate.
 	      This particular stack corresponds to the dielectric function in the <i>y</i> direction (the grating direction).
 	      If this parameter is set, it must have the same number of layers and the same layer thicknesses as <tt>stackepsx</tt> and <tt>stackepsz</tt> must be set, too.
-	      If this parameter is not set, then the materials are taken to be isotropic and the dielectric functions taken from <tt>stackepsx</tt>.
-            <td class="default"><i>none</i></td>
+	      If this parameter is not set (<a href="stackmodel.htm">No_StackModel</a>), then the materials are taken to be isotropic and the dielectric functions taken from <tt>stackepsx</tt>.
+            <td class="default">No_StackModel</td>
           </tr>
 
           <tr>
             <td class="parameter">stackepsz</td>
 
-            <td class="datatype"><a href="dielstack.htm">dielectric_stack</a></td>
+            <td class="datatype"><a href="stackmodel.htm">StackModel_Ptr</a></td>
 
             <td class="description">The description of any film stacks on the substrate.
 	      This particular stack corresponds to the dielectric function in the <i>z</i> direction (the grating direction).
 	      If this parameter is set, it must have the same number of layers and the same layer thicknesses as <tt>stackepsx</tt> and <tt>stackepsy</tt> must be set, too.
-	      If this parameter is not set, then the materials are taken to be isotropic and the dielectric functions taken from <tt>stackepsx</tt>.
-            <td class="default"><i>none</i></td>
+	      If this parameter is not set (<a href="stackmodel.htm">No_StackModel</a>), then the materials are taken to be isotropic and the dielectric functions taken from <tt>stackepsx</tt>.
+            <td class="default">No_StackModel</td>
           </tr>
 
           <tr>
             <td class="parameter">stackmux</td>
 
-            <td class="datatype"><a href="dielstack.htm">dielectric_stack</a></td>
+            <td class="datatype"><a href="stackmodel.htm">StackModel_Ptr</a></td>
 
             <td class="description">The description of any film stacks on the substrate.
 	      This particular stack corresponds to the magnetic function in the <i>x</i> direction (the grating direction). 
 	      If this parameter is set, it must have the same number of layers and the same layer thicknesses as <tt>stackepsx</tt>.
-	      If this parameter is not set, any layers are taken to be nonmagnetic.
-            <td class="default"><i>none</i></td>
+	      If this parameter is not set (<a href="stackmodel.htm">No_StackModel</a>), any layers are taken to be nonmagnetic.
+            <td class="default">No_StackModel</td>
           </tr>
 
           <tr>
             <td class="parameter">stackmuy</td>
 
-            <td class="datatype"><a href="dielstack.htm">dielectric_stack</a></td>
+            <td class="datatype"><a href="stackmodel.htm">StackModel_Ptr</a></td>
 
             <td class="description">The description of any film stacks on the substrate.
 	      This particular stack corresponds to the magnetic function in the <i>y</i> direction (the grating direction). 
 	      If this parameter is set, it must have the same number of layers and the same layer thicknesses as <tt>stackepsx</tt>, and <tt>stackmuz</tt> must be set, too.
-	      If this parameter is not set, any layers are taken to be isotropic.
-            <td class="default"><i>none</i></td>
+	      If this parameter is not set (<a href="stackmodel.htm">No_StackModel</a>), any layers are taken to be isotropic.
+            <td class="default">No_StackModel</td>
           </tr>
 
           <tr>
             <td class="parameter">stackmuz</td>
 
-            <td class="datatype"><a href="dielstack.htm">dielectric_stack</a></td>
+            <td class="datatype"><a href="stackmodel.htm">StackModel_Ptr</a></td>
 
             <td class="description">The description of any film stacks on the substrate.
 	      This particular stack corresponds to the magnetic function in the <i>z</i> direction (the grating direction). 
 	      If this parameter is set, it must have the same number of layers and the same layer thicknesses as <tt>stackepsx</tt>, and <tt>stackmuy</tt> must be set, too.
-	      If this parameter is not set, any layers are taken to be isotropic.
-            <td class="default"><i>none</i></td>
+	      If this parameter is not set (<a href="stackmodel.htm">No_StackModel</a>), any layers are taken to be isotropic.
+            <td class="default">No_StackModel</td>
           </tr>
 
           <tr>

@@ -39,7 +39,7 @@ namespace SCATMECH {
         if (substrate.k(lambda)!=0)
             error("Substrate cannot be absorbing");
         if (scatterer->get_lambda()!=lambda) error("scatterer.lambda!=lambda");
-        if (scatterer->get_medium().n(lambda)!=substrate.n(lambda)) error("scatterer.medium!=substrate.medium");
+        if (scatterer->get_medium().n(lambda)!=substrate.n(lambda)) error("scatterer.medium!=substrate");
 
         Euler = Matrix(cos(alpha)*cos(beta),  sin(alpha), -cos(alpha)*sin(beta),
                        -cos(beta)*sin(alpha), cos(alpha), sin(alpha)*sin(beta),
@@ -99,8 +99,8 @@ namespace SCATMECH {
                 Vector outPi = cross(outKi,outSi);
 
                 // Transmission coefficients into and out of the material...
-                JonesMatrix ti = stack.t12(thetai,lambda,vacuum,substrate)*(COMPLEX)sqrt(n);
-                JonesMatrix ts = stack.t12(thetas,lambda,vacuum,substrate)*(COMPLEX)sqrt(n*cos_thetas_internal/cos(thetas));
+                JonesMatrix ti = stack->t12(thetai,lambda,vacuum,substrate)*(COMPLEX)sqrt(n);
+                JonesMatrix ts = stack->t12(thetas,lambda,vacuum,substrate)*(COMPLEX)sqrt(n*cos_thetas_internal/cos(thetas));
 
                 // Polarization basis local to the scattering plane... {par*,perp,k} are right handed...
                 Vector perp = perpto(inKi,outKi);
@@ -180,7 +180,7 @@ namespace SCATMECH {
                     Vector pars = cross(perp,outKr);
 
                     // The reflection coefficients...
-                    JonesMatrix r = stack.r21i(fabs(thetas),lambda,substrate,vacuum);
+                    JonesMatrix r = stack->r21i(fabs(thetas),lambda,substrate,vacuum);
 
                     // Rotation matrices...
                     JonesMatrix matrixin = GetJonesRotator(pari,perp,inSi,inPi);
@@ -197,7 +197,7 @@ namespace SCATMECH {
                 }
 
                 // Transmission into substrate...
-                JonesMatrix ti = stack.t12(thetai,lambda,vacuum,substrate)*(COMPLEX)sqrt(n);
+                JonesMatrix ti = stack->t12(thetai,lambda,vacuum,substrate)*(COMPLEX)sqrt(n);
 
                 JonesMatrix scatter = (scatter_direct+scatter_indirect)*ti/k/n;
 
@@ -248,8 +248,8 @@ namespace SCATMECH {
                 Vector a4in = cross(b4in,inKr),  a4out = cross(b4out,outKr);
 
                 // The reflection coefficients...
-                JonesMatrix ri = stack.r21i(fabs(thetai),lambda,substrate,vacuum);
-                JonesMatrix rs = stack.r21i(fabs(thetas),lambda,substrate,vacuum);
+                JonesMatrix ri = stack->r21i(fabs(thetai),lambda,substrate,vacuum);
+                JonesMatrix rs = stack->r21i(fabs(thetas),lambda,substrate,vacuum);
 
                 // The scattering matrices...
                 JonesMatrix S1 = scatterer->jones(_Euler*inK,_Euler*outK);
@@ -349,14 +349,14 @@ namespace SCATMECH {
 
                     // Phase and reflection coefficients...
                     COMPLEX phase = exp(COMPLEX(0,2)*cos(thetai)*k*n*depth);
-                    JonesMatrix r = stack.r21i(fabs(thetai),lambda,substrate,vacuum);
+                    JonesMatrix r = stack->r21i(fabs(thetai),lambda,substrate,vacuum);
 
                     // Scattering matrix in global basis...
                     scatter_indirect = phase*matrixout*scatter*matrixin*r;
                 }
 
                 // Transmission out of material...
-                JonesMatrix t = stack.t21(thetas,lambda,substrate,vacuum)*
+                JonesMatrix t = stack->t21(thetas,lambda,substrate,vacuum)*
                                 sqrt(cos(thetas)/cos(thetas_inside)/n);
 
                 JonesMatrix scatter = t*(scatter_direct+scatter_indirect)/k/n;
@@ -373,7 +373,7 @@ namespace SCATMECH {
     DEFINE_MODEL(Subsurface_Particle_BRDF_Model,Local_BRDF_Model,
                  "Scattering by a particle beneath an interface of a nonabsorbing media");
 
-    DEFINE_PARAMETER(Subsurface_Particle_BRDF_Model,dielectric_stack,stack,"Film stack on substrate","",0xFF);
+    DEFINE_PTRPARAMETER(Subsurface_Particle_BRDF_Model,StackModel_Ptr,stack,"Film stack on substrate","No_StackModel",0xFF);
     DEFINE_PARAMETER(Subsurface_Particle_BRDF_Model,double,depth,"Depth of center of particle [um]","0",0xFF);
     DEFINE_PTRPARAMETER(Subsurface_Particle_BRDF_Model,Free_Space_Scatterer_Ptr,scatterer,"The scattering function","MieScatterer",0xFF);
     DEFINE_PARAMETER(Subsurface_Particle_BRDF_Model,double,alpha,"Rotation of particle about z-axis [rad]","0",0xFF);

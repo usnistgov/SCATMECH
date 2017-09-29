@@ -30,7 +30,6 @@ namespace SCATMECH {
     First_Diffuse_BRDF_Model()
     {
         l_scat = 1.;
-        stack.wash();
         phase_function = new Isotropic_Phase_Function;
     }
 
@@ -90,13 +89,13 @@ namespace SCATMECH {
 
             // The transmittance for incident light...
             double field_power_i = sqrt(n*cos_thetai_internal/cos(thetai));
-            COMPLEX tsi = stack.ts12(thetai,lambda,vacuum,substrate)*field_power_i;
-            COMPLEX tpi = stack.tp12(thetai,lambda,vacuum,substrate)*field_power_i;
+            COMPLEX tsi = stack->ts12(thetai,lambda,vacuum,substrate)*field_power_i;
+            COMPLEX tpi = stack->tp12(thetai,lambda,vacuum,substrate)*field_power_i;
 
             // The transmittance for scattered light...
             double field_power_s = sqrt(n*cos_thetas_internal/cos(thetas));
-            COMPLEX tss = stack.ts12(thetas,lambda,vacuum,substrate)*field_power_s;
-            COMPLEX tps = stack.tp12(thetas,lambda,vacuum,substrate)*field_power_s;
+            COMPLEX tss = stack->ts12(thetas,lambda,vacuum,substrate)*field_power_s;
+            COMPLEX tps = stack->tp12(thetas,lambda,vacuum,substrate)*field_power_s;
 
             // Transmission transfer matrices...
             CMatrix ti = (tsi*(CMatrix)outer(inSi,inSo))+(tpi*(CMatrix)outer(inPi,inPo));
@@ -205,6 +204,36 @@ namespace SCATMECH {
         return fabs((1+c)/2.*q1+(1-c)/2.*q2);
     }
 
+	static double LegendreP(int i,double x) {
+		if (i<0) return 0;
+		if (i==0) return 1;
+		if (i==1) return x;
+		double P1=x;
+		double P2=1;
+		for (int j=2;j<=i;++j) {
+			double P = ((2.*j-1.)*x*P1-(j-1.)*P2)/j;
+			P2=P1;
+			P1=P;
+		}
+		return P1;
+	}
+
+	double 
+	Legendre_Phase_Function::
+	f(double theta)
+	{
+		SETUP();
+		double result=0;
+		double costheta=cos(theta);
+		if (c0!=0) result += c0*LegendreP(0,costheta);
+		if (c1!=0) result += 3*c1*LegendreP(1,costheta);
+		if (c2!=0) result += 5*c2*LegendreP(2,costheta);
+		if (c3!=0) result += 7*c3*LegendreP(3,costheta);
+		if (c4!=0) result += 9*c4*LegendreP(4,costheta);
+		if (c5!=0) result += 11*c5*LegendreP(5,costheta);
+		return result;
+	}
+
 
     void Register(const First_Diffuse_BRDF_Model* x)
     {
@@ -229,6 +258,7 @@ namespace SCATMECH {
             Register_Model(Reynolds_McCormick_Phase_Function);
             Register_Model(Double_Reynolds_McCormick_Phase_Function);
             Register_Model(Isotropic_Phase_Function);
+            Register_Model(Legendre_Phase_Function);
             Register_Model(Rayleigh_Phase_Function);
             Register_Model(Table_Phase_Function);
         }
@@ -261,11 +291,14 @@ namespace SCATMECH {
     DEFINE_MODEL(Double_Reynolds_McCormick_Phase_Function,Phase_Function,
                  "A Reynolds-McCormick phase function with a opposition effect.");
 
+    DEFINE_MODEL(Legendre_Phase_Function,Phase_Function,
+                 "Phase function defined by a series of up to six Legendre polynomials (l=0 to l=5)");
+
     DEFINE_PARAMETER(First_Diffuse_BRDF_Model,double,l_scat,"Scatter mean free path [um]","1",0xFF);
 
     DEFINE_PTRPARAMETER(First_Diffuse_BRDF_Model,Phase_Function_Ptr,phase_function,"Phase Function","Henyey_Greenstein_Phase_Function",0xFF);
 
-    DEFINE_PARAMETER(First_Diffuse_BRDF_Model,dielectric_stack,stack,"Film stack on substrate","",0xFF);
+    DEFINE_PTRPARAMETER(First_Diffuse_BRDF_Model,StackModel_Ptr,stack,"Film stack on substrate","No_StackModel",0xFF);
 
     DEFINE_PARAMETER(Henyey_Greenstein_Phase_Function,double,g,"Asymmetry parameter (g)","0.01",0xFF);
 
@@ -281,6 +314,12 @@ namespace SCATMECH {
     DEFINE_PARAMETER(Double_Reynolds_McCormick_Phase_Function,double,alpha,"Peaking factor (alpha)","0.5",0xFF);
     DEFINE_PARAMETER(Double_Reynolds_McCormick_Phase_Function,double,c,"Mixing Factor (c)","0.1",0xFF);
 
+    DEFINE_PARAMETER(Legendre_Phase_Function,double,c0,"Legendre coefficient (l=0)","1",0xFF);
+    DEFINE_PARAMETER(Legendre_Phase_Function,double,c1,"Legendre coefficient (l=1)","0.65",0xFF);
+    DEFINE_PARAMETER(Legendre_Phase_Function,double,c2,"Legendre coefficient (l=2)","0.42",0xFF);
+    DEFINE_PARAMETER(Legendre_Phase_Function,double,c3,"Legendre coefficient (l=3)","0",0xFF);
+    DEFINE_PARAMETER(Legendre_Phase_Function,double,c4,"Legendre coefficient (l=4)","0",0xFF);
+    DEFINE_PARAMETER(Legendre_Phase_Function,double,c5,"Legendre coefficient (l=5)","0",0xFF);
 
 
 } // namespace SCATMECH

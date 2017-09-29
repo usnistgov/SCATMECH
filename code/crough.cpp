@@ -31,9 +31,10 @@ namespace SCATMECH {
         model.set_type(type);
         model.set_substrate(substrate);
         model.set_psd(psd);
-        dielectric_stack stack;
-        stack.grow(film,thickness);
-        model.set_stack(stack);
+        SingleFilm_StackModel stack;
+		stack.set_material(film);
+		stack.set_thickness(thickness);
+        model.set_stack(stack.clone());
     }
     //
     // Jones matrix for scattering...

@@ -23,10 +23,10 @@ namespace SCATMECH {
     namespace {
 
         // List of binary operators...
-        static const char binops[] = ",&|><=-+*/^";
+        static const char binops[] = ",&|><=+-*/^";
 
         // Precedence of each of the binary operators above...
-        static const int precs[] = {0,1,1,2,2,2,3,3,4,4,6};
+        static const int precs[] = {0,1,1,2,2,2,3,3,5,5,6};
 
         // This function returns the position of the character c in the string p...
         // (used to find precedence of operator)
@@ -110,8 +110,13 @@ namespace SCATMECH {
         char pre = input.peek();
         int sign = 1;
         if (pre == '-') {
-            input.get();
-            sign = -1;
+			if (val_stack.size()==0) {
+				val_stack.push(0.);
+				get_operator();
+			} else {
+				input.get();
+				sign = -1;
+			}
         } else if (pre == '+') {
             input.get();
         }

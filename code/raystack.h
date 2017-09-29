@@ -34,7 +34,7 @@ namespace SCATMECH {
             SCATMECH::JonesMatrix jonesDSC();
 
             DECLARE_MODEL();
-            DECLARE_PARAMETER(dielectric_stack,stack);
+            DECLARE_PARAMETER(StackModel_Ptr,stack);
             DECLARE_PARAMETER(double,depth);
             DECLARE_PARAMETER(double,radius);
             DECLARE_PARAMETER(dielectric_function,sphere);

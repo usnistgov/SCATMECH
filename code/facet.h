@@ -53,7 +53,7 @@ namespace SCATMECH {
 
             DECLARE_MODEL();
             DECLARE_PARAMETER(Slope_Distribution_Function_Ptr,sdf);
-            DECLARE_PARAMETER(dielectric_stack,stack);
+            DECLARE_PARAMETER(StackModel_Ptr,stack);
 
         protected:
             JonesMatrix jones();

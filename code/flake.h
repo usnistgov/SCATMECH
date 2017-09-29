@@ -35,7 +35,7 @@ namespace SCATMECH {
             DECLARE_PARAMETER(dielectric_function,overcoat);
 
             // Any films which exist above the overcoat...
-            DECLARE_PARAMETER(dielectric_stack,overcoat_films);
+            DECLARE_PARAMETER(StackModel_Ptr,overcoat_films);
 
         protected:
 

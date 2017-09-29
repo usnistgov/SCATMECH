@@ -18,8 +18,9 @@
 #include "matrixmath.h"
 #include "scatmech.h"
 #include "fft.h"
+#include "bobvlieg.h"
 #include <algorithm>
-
+ 
 using namespace std;
 
 namespace SCATMECH {
@@ -47,6 +48,7 @@ namespace SCATMECH {
 
     void Gridded_CrossGrating::FourierFactorize()
     {
+		using BobVlieg_Supp::mpow;
         CrossGrating::zeta = Gridded_CrossGrating::zeta;
         CrossGrating::d1 = Gridded_CrossGrating::d1;
         CrossGrating::d2 = Gridded_CrossGrating::d2;

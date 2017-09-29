@@ -29,7 +29,7 @@ namespace SCATMECH {
             DECLARE_MODEL();
             DECLARE_PARAMETER(double,depth);
             DECLARE_PARAMETER(Free_Space_Scatterer_Ptr,scatterer);
-            DECLARE_PARAMETER(dielectric_stack,stack);
+            DECLARE_PARAMETER(StackModel_Ptr,stack);
 
             // Particle can be rotated from its natural orientation...
             // Rotation of particle about z-axis...

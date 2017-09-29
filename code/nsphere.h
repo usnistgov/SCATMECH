@@ -41,7 +41,7 @@ namespace SCATMECH {
         public:
 
             DECLARE_MODEL();
-            DECLARE_PARAMETER(dielectric_stack,stack);
+            DECLARE_PARAMETER(StackModel_Ptr,stack);
 
         private:
 

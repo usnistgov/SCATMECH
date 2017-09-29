@@ -1,0 +1,231 @@
+<html>
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Cygwin (vers 1st September 2004), see www.w3.org">
+   <link rel="STYLESHEET" href="style.css" type="text/css">
+
+  <title>SCATMECH: StackModel</title>
+<script language="JavaScript" id="_fed_an_js_tag" src="/js/federated-analytics.all.min.js?agency=NIST&subagency=pml&pua=UA-37115410-46&yt=true"></script>
+</head>
+
+<body>
+  <a name="top" id="top"><!-- --></a>
+
+  <table width="98%" border="0" cellpadding="0" cellspacing="0" align="center">
+    <tr>
+      <td>
+        <p class="nav"><a href="index.htm">SCATMECH</a> &gt; <a href=
+        "classes.htm">Classes and Functions</a> &gt;
+        <a href="classes.htm#OPM">Optical Properties of Materials</a>
+        &gt; StackModel</p>
+
+	<h1>Abstract class StackModel</h1>
+        
+        <hr>
+
+        <p>The abstract class <b>StackModel</b> is used to give
+	  <a href="dielstack.htm">dielectric_stack</a> the properties of
+	  a <a href="model.htm">Model</a>. 
+        The provided <b>StackModels</b>s are:
+
+        <h2>Instantiable Models and Their Parameters:</h2>
+
+        <table border="1" cellpadding="5">
+          <tr>
+            <th>Parameter</th>
+
+            <th>Data
+            Type</th>
+
+            <th>Description</th>
+
+            <th>Default</th>
+          </tr>
+
+          <tr>
+            <td colspan="4" class="model"><b>No_StackModel</b>:<br>
+	      This model represents an interface without any films.
+	    </td>
+          </tr>
+          <tr>
+            <td colspan="4" class="model"><i>No_StackModel has no adjustable parameters.</i></td>
+          </tr>
+
+          <tr>
+            <td colspan="4" class="model"><b>Stack_StackModel</b>:<br>
+	      This model is a model that uses a <a href="dielstack.htm">dielectric_stack</a>.
+	    </td>
+          </tr>
+
+          <tr>
+            <td class="parameter">stack</td>
+
+            <td class="datatype"><a href="dielstack.htm">dielectric_stack</a></td>
+
+            <td class="description">The description of the stack.</td>
+
+            <td class="default"><i>none</i></td>
+          </tr>
+
+          <tr>
+            <td colspan="4" class="model"><b>SingleFilm_StackModel</b>:<br>          
+	      This model represents a single film.
+	  </td>
+          </tr>
+
+          <tr>
+            <td class="parameter">material</td>
+
+            <td class="datatype"><a href="dielfunc.htm">dielectric_function</a></td>
+
+            <td class="description">The optical properties (n and k) of the film.</td>
+
+            <td class="default">(1.5,0)</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">thickness</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The thickness of the film [&#181;m].</td>
+
+            <td class="default">0.1</td>
+          </tr>
+
+          <tr>
+            <td colspan="4" class="model"><b>DoubleFilm_StackModel</b>:<br>
+	      This model represents two films.
+	  </td>
+          </tr>
+
+          <tr>
+            <td class="parameter">material1</td>
+
+            <td class="datatype"><a href="dielfunc.htm">dielectric_function</a></td>
+
+            <td class="description">The optical properties (n and k) of the film closer to the substrate.</td>
+
+            <td class="default">(1.5,0)</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">thickness1</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The thickness of the film closer to the substrate [&#181;m].</td>
+
+            <td class="default">0.1</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">material2</td>
+
+            <td class="datatype"><a href="dielfunc.htm">dielectric_function</a></td>
+
+            <td class="description">The optical properties (n and k) of the film farther from the substrate.</td>
+
+            <td class="default">(1.5,0)</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">thickness2</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The thickness of the film [&#181;m] farther from the substrate.</td>
+
+            <td class="default">0.1</td>
+          </tr>
+	  
+          <tr>
+            <td colspan="4" class="model"><b>GradedFilm_StackModel</b>:<br>
+	      A film with a graded index.
+	  </td>
+          </tr>
+
+          <tr>
+            <td class="parameter">start</td>
+
+            <td class="datatype"><a href="dielfunc.htm">dielectric_function</a></td>
+
+            <td class="description">The optical properties (n and k) of the film closer to the substrate.</td>
+
+            <td class="default">(1.5,0)</td>
+          </tr>
+
+           <tr>
+            <td class="parameter">end</td>
+
+            <td class="datatype"><a href="dielfunc.htm">dielectric_function</a></td>
+
+            <td class="description">The optical properties (n and k) of the film farther from the substrate.</td>
+
+            <td class="default">(1,0)</td>
+          </tr>
+
+           <tr>
+            <td class="parameter">thickness</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The thickness of the film [&#181;m].</td>
+
+            <td class="default">0.1</td>
+          </tr>
+
+           <tr>
+            <td class="parameter">steps</td>
+
+            <td class="datatype">int</td>
+
+            <td class="description">The number of steps with which to approximate the film.</td>
+
+            <td class="default">5</td>
+          </tr>
+	   
+        </table>
+
+        <h2>See also:</h2>
+
+        <p><a href="index.htm">SCATMECH Home</a>, &nbsp;
+        <a href="dielstack.htm">dielectric_stack</a>
+        &nbsp;</p>
+
+	<h2>Include file:</h2>
+
+        <pre>
+#include "<a href="../code/filmtran.h">filmtrans.h</a>"
+</pre>
+        <h2>Source code:</h2>
+
+          <pre>
+<a href="../code/filmtran.cpp">filmtran.cpp</a>
+</pre>
+
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+<!-- START FOOTER -->
+<hr>
+<h2>For More Information</h2>
+
+<p>
+<a href="http://www.nist.gov/pml/div685/grp06/germer.cfm">SCATMECH Technical Information and Questions</a><br>
+<a href="http://www.nist.gov/pml/div685/index.cfm" target="_top">Sensor Science Division Home Page</a><br>
+<a href="mailto:fraser@nist.gov">Sensor Science Division Inquiries</a><br>
+<a href="mailto:thomas.germer@nist.gov">Website Comments</a>
+
+<p>
+Current SCATMECH version: <a href="./download.htm">7.00 (January 2015)</a><br>
+This page first online: Version 4.00 (July 2003) <br>
+This page last modified: Version 7.00 (January 2015) <br>
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+</td>
+</tr>
+</table>
+
+</body>
+</html>

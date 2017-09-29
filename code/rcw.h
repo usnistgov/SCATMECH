@@ -127,7 +127,7 @@ namespace SCATMECH {
 
             std::vector<double> kxi,Kx;
             std::vector<COMPLEX> kIzi,kIIzi,YI,YII,ZI,ZII;
-            double ky;
+            double ky; 
     };
 
     class RCW_BRDF_Model: public BRDF_Model {

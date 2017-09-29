@@ -58,10 +58,10 @@ namespace SCATMECH {
             double n_minus_1 = air.n(lambda)-1.;
 
             // Reflection coefficients ...
-            complex<double> rss = stack.rs12(thetas,lambda,vacuum,substrate);
-            complex<double> rsi = stack.rs12(thetai,lambda,vacuum,substrate);
-            complex<double> rps = stack.rp12(thetas,lambda,vacuum,substrate);
-            complex<double> rpi = stack.rp12(thetai,lambda,vacuum,substrate);
+            complex<double> rss = stack->rs12(thetas,lambda,vacuum,substrate);
+            complex<double> rsi = stack->rs12(thetai,lambda,vacuum,substrate);
+            complex<double> rps = stack->rp12(thetas,lambda,vacuum,substrate);
+            complex<double> rpi = stack->rp12(thetai,lambda,vacuum,substrate);
 
             // Angle subtended by viewing and scattering directions...
             double subtendi = subtend(-thetai,0.,thetas,phis);
@@ -114,7 +114,7 @@ namespace SCATMECH {
     DEFINE_MODEL(Rayleigh_Instrument_BRDF_Model,Instrument_BRDF_Model,
                  "Effective BRDF due to Rayleigh scatter by the air surrounding a smooth sample.");
 
-    DEFINE_PARAMETER(Rayleigh_Instrument_BRDF_Model,dielectric_stack,stack,"Film stack on substrate","",0xFF);
+    DEFINE_PTRPARAMETER(Rayleigh_Instrument_BRDF_Model,StackModel_Ptr,stack,"Film stack on substrate","No_StackModel",0xFF);
 
     DEFINE_PARAMETER(Rayleigh_Instrument_BRDF_Model,double,field_of_view,"Field of view of detector [um]","1000",0xFF);
 

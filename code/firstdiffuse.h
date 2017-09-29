@@ -40,7 +40,7 @@ namespace SCATMECH {
             DECLARE_MODEL();
             DECLARE_PARAMETER(double,l_scat);
             DECLARE_PARAMETER(Phase_Function_Ptr,phase_function);
-            DECLARE_PARAMETER(dielectric_stack,stack);
+            DECLARE_PARAMETER(StackModel_Ptr,stack);
 
         protected:
             virtual void setup();
@@ -117,6 +117,20 @@ namespace SCATMECH {
         private:
             double K;
     };
+
+    class Legendre_Phase_Function: public Phase_Function
+    {
+        public:
+            virtual double f(double theta);
+            DECLARE_MODEL();
+            DECLARE_PARAMETER(double,c0);
+            DECLARE_PARAMETER(double,c1);
+            DECLARE_PARAMETER(double,c2);
+            DECLARE_PARAMETER(double,c3);
+            DECLARE_PARAMETER(double,c4);
+            DECLARE_PARAMETER(double,c5);
+    };
+
 
     void Register(const First_Diffuse_BRDF_Model*);
     void Register(const Phase_Function* x);

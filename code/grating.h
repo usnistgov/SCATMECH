@@ -269,12 +269,12 @@ namespace SCATMECH {
 
         private:
             DECLARE_MODEL();
-            DECLARE_PARAMETER(dielectric_stack,stackepsx);
-            DECLARE_PARAMETER(dielectric_stack,stackepsy);
-            DECLARE_PARAMETER(dielectric_stack,stackepsz);
-            DECLARE_PARAMETER(dielectric_stack,stackmux);
-            DECLARE_PARAMETER(dielectric_stack,stackmuy);
-            DECLARE_PARAMETER(dielectric_stack,stackmuz);
+            DECLARE_PARAMETER(StackModel_Ptr,stackepsx);
+            DECLARE_PARAMETER(StackModel_Ptr,stackepsy);
+            DECLARE_PARAMETER(StackModel_Ptr,stackepsz);
+            DECLARE_PARAMETER(StackModel_Ptr,stackmux);
+            DECLARE_PARAMETER(StackModel_Ptr,stackmuy);
+            DECLARE_PARAMETER(StackModel_Ptr,stackmuz);
     };
 
     class Single_Line_Grating : public Grating {

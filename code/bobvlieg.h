@@ -44,10 +44,10 @@ namespace SCATMECH {
             // Radius of particle...
             DECLARE_PARAMETER(double,radius);
             // Coatings on sphere...
-            DECLARE_PARAMETER(dielectric_stack,spherecoat);
+            DECLARE_PARAMETER(StackModel_Ptr,spherecoat);
 
             // Substrate coatings...
-            DECLARE_PARAMETER(dielectric_stack,stack);
+            DECLARE_PARAMETER(StackModel_Ptr,stack);
             // Distance between particle and substrate...
             DECLARE_PARAMETER(double,delta);
             // Scattering order (-1 means exact)...
@@ -143,7 +143,7 @@ namespace SCATMECH {
                                           std::vector<COMPLEX>& b,std::vector<COMPLEX>& x);
     };
 
-    class Gauss_Laguerre_Integration {
+    class Gauss_Laguerre_Integration { 
         public:
             static double* weights[];
             static double* zeros[];

@@ -58,7 +58,7 @@ namespace SCATMECH {
 
         const int M11=1,M12=2,M21=3,M22=0;
 
-        int L=stack.get_n();
+        int L=stack->get_n();
         int m = is_forward() ? this_layer : L-this_layer;
         int n;
 
@@ -88,12 +88,12 @@ namespace SCATMECH {
         if (is_forward()) {
             eps[0]=(COMPLEX)(substrate.epsilon(lambda));
             for (n=1; n<L+1; ++n) {
-                eps[n]=(COMPLEX)(stack.get_e()[n-1].epsilon(lambda));
+                eps[n]=(COMPLEX)(stack->get_e()[n-1].epsilon(lambda));
             }
             eps[L+1]=1;
 
             d[0]=0;
-            for (n=1; n<L+1; ++n) d[n]=d[n-1]+2*pi*stack.get_t()[n-1]/lambda;
+            for (n=1; n<L+1; ++n) d[n]=d[n-1]+2*pi*stack->get_t()[n-1]/lambda;
         } else { // is_backward()
             _lambda = lambda/substrate.n(lambda);
             scatter_medium = is_reflection() ? 1. : 1/substrate.n(lambda);
@@ -101,12 +101,12 @@ namespace SCATMECH {
 
             eps[0]=1./(COMPLEX)(substrate.epsilon(lambda));
             for (n=1; n<L+1; ++n) {
-                eps[n]=(COMPLEX)(stack.get_e()[L-n].epsilon(lambda))/(COMPLEX)(substrate.epsilon(lambda));
+                eps[n]=(COMPLEX)(stack->get_e()[L-n].epsilon(lambda))/(COMPLEX)(substrate.epsilon(lambda));
             }
             eps[L+1]=1.;
 
             d[0]=0;
-            for (n=1; n<L+1; ++n) d[n]=d[n-1]+2*pi*stack.get_t()[L-n]/_lambda;
+            for (n=1; n<L+1; ++n) d[n]=d[n-1]+2*pi*stack->get_t()[L-n]/_lambda;
         }
 
         //
@@ -261,7 +261,7 @@ namespace SCATMECH {
     DEFINE_MODEL(Roughness_Stack_BRDF_Model,Roughness_BRDF_Model,
                  "Scattering by a single rough interface in a stack of films.");
 
-    DEFINE_PARAMETER(Roughness_Stack_BRDF_Model,dielectric_stack,stack,"Film stack on substrate","",0xFF);
+    DEFINE_PTRPARAMETER(Roughness_Stack_BRDF_Model,StackModel_Ptr,stack,"Film stack on substrate","No_StackModel",0xFF);
 
     DEFINE_PARAMETER(Roughness_Stack_BRDF_Model,int,this_layer,"Rough interface","0",0xFF);
 

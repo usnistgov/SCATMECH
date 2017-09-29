@@ -432,7 +432,7 @@ namespace SCATMECH {
                     muy[i+nmat]=conj(grating->fouriermuy(i,layer,0));
                     muz[i+nmat]=conj(grating->fouriermuz(i,layer,0));
                 } else {
-                    muinvx[i+nmat]= (i==0 ? 1.: 0);
+                    muinvx[i+nmat]= (i==0 ? 1.: 0); 
                     muy[i+nmat]= (i==0 ? 1.: 0);
                     muz[i+nmat]= (i==0 ? 1.: 0);
                 }

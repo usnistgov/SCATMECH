@@ -41,7 +41,7 @@ namespace SCATMECH {
             {
                 double thetas_internal = asin(sin(thetas)/substrate.n(lambda));
 
-                MuellerMatrix T = films.t12(thetas,lambda,vacuum,substrate);
+                MuellerMatrix T = films->t12(thetas,lambda,vacuum,substrate);
                 double transmittancefactorout = substrate.n(lambda)*cos(thetas_internal)/cos(thetas);
                 double jacobian = cos(thetas)/cos(thetas_internal)/sqr(substrate.n(lambda));
                 double ratiocosines = cos(thetas_internal)/cos(thetas);
@@ -55,8 +55,8 @@ namespace SCATMECH {
             {
                 double thetas_internal = asin(sin(thetas)/substrate.n(lambda));
                 double thetai_internal = asin(sin(thetai)/substrate.n(lambda));
-                MuellerMatrix Ti = films.t12(thetai,lambda,vacuum,substrate);
-                MuellerMatrix Ts = films.t12(thetas,lambda,vacuum,substrate);
+                MuellerMatrix Ti = films->t12(thetai,lambda,vacuum,substrate);
+                MuellerMatrix Ts = films->t12(thetas,lambda,vacuum,substrate);
                 double transmittancefactorin = cos(thetai_internal)/cos(thetai)*substrate.n(lambda);
                 double transmittancefactorout = cos(thetas_internal)/cos(thetas)*substrate.n(lambda);
                 double jacobian = cos(thetas)/cos(thetas_internal)/sqr(substrate.n(lambda));
@@ -70,7 +70,7 @@ namespace SCATMECH {
             case 3:
             {
                 double thetai_internal = asin(sin(thetai)/substrate.n(lambda));
-                MuellerMatrix Ti = films.t12(thetai,lambda,vacuum,substrate);
+                MuellerMatrix Ti = films->t12(thetai,lambda,vacuum,substrate);
                 double transmittancefactorin = cos(thetai_internal)/cos(thetai)*substrate.n(lambda);
                 double factor = transmittancefactorin;
 
@@ -89,6 +89,6 @@ namespace SCATMECH {
                  "Model which evaluates another BRDF_Model in transmission, outside of a material.");
 
     DEFINE_PTRPARAMETER(Transmit_BRDF_Model,BRDF_Model_Ptr,model,"The model","Microroughness_BRDF_Model",0xFF);
-    DEFINE_PARAMETER(Transmit_BRDF_Model,dielectric_stack,films,"Films on the bottom side","",0xFF);
+    DEFINE_PTRPARAMETER(Transmit_BRDF_Model,StackModel_Ptr,films,"Films on the bottom side","No_StackModel",0xFF);
 
 } // namespace SCATMECH

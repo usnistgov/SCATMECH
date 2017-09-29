@@ -849,7 +849,7 @@ namespace SCATMECH {
                 TYPE &_parameter = ((MODEL*)model)->*parameter;
                 SCATMECH_output << description;
                 _parameter = Get_Model_Ptr();
-                _parameter->AskUser();
+				_parameter->Model::AskUser();
                 model->set_recalc(recalclevel);
             }
 

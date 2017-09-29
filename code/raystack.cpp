@@ -68,9 +68,9 @@ JonesMatrix Rayleigh_Stack_BRDF_Model::jonesDSC()
         // in mind if one is interested in coherent scattering between two
         // defects...
         complex<double> total_phase(0,0);
-        for (int i=0; i<stack.get_n(); ++i) {
-            complex<double> ee=stack.get_e()[i].epsilon(lambda_eff);
-            double tt = k*stack.get_t()[i];
+        for (int i=0; i<stack->get_n(); ++i) {
+            complex<double> ee=stack->get_e()[i].epsilon(lambda_eff);
+            double tt = k*stack->get_t()[i];
             ee = 1.;
             total_phase += sqrt(ee-sqr(sin(thetai)))*tt;
             total_phase += sqrt(ee-sqr(sin(thetas)))*tt;
@@ -189,9 +189,9 @@ JonesMatrix Rayleigh_Stack_BRDF_Model::jonesDSC()
         // The total phase is not mentioned in the text, but must be kept in mind if one
         // is interested in coherent scattering between two defects...
         complex<double> total_phase(0,0);
-        for (int i=0; i<stack.get_n(); ++i) {
-            complex<double> ee=stack.get_e()[i].epsilon(lambda_eff);
-            double tt = k*stack.get_t()[i];
+        for (int i=0; i<stack->get_n(); ++i) {
+            complex<double> ee=stack->get_e()[i].epsilon(lambda_eff);
+            double tt = k*stack->get_t()[i];
             total_phase += sqrt(ee-sqr(sin(thetai)))*tt;
             total_phase -= sqrt(ee-sqr(sinthetasext))*tt;
         }
@@ -294,14 +294,14 @@ void Rayleigh_Stack_BRDF_Model::setup()
 
     int layer_number;
 
-    double stackthickness = stack.get_total_thickness();
+    double stackthickness = stack->get_total_thickness();
 
     if (depth>=0 && depth<stackthickness) {
         layer_number=0;
 
         double _depth = depth;
-        for (int ii=stack.get_n()-1; ii>=0; --ii) {
-            double t = stack.get_t()[ii];
+        for (int ii=stack->get_n()-1; ii>=0; --ii) {
+            double t = stack->get_t()[ii];
             if (_depth<=t&&_depth>=0) {
                 layer_number = ii;
                 if (is_forward()) {
@@ -316,37 +316,37 @@ void Rayleigh_Stack_BRDF_Model::setup()
         // Grow films below the defect...
         if (is_forward()) {
             for (int ii=0; ii<layer_number; ++ii) {
-                below.grow(stack.get_e()[ii].index(lambda),stack.get_t()[ii]);
+                below.grow(stack->get_e()[ii].index(lambda),stack->get_t()[ii]);
             }
         } else {
             for (int ii=layer_number-1; ii>=0; --ii) {
-                above.grow(optical_constant(COMPLEX(stack.get_e()[ii].index(lambda))/bscale),stack.get_t()[ii]);
+                above.grow(optical_constant(COMPLEX(stack->get_e()[ii].index(lambda))/bscale),stack->get_t()[ii]);
             }
         }
 
         // Get defect's layer information...
         int i=layer_number;
         if (is_forward()) {
-            material2 = stack.get_e()[i].index(lambda);
+            material2 = stack->get_e()[i].index(lambda);
         } else {
-            material2 = optical_constant(COMPLEX(stack.get_e()[i].index(lambda))/bscale);
+            material2 = optical_constant(COMPLEX(stack->get_e()[i].index(lambda))/bscale);
         }
-        tau = stack.get_t()[i];
+        tau = stack->get_t()[i];
 
         // Grow films above the defect...
         if (is_forward()) {
-            for (int i=layer_number+1; i<stack.get_n(); ++i) {
-                above.grow(stack.get_e()[i].index(lambda),stack.get_t()[i]);
+            for (int i=layer_number+1; i<stack->get_n(); ++i) {
+                above.grow(stack->get_e()[i].index(lambda),stack->get_t()[i]);
             }
         } else {
-            for (int i=stack.get_n()-1; i>=layer_number+1; --i) {
-                below.grow(optical_constant(COMPLEX(stack.get_e()[i].index(lambda))/bscale),stack.get_t()[i]);
+            for (int i=stack->get_n()-1; i>=layer_number+1; --i) {
+                below.grow(optical_constant(COMPLEX(stack->get_e()[i].index(lambda))/bscale),stack->get_t()[i]);
             }
         }
     } else if (depth<0 && is_forward()) {
         // Grow films below the defect...
-        for (int ii=0; ii<stack.get_n(); ++ii) {
-            below.grow(stack.get_e()[ii].index(lambda),stack.get_t()[ii]);
+        for (int ii=0; ii<stack->get_n(); ++ii) {
+            below.grow(stack->get_e()[ii].index(lambda),stack->get_t()[ii]);
         }
 
         // Get defect's layer information...
@@ -359,8 +359,8 @@ void Rayleigh_Stack_BRDF_Model::setup()
         material2 = optical_constant(1./bscale);
         tau = -depth;
         d = 0;
-        for (int ii=stack.get_n()-1; ii>=0; --ii) {
-            above.grow(optical_constant(COMPLEX(stack.get_e()[ii].index(lambda))/bscale),stack.get_t()[ii]);
+        for (int ii=stack->get_n()-1; ii>=0; --ii) {
+            above.grow(optical_constant(COMPLEX(stack->get_e()[ii].index(lambda))/bscale),stack->get_t()[ii]);
         }
 
     } else if (depth>stackthickness && is_forward()) {
@@ -370,8 +370,8 @@ void Rayleigh_Stack_BRDF_Model::setup()
         d = 0;
 
         // Grow films above the defect...
-        for (int i=0; i<stack.get_n(); ++i) {
-            above.grow(stack.get_e()[i].index(lambda),stack.get_t()[i]);
+        for (int i=0; i<stack->get_n(); ++i) {
+            above.grow(stack->get_e()[i].index(lambda),stack->get_t()[i]);
         }
 
     } else {
@@ -381,8 +381,8 @@ void Rayleigh_Stack_BRDF_Model::setup()
         d = tau;
 
         // Grow films above the defect...
-        for (int i=stack.get_n()-1; i>=0; --i) {
-            below.grow(optical_constant(COMPLEX(stack.get_e()[i].index(lambda))/bscale),stack.get_t()[i]);
+        for (int i=stack->get_n()-1; i>=0; --i) {
+            below.grow(optical_constant(COMPLEX(stack->get_e()[i].index(lambda))/bscale),stack->get_t()[i]);
         }
     }
 
@@ -400,7 +400,7 @@ void Rayleigh_Stack_BRDF_Model::setup()
 }
 
 DEFINE_MODEL(Rayleigh_Stack_BRDF_Model,Local_BRDF_Model,"A Rayleigh defect in a stack of layers");
-DEFINE_PARAMETER(Rayleigh_Stack_BRDF_Model,dielectric_stack,stack,"Dielectric stack","",0xFF);
+DEFINE_PTRPARAMETER(Rayleigh_Stack_BRDF_Model,StackModel_Ptr,stack,"Dielectric stack","No_StackModel",0xFF);
 DEFINE_PARAMETER(Rayleigh_Stack_BRDF_Model,double,depth,"Depth into stack [um]","0",0xFF);
 DEFINE_PARAMETER(Rayleigh_Stack_BRDF_Model,double,radius,"Sphere radius [um]","0.01",0xFF);
 DEFINE_PARAMETER(Rayleigh_Stack_BRDF_Model,dielectric_function,sphere,"Sphere optical properties","(1,0)",0xFF);

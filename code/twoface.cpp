@@ -30,9 +30,10 @@ namespace SCATMECH {
         model.set_type(type);
         model.set_substrate(substrate);
         model.set_psd(psd);
-        dielectric_stack stack;
-        stack.grow(film,thickness);
-        model.set_stack(stack);
+		SingleFilm_StackModel stack0;
+		stack0.set_material(film);
+		stack0.set_thickness(thickness);
+        model.set_stack(stack0.clone());
         model.set_this_layer(face-1);
     }
 

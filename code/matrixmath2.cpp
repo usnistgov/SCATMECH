@@ -190,8 +190,9 @@ namespace SCATMECH {
             //C
             //C     SET THE MAXIMUM NUMBER OF ITERATIONS.
             //C
+	    int MAXIT = 30;
+	    
             //C***FIRST EXECUTABLE STATEMENT  CSVDC
-            int MAXIT = 30;
             //C
             //C     DETERMINE WHAT IS TO BE COMPUTED.
             //C
@@ -391,7 +392,6 @@ Line390:
             //C
             MM = M;
             ITER = 0;
-            MAXIT = M;  // THOM KLUDGE!
             //C
             //C        QUIT IF ALL THE SINGULAR VALUES HAVE BEEN FOUND.
             //C

@@ -115,6 +115,9 @@ namespace SCATMECH {
             void set_n(const Table& n);
             void set_k(const Table& k);
 
+			const Table& get_n() {return n1;}
+			const Table& get_k() {return n2;}
+
         private:
             Table n1;
             Table n2;

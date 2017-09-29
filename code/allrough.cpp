@@ -38,7 +38,8 @@ namespace SCATMECH {
         SETUP();
 
         JonesMatrix J=JonesZero();
-        for (int layer=0; layer<=stack.get_n(); ++layer) {
+
+        for (int layer=0; layer<=stack->get_n(); ++layer) {
             model.set_this_layer(layer);
             J = J + model.Jones(thetai,thetas,phis,rotation);
         }
@@ -65,7 +66,7 @@ namespace SCATMECH {
         SETUP();
 
         MuellerMatrix M=MuellerZero();
-        for (int layer=0; layer<=stack.get_n(); ++layer) {
+        for (int layer=0; layer<=stack->get_n(); ++layer) {
             model.set_this_layer(layer);
             M = M + model.Mueller(thetai,thetas,phis,rotation);
         }
@@ -104,7 +105,7 @@ namespace SCATMECH {
     {
         SETUP();
 
-        int N = stack.get_n();
+        int N = stack->get_n();
         double fx,fy;
         Bragg_Frequency(fx,fy);
         double qpow = pow(4*sqr(pi)*(sqr(fx)+sqr(fy)),exponent/2.);
@@ -118,7 +119,7 @@ namespace SCATMECH {
         vector<double> a(N);
         vector<double> PSDint(N);
         for (int i=0; i<N; ++i) {
-            double argument = fourpisqr*nu*qpow*stack.get_t()[i];
+            double argument = fourpisqr*nu*qpow*stack->get_t()[i];
             // The replication factor between the layers...
             a[i] = exp(-argument);
             // The intrinsic roughness of the layer...
@@ -164,16 +165,16 @@ namespace SCATMECH {
 
     DEFINE_MODEL(Correlated_Roughness_Stack_BRDF_Model,Roughness_BRDF_Model,
                  "All films in a stack equally rough and correlated");
-    DEFINE_PARAMETER(Correlated_Roughness_Stack_BRDF_Model,dielectric_stack,stack,"Film stack on substrate","",0xFF);
+	DEFINE_PTRPARAMETER(Correlated_Roughness_Stack_BRDF_Model,StackModel_Ptr,stack,"Film stack on substrate","No_StackModel",0xFF);
 
 
     DEFINE_MODEL(Uncorrelated_Roughness_Stack_BRDF_Model,Roughness_BRDF_Model,
                  "All films in a stack equally rough but uncorrelated");
-    DEFINE_PARAMETER(Uncorrelated_Roughness_Stack_BRDF_Model,dielectric_stack,stack,"Film stack on substrate","",0xFF);
+    DEFINE_PTRPARAMETER(Uncorrelated_Roughness_Stack_BRDF_Model,StackModel_Ptr,stack,"Film stack on substrate","No_StackModel",0xFF);
 
     DEFINE_MODEL(Growth_Roughness_Stack_BRDF_Model,Roughness_BRDF_Model,
                  "All films in a stack having intrinsic roughness, but also correlation with roughness from the stack below.");
-    DEFINE_PARAMETER(Growth_Roughness_Stack_BRDF_Model,dielectric_stack,stack,"Film stack on substrate","",0xFF);
+    DEFINE_PTRPARAMETER(Growth_Roughness_Stack_BRDF_Model,StackModel_Ptr,stack,"Film stack on substrate","No_StackModel",0xFF);
     DEFINE_PARAMETER(Growth_Roughness_Stack_BRDF_Model,double,relaxation,"Correlation relaxation parameter [um]","0",0xFF);
     DEFINE_PARAMETER(Growth_Roughness_Stack_BRDF_Model,double,exponent,"Correlation spatial frequency exponent parameter","2",0xFF);
     DEFINE_PTRPARAMETER(Growth_Roughness_Stack_BRDF_Model,PSD_Function_Ptr,intrinsic,"Intrinsic PSD of the film interfaces","ABC_PSD_Function",0xFF);

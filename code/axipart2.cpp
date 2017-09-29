@@ -62,7 +62,7 @@ namespace SCATMECH {
         COMPLEX result;
         COMPLEX cost = cos(thetai);
         COMPLEX phase = exp(2.*cI*qq*cost);
-        COMPLEX rp = stack.rp12(thetai,lambda,vacuum,substrate);
+        COMPLEX rp = stack->rp12(thetai,lambda,vacuum,substrate);
         COMPLEX costheta2=cos(thetai/2.);
         COMPLEX sintheta2=sin(thetai/2.);
 
@@ -96,7 +96,7 @@ namespace SCATMECH {
         COMPLEX sintheta2=sqrt(1.-cost)/sqrt(2.);
         if (real(sintheta2)<0) sintheta2 = -sintheta2;
         COMPLEX costheta2=sint/2./sintheta2;
-        COMPLEX _tp = stack.tp12(_thetai,lambda,vacuum,substrate);
+        COMPLEX _tp = stack->tp12(_thetai,lambda,vacuum,substrate);
         COMPLEX phase = exp(cI*qq*(cost-substrate.n(lambda)*cos(thetai)));
 
         COMPLEX result;
@@ -151,7 +151,7 @@ namespace SCATMECH {
         COMPLEX result;
         COMPLEX cost = cos(thetai);
         COMPLEX phase = exp(2.*cI*qq*cost);
-        COMPLEX rs = stack.rs12(thetai,lambda,vacuum,substrate);
+        COMPLEX rs = stack->rs12(thetai,lambda,vacuum,substrate);
         COMPLEX costheta2=cos(thetai/2.);
         COMPLEX sintheta2=sin(thetai/2.);
 
@@ -185,7 +185,7 @@ namespace SCATMECH {
         COMPLEX sintheta2=sqrt(1.-cost)/sqrt(2.);
         if (real(sintheta2)<0) sintheta2 = -sintheta2;
         COMPLEX costheta2=sint/2./sintheta2;
-        COMPLEX _ts = stack.ts12(_thetai,lambda,vacuum,substrate);
+        COMPLEX _ts = stack->ts12(_thetai,lambda,vacuum,substrate);
         COMPLEX phase = exp(cI*qq*(cost-substrate.n(lambda)*cos(thetai)));
 
         COMPLEX result;
@@ -342,8 +342,8 @@ namespace SCATMECH {
             double sint = real(sqrt(1.-sqr(cost)));
 
             COMPLEX _cost=cos(pi-thetas);
-            COMPLEX rp = stack.rp12(pi-thetas,lambda,vacuum,substrate);
-            COMPLEX rs = stack.rs12(pi-thetas,lambda,vacuum,substrate);
+            COMPLEX rp = stack->rp12(pi-thetas,lambda,vacuum,substrate);
+            COMPLEX rs = stack->rs12(pi-thetas,lambda,vacuum,substrate);
             COMPLEX phase = exp(2.*cI*qq*_cost);
             COMPLEX rpphase = rp*phase;
             COMPLEX rsphase = rs*phase;
@@ -387,8 +387,8 @@ namespace SCATMECH {
             if (imag(_thetas)>0) _thetas = conj(_thetas);
             COMPLEX cost= sqrt(1.-sqr(sint));
             if (imag(cost)<0) cost = -cost;
-            COMPLEX tp = stack.tp12(_thetas,lambda,vacuum,substrate);
-            COMPLEX ts = stack.ts12(_thetas,lambda,vacuum,substrate);
+            COMPLEX tp = stack->tp12(_thetas,lambda,vacuum,substrate);
+            COMPLEX ts = stack->ts12(_thetas,lambda,vacuum,substrate);
             COMPLEX phase = exp(cI*qq*(cost-substrate.n(lambda)*cos(pi-thetas)));
             // The following factor accounts for the transmittance across the interface and
             // the Jacobian as the solid angle across the interface changes...

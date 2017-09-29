@@ -40,7 +40,7 @@ namespace SCATMECH {
             DECLARE_PARAMETER(int,this_layer);
 
             // The films
-            DECLARE_PARAMETER(dielectric_stack,stack);
+            DECLARE_PARAMETER(StackModel_Ptr,stack);
 
         protected:
 

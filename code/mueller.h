@@ -637,7 +637,7 @@ namespace SCATMECH {
             ///
             /// Returns the closest Mueller matrix that is non-depolarizing
             ///
-            MuellerMatrix Closest_NonDepolarizing() const;
+            MuellerMatrix Closest_NonDepolarizing(int rank=1) const;
 
             ///
             /// The Mueller matrix normalized, M/M[0][0]
@@ -1093,6 +1093,10 @@ namespace SCATMECH {
         double attenuation=1.,  ///< An overal scaling factor
         double depolarization=1. ///< The amount of depolarization, 0<=depolarization<=1
     );
+	// 
+	// Returns a diagonal Mueller matrix
+	//
+	MuellerMatrix MuellerDiagonal(double m00,double m11, double m22, double m33);
     ///
     /// Returns a partiall linear polarizer
     ///

@@ -43,7 +43,7 @@ namespace SCATMECH {
             DECLARE_PARAMETER(double,number_density);
 
             // Any dielectric films on the substrate...
-            DECLARE_PARAMETER(dielectric_stack,stack);
+            DECLARE_PARAMETER(StackModel_Ptr,stack);
 
         protected:
             // The Mueller matrix BRDF for scattering...

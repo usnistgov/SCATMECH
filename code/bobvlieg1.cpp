@@ -71,13 +71,13 @@ namespace SCATMECH {
             // of C.F. Bohren and D.R.Huffman, "Absorption and Scattering of Light by Small Particles," (Wiley, New York, 1983).
 
             int n = l;
-            int rr = spherecoat.get_n()+1; // rr is the r in S&Q
+            int rr = spherecoat->get_n()+1; // rr is the r in S&Q
             if (f==efield) {
                 COMPLEX T = 0.;
                 double Rs = r0;
                 COMPLEX ns = N2;
                 for (int s=1; s<=rr-1; ++s) {
-                    COMPLEX nsp1 = spherecoat.get_e()[s-1].index(lambda);
+                    COMPLEX nsp1 = spherecoat->get_e()[s-1].index(lambda);
                     COMPLEX ms = nsp1/ns;
                     COMPLEX ys = 2*pi*ns/lambda*Rs;
                     // Eq. (8a) of S&Q...
@@ -85,9 +85,9 @@ namespace SCATMECH {
                         (ms*chi(n,ms*ys)*(psi_(n,ys)+T*chi_(n,ys))-chi_(n,ms*ys)*(psi(n,ys)+T*chi(n,ys)));
 
                     ns = nsp1;
-                    Rs += spherecoat.get_t()[s-1];
+                    Rs += spherecoat->get_t()[s-1];
                 }
-                COMPLEX nr = spherecoat.get_e()[rr-2].index(lambda);
+                COMPLEX nr = spherecoat->get_e()[rr-2].index(lambda);
                 COMPLEX mr = 1./nr;
                 COMPLEX yr = 2*pi*nr/lambda*Rs;
                 // Eq. (9a) of S&Q...
@@ -99,16 +99,16 @@ namespace SCATMECH {
                 double Rs = r0;
                 COMPLEX ns = N2;
                 for (int s=1; s<=rr-1; ++s) {
-                    COMPLEX nsp1 = spherecoat.get_e()[s-1].index(lambda);
+                    COMPLEX nsp1 = spherecoat->get_e()[s-1].index(lambda);
                     COMPLEX ms = nsp1/ns;
                     COMPLEX ys = 2*pi*ns/lambda*Rs;
                     // Eq. (8b) of S&Q...
                     S = -(psi(n,ms*ys)*(psi_(n,ys)+S*chi_(n,ys))-ms*psi_(n,ms*ys)*(psi(n,ys)+S*chi(n,ys)))/
                         (chi(n,ms*ys)*(psi_(n,ys)+S*chi_(n,ys))-ms*chi_(n,ms*ys)*(psi(n,ys)+S*chi(n,ys)));
                     ns = nsp1;
-                    Rs += spherecoat.get_t()[s-1];
+                    Rs += spherecoat->get_t()[s-1];
                 }
-                COMPLEX nr = spherecoat.get_e()[rr-2].index(lambda);
+                COMPLEX nr = spherecoat->get_e()[rr-2].index(lambda);
                 COMPLEX mr = 1./nr;
                 COMPLEX yr = 2*pi*nr/lambda*Rs;
 
@@ -161,8 +161,8 @@ namespace SCATMECH {
         }
 
         // Normal incidence reflection coefficients...
-        COMPLEX rsnormal = stack.rs12(0.,lambda,vacuum,substrate);
-        COMPLEX rpnormal = stack.rp12(0.,lambda,vacuum,substrate);
+        COMPLEX rsnormal = stack->rs12(0.,lambda,vacuum,substrate);
+        COMPLEX rpnormal = stack->rp12(0.,lambda,vacuum,substrate);
 
         vector<COMPLEX> reflect_s(npts);
         vector<COMPLEX> reflect_p(npts);
@@ -186,8 +186,8 @@ namespace SCATMECH {
                 reflect_s[j] = rsnormal;
                 reflect_p[j] = rpnormal;
             } else {               // Exact solution
-                reflect_s[j] = stack.rs12(alpha,lambda,vacuum,substrate);
-                reflect_p[j] = stack.rp12(alpha,lambda,vacuum,substrate);
+                reflect_s[j] = stack->rs12(alpha,lambda,vacuum,substrate);
+                reflect_p[j] = stack->rp12(alpha,lambda,vacuum,substrate);
             }
 
             // Calculate U, V, d+, and d- for each angle and (l,m) combination...
@@ -479,9 +479,9 @@ Line10:
 
         r0 = radius;
         d = 0.;
-        for (int i=0; i<spherecoat.get_n(); ++i) {
-            r0 -= spherecoat.get_t()[i];
-            d += spherecoat.get_t()[i];
+        for (int i=0; i<spherecoat->get_n(); ++i) {
+            r0 -= spherecoat->get_t()[i];
+            d += spherecoat->get_t()[i];
         }
         if (r0<=0) throw SCATMECH_exception("Radius of particle, r, less than or equal to total thickness of coatings.");
 
@@ -853,7 +853,7 @@ Line10:
             {
                 set_geometry(theta,theta,0.);
                 COMPLEX e = E(W,Z);
-                COMPLEX r = stack.r12(theta,lambda,vacuum,substrate)[pol];
+                COMPLEX r = stack->r12(theta,lambda,vacuum,substrate)[pol];
                 r *= exp(2.*cI*qq*cos(theta));
                 double R = norm(r);
                 return 4.*pi/k*COMPLEX(0.,-1.)*(e/r)*R;
@@ -870,7 +870,7 @@ Line10:
                 COMPLEX phase =  exp(cI*qq*(cos(theta)-index*cos(thetat)));
                 double factor = cos(thetat)/cos(theta);
                 e /= phase;
-                COMPLEX t = stack.t12(theta,lambda,vacuum,substrate)[pol];
+                COMPLEX t = stack->t12(theta,lambda,vacuum,substrate)[pol];
                 double T = norm(t)*factor*index;
                 return 4.*pi/k/sqrt(cube(index))/factor*COMPLEX(0.,-1.)*(e/t)*T;
             }
@@ -885,7 +885,7 @@ Line10:
                 COMPLEX cost = sqrt(1.-sqr(sint));
                 if (imag(cost)<0) cost = -cost;
 
-                COMPLEX r = stack.r21i(theta,lambda,substrate,vacuum)[pol];
+                COMPLEX r = stack->r21i(theta,lambda,substrate,vacuum)[pol];
                 double R = norm(r);
 
                 r *= exp(-2.*cI*qq*index*cos(theta));
@@ -909,7 +909,7 @@ Line10:
                 COMPLEX phase = exp(cI*qq*(cost-index*cos(theta)));
 
                 e /= phase;
-                COMPLEX t = stack.t21i(theta,lambda,substrate,vacuum)[pol];
+                COMPLEX t = stack->t21i(theta,lambda,substrate,vacuum)[pol];
                 double T = norm(t)/index/factor;
                 return 4.*pi/k*sqrt(index)*factor*COMPLEX(0.,-1.)*(e/t)*T;
             }
@@ -925,8 +925,8 @@ Line10:
 
     DEFINE_PARAMETER(Bobbert_Vlieger_BRDF_Model,dielectric_function,sphere,"Sphere optical properties","(1.59,0)",0xFF);
     DEFINE_PARAMETER(Bobbert_Vlieger_BRDF_Model,double,radius,"Particle radius [um]","0.05",0xFF);
-    DEFINE_PARAMETER(Bobbert_Vlieger_BRDF_Model,dielectric_stack,spherecoat,"Coatings on the sphere","",0xFF);
-    DEFINE_PARAMETER(Bobbert_Vlieger_BRDF_Model,dielectric_stack,stack,"Substrate films","",0xFF);
+    DEFINE_PTRPARAMETER(Bobbert_Vlieger_BRDF_Model,StackModel_Ptr,spherecoat,"Coatings on the sphere","No_StackModel",0xFF);
+    DEFINE_PTRPARAMETER(Bobbert_Vlieger_BRDF_Model,StackModel_Ptr,stack,"Substrate films","No_StackModel",0xFF);
     DEFINE_PARAMETER(Bobbert_Vlieger_BRDF_Model,double,delta,"Separation of particle from substrate [um] (in contact: 0)","0",0xFF);
     DEFINE_PARAMETER(Bobbert_Vlieger_BRDF_Model,int,lmax,"Maximum spherical harmonic order (use Bohren & Huffman estimate: 0)","0",0xFF);
     DEFINE_PARAMETER(Bobbert_Vlieger_BRDF_Model,int,order,"Perturbation order (exact: -1)","-1",0xFF);

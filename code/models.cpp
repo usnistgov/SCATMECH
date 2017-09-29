@@ -20,6 +20,7 @@
 #include "rcw.h"
 #include "crossrcw.h"
 #include "reflectance.h"
+#include "filmtran.h"
 
 using namespace std;
 
@@ -41,6 +42,7 @@ namespace SCATMECH {
             Register((CrossGrating*)NULL);
             Register_Model(RCW_Model);
             Register_Model(CrossRCW_Model);
+			Register((StackModel*)NULL);
         }
     }
 

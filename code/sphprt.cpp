@@ -108,8 +108,8 @@ namespace SCATMECH {
                 Vector a4in = cross(b4in,inKr),  a4out = cross(b4out,outKr);
 
                 // The reflection coefficients...
-                JonesMatrix ri = stack.r12(thetai,lambda,vacuum,substrate);
-                JonesMatrix rs = stack.r12(thetas,lambda,vacuum,substrate);
+                JonesMatrix ri = stack->r12(thetai,lambda,vacuum,substrate);
+                JonesMatrix rs = stack->r12(thetas,lambda,vacuum,substrate);
 
                 JonesMatrix S1 = scatterer->jones(_Euler*inK, _Euler*outK);
                 JonesMatrix S2 = scatterer->jones(_Euler*inKr,_Euler*outK);
@@ -206,13 +206,13 @@ namespace SCATMECH {
 
                     // The reflected wave has a reflection and extra path length...
                     COMPLEX phase = exp(COMPLEX(0,2)*cos(thetai)*k*distance);
-                    JonesMatrix r = stack.r12(thetai,lambda,vacuum,substrate);
+                    JonesMatrix r = stack->r12(thetai,lambda,vacuum,substrate);
 
                     scatter_indirect = phase*matrixout*scatter*matrixin*r;
                 }
 
                 // Transmission through the interface...
-                JonesMatrix t = stack.t12(thetas_outside,lambda,vacuum,substrate)*
+                JonesMatrix t = stack->t12(thetas_outside,lambda,vacuum,substrate)*
                                 sqrt(n*cos(thetas)/cos_thetas_outside);
 
                 // Total scatter...
@@ -263,8 +263,8 @@ namespace SCATMECH {
                 Vector outPi = cross(outKi,outSi);
 
                 // Transmission through the interface...
-                JonesMatrix ti = stack.t21i(thetai,lambda,substrate,vacuum)/(COMPLEX)sqrt(n);
-                JonesMatrix ts = stack.t21i(thetas,lambda,substrate,vacuum)*(COMPLEX)sqrt(cos_thetas_at_part/cos(thetas)/n);
+                JonesMatrix ti = stack->t21i(thetai,lambda,substrate,vacuum)/(COMPLEX)sqrt(n);
+                JonesMatrix ts = stack->t21i(thetas,lambda,substrate,vacuum)*(COMPLEX)sqrt(cos_thetas_at_part/cos(thetas)/n);
 
                 // Local polarization basis set, so that {par*,perp,k} is right handed...
                 Vector perp = perpto(inKi,outKi);
@@ -352,7 +352,7 @@ namespace SCATMECH {
                     Vector pars = cross(perp,outKr);
 
                     // Reflection coefficient from surface...
-                    JonesMatrix r = stack.r12(thetas,lambda,vacuum,substrate);
+                    JonesMatrix r = stack->r12(thetas,lambda,vacuum,substrate);
 
                     // Rotations to/from {s,p,k} and {par*,perp,k}...
                     JonesMatrix matrixin = GetJonesRotator(pari,perp,inS,inP);
@@ -368,7 +368,7 @@ namespace SCATMECH {
                 }
 
                 // The transmission coefficient through the interface...
-                JonesMatrix ti = stack.t21i(thetai,lambda,substrate,vacuum)/(COMPLEX)sqrt(n);
+                JonesMatrix ti = stack->t21i(thetai,lambda,substrate,vacuum)/(COMPLEX)sqrt(n);
 
                 // The total scatter...
                 JonesMatrix scatter = (scatter_direct+scatter_indirect)*ti/k;
@@ -398,7 +398,7 @@ namespace SCATMECH {
     DEFINE_MODEL(Double_Interaction_BRDF_Model,Local_BRDF_Model,
                  "The double-interaction model for a spherical particle above a surface.");
 
-    DEFINE_PARAMETER(Double_Interaction_BRDF_Model,dielectric_stack,stack,"Film stack on substrate","",0xFF);
+    DEFINE_PTRPARAMETER(Double_Interaction_BRDF_Model,StackModel_Ptr,stack,"Film stack on substrate","No_StackModel",0xFF);
     DEFINE_PARAMETER(Double_Interaction_BRDF_Model,double,distance,"Distance from center to surface [um]","0.05",0xFF);
     DEFINE_PTRPARAMETER(Double_Interaction_BRDF_Model,Free_Space_Scatterer_Ptr,scatterer,"The scattering function","MieScatterer",0xFF);
     DEFINE_PARAMETER(Double_Interaction_BRDF_Model,double,alpha,"Rotation of particle about z-axis [rad]","0",0xFF);

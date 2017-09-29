@@ -53,22 +53,25 @@ namespace SCATMECH {
         model.set_sphere((optical_constant)((COMPLEX)(sphere.index(lambda))/n));
         model.set_radius(radius);
         dielectric_stack temp;
-        for (int i=0; i<spherecoat.get_n(); ++i) {
+        for (int i=0; i<spherecoat->get_n(); ++i) {
             int j = i;
-            COMPLEX index = (COMPLEX)(spherecoat.get_e()[j].index(lambda))/n;
-            double thickness = spherecoat.get_t()[j];
+            COMPLEX index = (COMPLEX)(spherecoat->get_e()[j].index(lambda))/n;
+            double thickness = spherecoat->get_t()[j];
             temp.grow(optical_constant(index),thickness);
         }
-        model.set_spherecoat(temp);
+		Stack_StackModel temp0;
+		temp0.set_stack(temp);
+        model.set_spherecoat(temp0.clone());
         temp.wash();
-        for (int i=0; i<stack.get_n(); ++i) {
+        for (int i=0; i<stack->get_n(); ++i) {
             // Need to reverse order of films...
-            int j = stack.get_n()-i-1;
-            COMPLEX index = (COMPLEX)(stack.get_e()[j].index(lambda))/n;
-            double thickness = stack.get_t()[j];
+            int j = stack->get_n()-i-1;
+            COMPLEX index = (COMPLEX)(stack->get_e()[j].index(lambda))/n;
+            double thickness = stack->get_t()[j];
             temp.grow(optical_constant(index),thickness);
         }
-        model.set_stack(temp);
+		temp0.set_stack(temp);
+        model.set_stack(temp0.clone());
         model.set_delta(delta);
         model.set_lmax(lmax);
         model.set_order(order);
@@ -120,14 +123,16 @@ namespace SCATMECH {
         model.set_particle((optical_constant)((COMPLEX)(particle.index(lambda))/n));
         model.set_Shape(Shape);
         dielectric_stack temp;
-        for (int i=0; i<stack.get_n(); ++i) {
+        for (int i=0; i<stack->get_n(); ++i) {
             // Need to reverse order of films...
-            int j = stack.get_n()-i-1;
-            COMPLEX index = (COMPLEX)(stack.get_e()[j].index(lambda))/n;
-            double thickness = stack.get_t()[j];
+            int j = stack->get_n()-i-1;
+            COMPLEX index = (COMPLEX)(stack->get_e()[j].index(lambda))/n;
+            double thickness = stack->get_t()[j];
             temp.grow(optical_constant(index),thickness);
         }
-        model.set_stack(temp);
+		Stack_StackModel temp0;
+		temp0.set_stack(temp);
+        model.set_stack(temp0.clone());
         model.set_delta(delta);
         model.set_lmax(lmax);
         model.set_mmax(mmax);
@@ -152,8 +157,8 @@ namespace SCATMECH {
 
     DEFINE_PARAMETER(Subsurface_Bobbert_Vlieger_BRDF_Model,dielectric_function,sphere,"Sphere optical properties","(1.59,0)",0xFF);
     DEFINE_PARAMETER(Subsurface_Bobbert_Vlieger_BRDF_Model,double,radius,"Particle radius [um]","0.05",0xFF);
-    DEFINE_PARAMETER(Subsurface_Bobbert_Vlieger_BRDF_Model,dielectric_stack,spherecoat,"Coatings on the sphere","",0xFF);
-    DEFINE_PARAMETER(Subsurface_Bobbert_Vlieger_BRDF_Model,dielectric_stack,stack,"Substrate films","",0xFF);
+    DEFINE_PTRPARAMETER(Subsurface_Bobbert_Vlieger_BRDF_Model,StackModel_Ptr,spherecoat,"Coatings on the sphere","No_StackModel",0xFF);
+    DEFINE_PTRPARAMETER(Subsurface_Bobbert_Vlieger_BRDF_Model,StackModel_Ptr,stack,"Substrate films","No_StackModel",0xFF);
     DEFINE_PARAMETER(Subsurface_Bobbert_Vlieger_BRDF_Model,double,delta,"Separation of particle from substrate [um] (in contact: 0)","0",0xFF);
     DEFINE_PARAMETER(Subsurface_Bobbert_Vlieger_BRDF_Model,int,lmax,"Maximum spherical harmonic order (use Bohren & Huffman estimate: 0)","0",0xFF);
     DEFINE_PARAMETER(Subsurface_Bobbert_Vlieger_BRDF_Model,int,order,"Perturbation order (exact: -1)","-1",0xFF);
@@ -165,7 +170,7 @@ namespace SCATMECH {
 
     DEFINE_PTRPARAMETER(Subsurface_Axisymmetric_Particle_BRDF_Model,Axisymmetric_Shape_Ptr,Shape,"Particle Shape","Ellipsoid_Axisymmetric_Shape",0xFF);
     DEFINE_PARAMETER(Subsurface_Axisymmetric_Particle_BRDF_Model,dielectric_function,particle,"Particle optical properties","(1.59,0)",0xFF);
-    DEFINE_PARAMETER(Subsurface_Axisymmetric_Particle_BRDF_Model,dielectric_stack,stack,"Substrate films","",0xFF);
+    DEFINE_PTRPARAMETER(Subsurface_Axisymmetric_Particle_BRDF_Model,StackModel_Ptr,stack,"Substrate films","No_StackModel",0xFF);
     DEFINE_PARAMETER(Subsurface_Axisymmetric_Particle_BRDF_Model,double,delta,"Separation of particle from substrate [um] (in contact: 0)","0",0xFF);
     DEFINE_PARAMETER(Subsurface_Axisymmetric_Particle_BRDF_Model,int,lmax,"Maximum polar order (lmax)","0",0xFF);
     DEFINE_PARAMETER(Subsurface_Axisymmetric_Particle_BRDF_Model,int,mmax,"Maximum azimuthal order (mmax)","0",0xFF);

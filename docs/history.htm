@@ -18,6 +18,8 @@
         <hr>
 
         <ul>
+	  <li><a href="#v7.01">Version 7.01</a> (September 2017)</li>
+	  
           <li><a href="#v7.00">Version 7.00</a> (January 2015)</li>
 
 	  <li><a href="#v6.01u">Editorial Update</a> (September 2012)</li>
@@ -48,6 +50,23 @@
 	  
 	  <li>Version 1.00 (March 2000)</li>
         </ul>
+        <a name="v7.01" id="v7.01"><!-- --></a>
+	<h2>Version 7.01 (September 2017)</h2>
+	
+
+	<p>Abstract class <a href="stackmodel.htm">StackModel</a> was created to give
+	  <a href="dielstack.htm">dielectric_stack</a> the properties of a <a href="model.htm">Model</a>. Specific classes
+	  <a href="stackmodel.htm#No_StackModel">No_StackModel</a>, <a href="stackmodel.htm#Stack_StackModel">Stack_StackModel</a>, <a href="stackmodel.htm#SingleFilm_StackModel">SingleFilm_StackModel</a>,
+	  <a href="stackmodel.htm#DoubleFilm_StackModel">DoubleFilm_StackModel</a>, and <a href="stackmodel.htm#GradedFilm_StackModel">GradedFilm_StackModel</a> implement specific film stack models. These
+	  models inherit <a href="model.htm">Model</a>, so they make it easier to
+	  parametrically vary parameters associated with a film
+	  stack. All scattering models that allowed for a <a href="dielstack.htm">dielectric_stack</a> have been upgraded to use <a href="stackmodel.htm">StackModel</a> instead.</p>
+	
+	<p>Added <a href="phase.htm">Legendre_Phase_Function</a> to the list of classes inheriting <a href="phase.htm">Phase_Function</a>.</p>
+
+	<p>Corrected some errors in the thread safety using mutexes.</p>
+
+	<p>Corrected some errors in coordinate systems for polarization in <a href="BRDF_Model.htm">BRDF_Model</a>.</p>
 
         <a name="v7.00" id="v7.00"><!-- --></a>
 	<h2>Version 7.00 (January 2015)</h2>

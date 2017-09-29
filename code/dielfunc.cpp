@@ -172,7 +172,8 @@ namespace SCATMECH {
     set_n(const Table& n)
     {
         n1 = n;
-        last.x=-1;
+        last.x=-1.;
+		index(1.);
     }
 
     void
@@ -180,7 +181,8 @@ namespace SCATMECH {
     set_k(const Table& k)
     {
         n2 = k;
-        last.x=-1;
+        last.x=-1.;
+		index(1.);
     }
 
     void

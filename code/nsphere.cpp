@@ -42,7 +42,7 @@ namespace SCATMECH {
     {
         SphericalScatterer::setup();
 
-        int nlayers = stack.get_n();
+        int nlayers = stack->get_n();
         int r = nlayers+1;
         CFARRAY m(r,1);
         CFARRAY n(r+1,1);
@@ -56,7 +56,7 @@ namespace SCATMECH {
             } else if (s==r+1) {
                 n(s) = medium.index(lambda);
             } else {
-                n(s) = stack.get_e()[s-2].index(lambda);
+                n(s) = stack->get_e()[s-2].index(lambda);
             }
         }
         for (int s=1; s<=r; ++s) {
@@ -70,11 +70,11 @@ namespace SCATMECH {
             if (s==1) {
                 R(s)=SphericalScatterer::radius;
                 for (int t=0; t<nlayers; ++t) {
-                    R(s)-=stack.get_t()[t];
+                    R(s)-=stack->get_t()[t];
                 }
                 if (R(s)<0.) throw SCATMECH_exception("Thickness of stack exceeds particle radius.");
             } else {
-                R(s)=R(s-1)+stack.get_t()[s-2];
+                R(s)=R(s-1)+stack->get_t()[s-2];
             }
             y(s) = k(s)*R(s);
             x(s) = 2*pi/lambda*R(s);
@@ -238,7 +238,7 @@ namespace SCATMECH {
     DEFINE_MODEL(MultilayerCoatedMieScatterer,SphericalScatterer,
                  "Scattering from a sphere with any number of coatings.");
 
-    DEFINE_PARAMETER(MultilayerCoatedMieScatterer,dielectric_stack,stack,"Coating stack on core sphere","",0xFF);
+    DEFINE_PTRPARAMETER(MultilayerCoatedMieScatterer,StackModel_Ptr,stack,"Coating stack on core sphere","No_StackModel",0xFF);
 
 } // namespace SCATMECH;
 

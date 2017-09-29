@@ -192,7 +192,15 @@ namespace SCATMECH {
         return M;
     }
 
-    //
+	void dielectric_stack::reverse()
+	{
+		for (int i=0;i<n/2;++i) {
+			swap(e[i],e[n-i-1]);
+			swap(t[i],t[n-i-1]);
+		}
+	}
+
+	//
     // The following give the reflectances of the dielectric stack...
     //   (r,t) reflectance, transmittance
     //   (s,p) polarization
@@ -655,6 +663,44 @@ namespace SCATMECH {
         value = dielectric_stack::AskUser(prompt);
     }
 
+    void Register(const StackModel* x)
+    {
+        static bool Models_Registered = false;
+        if (!Models_Registered) {
+            Models_Registered=true;
+
+            Register_Model(StackModel);
+			Register_Model(No_StackModel);
+            Register_Model(Stack_StackModel);
+            Register_Model(SingleFilm_StackModel);
+			Register_Model(DoubleFilm_StackModel);
+            Register_Model(GradedFilm_StackModel);
+
+        }
+    }
+
+	DEFINE_VIRTUAL_MODEL(StackModel,Model,"Abstract model for film stacks, allowing parametric variation of dielectric stacks");
+	
+	DEFINE_MODEL(No_StackModel,StackModel,"An empty film stack");
+
+	DEFINE_MODEL(Stack_StackModel,StackModel,"StackModel that takes a dielectric stack");
+	DEFINE_PARAMETER(Stack_StackModel,dielectric_stack,stack,"Film stack","",0xFF);
+
+	DEFINE_MODEL(SingleFilm_StackModel,StackModel,"A single film");
+	DEFINE_PARAMETER(SingleFilm_StackModel,dielectric_function,material,"Material","(1.5,0)",0xFF);
+	DEFINE_PARAMETER(SingleFilm_StackModel,double,thickness,"Thickness [um]","0.1",0xFF);
+
+	DEFINE_MODEL(DoubleFilm_StackModel,StackModel,"A double film");
+	DEFINE_PARAMETER(DoubleFilm_StackModel,dielectric_function,material1,"Material deposited first","(1.5,0)",0xFF);
+	DEFINE_PARAMETER(DoubleFilm_StackModel,double,thickness1,"Thickness of first film [um]","0.1",0xFF);
+	DEFINE_PARAMETER(DoubleFilm_StackModel,dielectric_function,material2,"Material deposited second","(1.5,0)",0xFF);
+	DEFINE_PARAMETER(DoubleFilm_StackModel,double,thickness2,"Thickness of second film[um]","0.1",0xFF);
+
+	DEFINE_MODEL(GradedFilm_StackModel,StackModel,"A graded index film");
+	DEFINE_PARAMETER(GradedFilm_StackModel,dielectric_function,start,"Material closest to substrate","(1.5,0)",0xFF);
+	DEFINE_PARAMETER(GradedFilm_StackModel,dielectric_function,end,"Material farthest from substrate","(1,0)",0xFF);
+	DEFINE_PARAMETER(GradedFilm_StackModel,double,thickness,"Thickness [um]","0.1",0xFF);
+	DEFINE_PARAMETER(GradedFilm_StackModel,int,steps,"Number of steps","5",0xFF);
 
 } // namespace SCATMECH
 

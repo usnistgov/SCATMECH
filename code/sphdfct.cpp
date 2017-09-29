@@ -100,10 +100,10 @@ namespace SCATMECH {
                 // Transmission coefficients...
                 const dielectric_constant vacuum(1.);
 
-                COMPLEX tsi = stack.ts12(thetai,lambda,vacuum,substrate);
-                COMPLEX tpi = stack.tp12(thetai,lambda,vacuum,substrate);
-                COMPLEX tss = stack.ts21(thetas,lambda,substrate,vacuum);
-                COMPLEX tps = stack.tp21(thetas,lambda,substrate,vacuum);
+                COMPLEX tsi = stack->ts12(thetai,lambda,vacuum,substrate);
+                COMPLEX tpi = stack->tp12(thetai,lambda,vacuum,substrate);
+                COMPLEX tss = stack->ts21(thetas,lambda,substrate,vacuum);
+                COMPLEX tps = stack->tp21(thetas,lambda,substrate,vacuum);
 
                 // Transmission transfer matrices...
                 CMatrix ti = (tsi*outer(inSi,inSo))+(tpi*outer(inPi,inPo));
@@ -167,10 +167,10 @@ namespace SCATMECH {
 
                 // Reflection and transmission coefficients...
 
-                COMPLEX ts = stack.ts12(thetai,lambda,vacuum,substrate)*sqrt(n);
-                COMPLEX tp = stack.tp12(thetai,lambda,vacuum,substrate)*sqrt(n);
-                COMPLEX rs = stack.rs21i(fabs(thetas),lambda,substrate,vacuum);
-                COMPLEX rp = stack.rp21i(fabs(thetas),lambda,substrate,vacuum);
+                COMPLEX ts = stack->ts12(thetai,lambda,vacuum,substrate)*sqrt(n);
+                COMPLEX tp = stack->tp12(thetai,lambda,vacuum,substrate)*sqrt(n);
+                COMPLEX rs = stack->rs21i(fabs(thetas),lambda,substrate,vacuum);
+                COMPLEX rp = stack->rp21i(fabs(thetas),lambda,substrate,vacuum);
 
                 COMPLEX rayleigh = (e_part-e)/(e_part+2.*e)*cube(x);
 
@@ -219,10 +219,10 @@ namespace SCATMECH {
 
                 // Reflection coefficients...
 
-                COMPLEX rsi = stack.rs21i(fabs(thetai),lambda,substrate,vacuum);
-                COMPLEX rpi = stack.rp21i(fabs(thetai),lambda,substrate,vacuum);
-                COMPLEX rss = stack.rs21i(fabs(thetas),lambda,substrate,vacuum);
-                COMPLEX rps = stack.rp21i(fabs(thetas),lambda,substrate,vacuum);
+                COMPLEX rsi = stack->rs21i(fabs(thetai),lambda,substrate,vacuum);
+                COMPLEX rpi = stack->rp21i(fabs(thetai),lambda,substrate,vacuum);
+                COMPLEX rss = stack->rs21i(fabs(thetas),lambda,substrate,vacuum);
+                COMPLEX rps = stack->rp21i(fabs(thetas),lambda,substrate,vacuum);
 
                 COMPLEX rayleigh = (e_part-e)/(e_part+2.*e)*cube(x);
 
@@ -271,10 +271,10 @@ namespace SCATMECH {
 
                 // Reflection and transmission coefficients...
 
-                COMPLEX rsi = stack.rs21i(fabs(thetai),lambda,substrate,vacuum);
-                COMPLEX rpi = stack.rp21i(fabs(thetai),lambda,substrate,vacuum);
-                COMPLEX tss = stack.ts21(thetas,lambda,substrate,vacuum)*sqrt(cos(thetas)/cos_thetas_internal/n);
-                COMPLEX tps = stack.tp21(thetas,lambda,substrate,vacuum)*sqrt(cos(thetas)/cos_thetas_internal/n);
+                COMPLEX rsi = stack->rs21i(fabs(thetai),lambda,substrate,vacuum);
+                COMPLEX rpi = stack->rp21i(fabs(thetai),lambda,substrate,vacuum);
+                COMPLEX tss = stack->ts21(thetas,lambda,substrate,vacuum)*sqrt(cos(thetas)/cos_thetas_internal/n);
+                COMPLEX tps = stack->tp21(thetas,lambda,substrate,vacuum)*sqrt(cos(thetas)/cos_thetas_internal/n);
 
                 COMPLEX rayleigh = (e_part-e)/(e_part+2.*e)*cube(x);
 
@@ -313,7 +313,7 @@ namespace SCATMECH {
     DEFINE_MODEL(Rayleigh_Defect_BRDF_Model,Local_BRDF_Model,
                  "Scattering by a subsurface defect in the Rayleigh limit.");
 
-    DEFINE_PARAMETER(Rayleigh_Defect_BRDF_Model,dielectric_stack,stack,"Film stack on substrate","",0xFF);
+    DEFINE_PTRPARAMETER(Rayleigh_Defect_BRDF_Model,StackModel_Ptr,stack,"Film stack on substrate","No_StackModel",0xFF);
 
     DEFINE_PARAMETER(Rayleigh_Defect_BRDF_Model,double,radius,"Defect radius [um]","0.001",0xFF);
 

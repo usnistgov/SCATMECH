@@ -26,8 +26,8 @@ namespace SCATMECH {
             DECLARE_MODEL();
             DECLARE_PARAMETER(dielectric_function,sphere);
             DECLARE_PARAMETER(double,radius);
-            DECLARE_PARAMETER(dielectric_stack,spherecoat);
-            DECLARE_PARAMETER(dielectric_stack,stack);
+            DECLARE_PARAMETER(StackModel_Ptr,spherecoat);
+            DECLARE_PARAMETER(StackModel_Ptr,stack);
             DECLARE_PARAMETER(double,delta);
             DECLARE_PARAMETER(int,lmax);
             DECLARE_PARAMETER(int,order);
@@ -60,7 +60,7 @@ namespace SCATMECH {
             DECLARE_MODEL();
             DECLARE_PARAMETER(Axisymmetric_Shape_Ptr,Shape);
             DECLARE_PARAMETER(dielectric_function,particle);
-            DECLARE_PARAMETER(dielectric_stack,stack);
+            DECLARE_PARAMETER(StackModel_Ptr,stack);
             DECLARE_PARAMETER(double,delta);
             DECLARE_PARAMETER(int,lmax);
             DECLARE_PARAMETER(int,mmax);
