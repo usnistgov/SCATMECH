@@ -48,7 +48,7 @@ expansion of new models.
 
 <h2>Current Version</h2>
 
-<p><a href="download.htm">Download version 7.00 (January 2015)</a><br>
+<p><a href="download.htm">Download version 7.01 (September 2017)</a><br>
 <a href="history.htm">See version history</a></p>
 
 <h2>Author</h2>
@@ -57,16 +57,16 @@ expansion of new models.
 
 <h2>Modeled Integrated Scatter Tool (MIST)</h2>
 
-<p>The <a href="http://www.nist.gov/pml/div685/grp06/scattering_mist.cfm" target="_blank">MIST</a>
+<p>The <a href="https://github.com/thomas-germer/MIST" target="_blank">MIST</a>
 program has been developed to provide users with a general application
 to model an integrated scattering system. The program performs an
 integration of the bidirectional reflectance distribution function
 (BRDF) over solid angles specified by the user and allows the
 dependence of these integrals on model parameters to be
-investigated. The <a href="http://www.nist.gov/pml/div685/grp06/scattering_mist.cfm">MIST</a>
+investigated. The <a href="https://github.com/thomas-germer/MIST">MIST</a>
 program can access any model
-inheriting <a href="BRDF_Model.htm">BRDF_Model</a>.  See <a href="http://www.nist.gov/pml/div685/grp06/scattering_mist.cfm">MIST Website</a> to 
-download.
+inheriting <a href="BRDF_Model.htm">BRDF_Model</a>.  See <a href="https://github.com/thomas-germer/MIST/releases">MIST GitHub page</a> to 
+download latest release.
 
 <a name="Contents"><!-- --></a>
 
@@ -112,9 +112,9 @@ download.
 <a href="mailto:thomas.germer@nist.gov">Website Comments</a>
 
 <p>
-Current SCATMECH version: <a href="./download.htm">7.00 (January 2015)</a><br>
+Current SCATMECH version: <a href="./download.htm">7.01 (September 2017)</a><br>
 This page first online: Version 1.00 (March 2000) <br>
-This page last modified: Version 7.00 (January 2015) <br>
+This page last modified: Version 7.01 (September 2017) <br>
 
 <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
