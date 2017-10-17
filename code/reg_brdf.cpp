@@ -22,6 +22,7 @@
 #include "transmit.h"
 #include "rcw.h"
 #include "crossrcw.h"
+#include "zernikeexpansion.h"
 
 namespace SCATMECH {
 
@@ -45,6 +46,7 @@ namespace SCATMECH {
             Register_Model(Transmit_BRDF_Model);
             Register_Model(RCW_BRDF_Model);
             Register_Model(CrossRCW_BRDF_Model);
+			Register_Model(ZernikeExpansion_BRDF_Model);
 
         }
     }
