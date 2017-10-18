@@ -9,8 +9,6 @@
 //** Phone: (301) 975-2876
 //** Email: thomas.germer@nist.gov
 //**
-//** Version: 7.00 (January 2015)
-//**
 //******************************************************************************
 #ifndef SCATMECH_STACK_BR_H
 #define SCATMECH_STACK_BR_H
