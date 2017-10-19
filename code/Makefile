@@ -9,7 +9,6 @@
 #//** Phone: (301) 975-2876
 #//** Email: thomas.germer@nist.gov
 #//**
-#//**
 #//******************************************************************************
 
 
@@ -138,7 +137,8 @@ OBJECTS = allrough.o \
 	two_source.o \
 	twoface.o \
 	urough.o \
-	vector3d.o 
+	vector3d.o \
+	zernikeexpansion.o 
 
 
 .PHONY : all
