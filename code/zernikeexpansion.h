@@ -23,7 +23,7 @@ namespace SCATMECH {
 	/// J.J. Koenderink and A.J. van Doorn, "Phenomenological description of bidirectional surface reflection," J. Opt. Soc. Am. A vol. 15, pp. 2903-2912 (1998)
 	/// as extended by
 	/// T.A. Germer, "Full four-dimensional and reciprocal Mueller matrix bidirectional reflectance distribution function of sintered polytetrafluoroethylene,"
-	/// Appl. Opt., to be submitted (2017)
+	/// Appl. Opt., in press (2017)
  	///
 	class ZernikeExpansion_BRDF_Model : public BRDF_Model {
 	public:
@@ -31,7 +31,7 @@ namespace SCATMECH {
 		// List of the parameters ...
 		DECLARE_MODEL();
 		DECLARE_PARAMETER(std::string,coefficientfile); /// File containing indices and coefficients
-		DECLARE_PARAMETER(double,scale);                /// An overall scale factor (if the coefficients correspond to unit reflectance)
+		DECLARE_PARAMETER(Table,scale);                 /// An overall scale factor (if the coefficients correspond to unit reflectance)
 
 		// Function evaluating Mueller matrix
 		MuellerMatrix mueller();
