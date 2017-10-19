@@ -8,7 +8,7 @@ physics-based and which predict the polarization properties of the scattered lig
 a number of classes that are useful for working with polarized light or the optics of thin films. The library 
 is designed to enable expansion of new models.
 
-See <a href="https://thomas-germer.github.io/SCATMECH/">https://pages.nist.gov/SCATMECH/</a> for full documentation.
+See <a href="https://pages.nist.gov/SCATMECH/index.htm">https://pages.nist.gov/SCATMECH/index.htm</a> for full documentation.
 
 This software was developed by employees of the National Institute of Standards and Technology (NIST), an agency of the Federal Government. Pursuant to title 17 United States Code Section 105, works of NIST employees are not subject to copyright protection in the United States and are considered to be in the public domain. Permission to freely use, copy, modify, and distribute this software and its documentation without fee is hereby granted, provided that this notice and disclaimer of warranty appears in all copies.
 

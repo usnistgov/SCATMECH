@@ -16,13 +16,6 @@
 using namespace std;
 using namespace SCATMECH;
 
-//// 
-//// ZernikeExpansion_BRDF_Model implements the model described in 
-//// T.A. Germer, "Full four-dimensional and reciprocal Mueller matrix
-//// bidirectional reflectance distribution function of
-//// sintered polytetrafluoroethylene," Appl. Opt., in press (2017).
-////
-
 namespace SCATMECH {
 
 ///
@@ -59,19 +52,11 @@ void ZernikeExpansion_BRDF_Model::setup()
 	// The model uses the xyxy basis, rather than the default psps
 	model_cs = xyxy; 
 
-	// This code does not accept anything for transmission mode or for
-	// radiation upwelling in the material
-	throw_transmission();
-	throw_backward();
-
-	// Check that coefficientfile has been specified 
-	if (coefficientfile.size() == 0) throw("No coefficient file specified");
-
 	// Open the coefficient file
 	ifstream_with_comments cfile(coefficientfile.c_str());
 
 	// Throw exception if the coefficient file doesn't open
-	if (!cfile) error(string("Cannot open coefficient file '") + coefficientfile + string("'"));
+	if (!cfile) error("Cannot open coefficient file.");
 
 	// Clear the list of coefficients
 	coeff.clear();
@@ -110,15 +95,11 @@ void ZernikeExpansion_BRDF_Model::setup()
 			// If there was a failure, then throw an exception
 			if (sline.fail()) error("Error reading a line in coefficient file");
 
-			// Check some ranges...
-			if (i < 1 || i > 4) error("i = " + to_string(i) + " out of range in coefficient file");
-			if (j < 1 || j > 4) error("j = " + to_string(j) + " out of range in coefficient file");
-			if (p < 0 || p > 4) error("p = " + to_string(p) + " out of range in coefficient file");
-
 			// Push the coefficient onto the list of coefficients
 			coeff.push_back(Coefficient(i,j,n,m,k,l,p,c));
 		}
 	}
+	return;
 }
 
 MuellerMatrix ZernikeExpansion_BRDF_Model::mueller()
@@ -126,6 +107,11 @@ MuellerMatrix ZernikeExpansion_BRDF_Model::mueller()
 	// It is standard procedure for all Models to call SETUP() at beginning of 
 	// routines that use 
 	SETUP();
+
+	// This code does not accept anything for transmission mode or for
+	// radiation upwelling in the material
+	throw_transmission();
+	throw_backward();
 
 	// Start the sum with zero
 	MuellerMatrix result = MuellerZero();
@@ -136,14 +122,6 @@ MuellerMatrix ZernikeExpansion_BRDF_Model::mueller()
 	double rhor = sqrt(2.)*sin(thetas/2.);
 	double phii = pi-rotation;
 	double phir = phis-rotation;
-
-	// Create a table of powers of lambda
-	double lambdapower[5];
-	lambdapower[0] = 1.;
-	lambdapower[1] = lambda;
-	lambdapower[2] = lambdapower[1] * lambda;
-	lambdapower[3] = lambdapower[2] * lambda;
-	lambdapower[4] = lambdapower[3] * lambda;
 
 	// Iterate through all the coefficients...
 	for (list<Coefficient>::iterator q=coeff.begin();q!=coeff.end();++q) {
@@ -156,7 +134,8 @@ MuellerMatrix ZernikeExpansion_BRDF_Model::mueller()
 		short p = q->p;
 		double coeff = q->coeff;
 
-		double power = lambdapower[p];
+		// The following just evaluates lambda^p
+		double power = p==0?1.:p==1?lambda:p==2?sqr(lambda):p==3?sqr(lambda):pow(lambda,p);
 
 		if (i==1&&j==1) {
 			// The basis set for the unpolarized BRDF...
@@ -169,7 +148,7 @@ MuellerMatrix ZernikeExpansion_BRDF_Model::mueller()
 			result[i-1][j-1] += coeff * prefact * (Radial_Zernike_Polynomial(n,k,rhoi)*Radial_Zernike_Polynomial(m,l,rhor)*az(k,phii)*az(l,phir) +
 												 Radial_Zernike_Polynomial(m,l,rhoi)*Radial_Zernike_Polynomial(n,k,rhor)*az(k,phir)*az(l,phii));
 		} else if (i<j) {		
-			// The basis set for the off-diagonal elements...
+			// The baiss set for the off-diagonal elements...
 			double prefact = sqrt((n+1.)*(m+1.))/pi*power;
 			result[i-1][j-1] += coeff * prefact * Radial_Zernike_Polynomial(n,k,rhoi)*Radial_Zernike_Polynomial(m,l,rhor)*az(k,phii)*az(l,phir);
 			result[j-1][i-1] += coeff * prefact * Radial_Zernike_Polynomial(n,k,rhor)*Radial_Zernike_Polynomial(m,l,rhoi)*az(k,phir)*az(l,phii);
@@ -184,18 +163,18 @@ MuellerMatrix ZernikeExpansion_BRDF_Model::mueller()
 	result[3][2] = -result[3][2];
 
 	// Change to un-normalized Mueller matrix...
-	result *= brdf*scale.value(lambda);
+	result *= brdf*scale;
 
 	// And return!
 	return result;
 }
 
 //
-// These are required for registration of Models ...
+// These are required for Models in SCATMECH...
 //
 DEFINE_MODEL(ZernikeExpansion_BRDF_Model,BRDF_Model,"Model using the model of Koenderink and van Doorn, extended by Germer to include the Mueller matrix");
 DEFINE_PARAMETER(ZernikeExpansion_BRDF_Model,string,coefficientfile,"File containing coefficients","",0xFF);
-DEFINE_PARAMETER(ZernikeExpansion_BRDF_Model,Table,scale,"Scale factor","1",0xFF);
+DEFINE_PARAMETER(ZernikeExpansion_BRDF_Model,double,scale,"Scale factor","1",0xFF);
 
 
 } // namespace SCATMECH;
