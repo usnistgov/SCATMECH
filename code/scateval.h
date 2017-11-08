@@ -44,7 +44,16 @@ namespace SCATMECH {
                       const VMAP& _variables = VMAP(),   ///< Map of variables
                       bool _top=true                     ///< Normally true, but false for recursive calls
                      ) : input(str), variables(_variables), top(_top) {
-                evaluate();
+				if (top) {
+					try {
+						evaluate();
+					}
+					catch (std::exception& e) {
+						throw SCATMECH_exception("Error during evaluation of expression \"" + str + "\": " + e.what());
+					}
+				} else {
+					evaluate();
+				}
             }
 
             /// Get the result, forcing it to have only one value.
