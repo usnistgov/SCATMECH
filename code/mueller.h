@@ -561,7 +561,7 @@ namespace SCATMECH {
             ///
             double polarizance() const
             {
-                return m[0][0]+sqrt(m[1][0]*m[1][0]+m[2][0]*m[2][0]+m[3][0]*m[3][0]);
+				return sqrt(m[1][0] * m[1][0] + m[2][0] * m[2][0] + m[3][0] * m[3][0]) / m[0][0];
             }
             ///
             /// Depolarization index
@@ -643,6 +643,11 @@ namespace SCATMECH {
             MuellerMatrix normalized() const {
                 return *this/m[0][0];
             }
+
+			///
+			/// The polarimetric entropy, defined by Cloude and Pottier
+			///
+			double entropy() const;
 
             ///
             /// Multiplication of two Mueller matrices
