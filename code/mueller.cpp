@@ -559,6 +559,32 @@ namespace SCATMECH {
         return true;
     }
 
+	///
+	/// The function entropy() calculates the polarization entropy defined by Cloude and Pottier in 
+	/// S.R. Cloude and E. Pottier, "Concept of polarization entropy in optical scattering," Opt. Eng. 34(6) 1599-1610 (1995)
+	///
+	double
+	MuellerMatrix::entropy() const
+	{
+		CFARRAY Q(4, 1);
+		CFARRAY W(4, 4);
+		CFARRAY M(4, 4);
+
+		MuellerToHermitian(*this, M);
+		eigen(M, Q, W, 4);
+
+		double sumQ = real(Q(1)) + real(Q(2)) + real(Q(3)) + real(Q(4));
+		double result = 0.;
+		for (int i = 1; i <= 4; ++i) {
+			if (real(Q(i))<0.) return std::numeric_limits<double>::quiet_NaN(); // Invalid Mueller matrix
+			double Pi = real(Q(i)) / sumQ;
+			if (Pi > 0) {
+				result += Pi*std::log(Pi);
+			}
+		}
+		return -result/std::log(4.);
+	}
+
     ///
     /// The Cloude decomposition expresses the Mueller matrix as the sum of four non-depolarizing (Jones-Mueller)
     /// matrices.
