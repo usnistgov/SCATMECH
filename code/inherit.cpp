@@ -501,19 +501,18 @@ namespace SCATMECH {
             string name = param->name;
             string type = param->type;
             string description = param->description;
-            if (prefix!="") os << prefix << ".";
+			string newprefix = (prefix != "") ? (prefix + ".") : ("");
 
             if (param->get_inheritance(this)==NULL) {
-                os << name << " = " << param->get_parameter(this,"")
+                os << newprefix << name << " = " << param->get_parameter(this,"")
                    << " (" << type << ": "
                    << description << ")" << endl;
             } else {
-
-                os << name << " = " << param->get_parameter(this,"")
+                os << newprefix << name << " = " << param->get_parameter(this,"")
                    << " (" << type << ": "
                    << description << ")" << endl;
 
-                ((Model*)(param->get_ptr(this)))->print_parameters_base(os,name);
+                ((Model*)(param->get_ptr(this)))->print_parameters_base(os,newprefix+name);
             }
         }
     }
