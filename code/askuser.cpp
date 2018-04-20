@@ -112,7 +112,7 @@ namespace SCATMECH {
                 if (file) return filename;
                 begin = end+1;
             }
-            throw SCATMECH_exception("Cannot open file " + name);
+            throw SCATMECH_exception("Cannot open file \"" + name + "\"");
         } else {
             return name;
         }

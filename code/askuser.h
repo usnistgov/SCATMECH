@@ -19,8 +19,10 @@
 #include <sstream>
 #include <string>
 #include <stack>
+#include <list>
 #include <cctype>     // std::tolower
 #include <cstddef>    // std::size_t
+#include <algorithm>
 
 namespace SCATMECH {
 
@@ -210,6 +212,33 @@ namespace SCATMECH {
 
     /// Get a token from an input stream
     //std::string get_token(std::istream &is,const char* delim);
+
+	class CommandLineParser {
+	private:
+		typedef std::list<std::string> TokenList;
+	public:
+		CommandLineParser(const int &argc, const char **argv) {
+			for (int i = 1; i < argc; ++i) 
+				tokens.push_back(argv[i]);
+		}
+		std::string getOption(const std::string &option) const {
+			TokenList::const_iterator itr;
+			itr = std::find(tokens.begin(), tokens.end(), option);
+			if (itr != tokens.end() && ++itr != tokens.end()) {
+				return *itr;
+			}
+			else {
+				return std::string("");
+			}
+		}
+		bool optionExists(const std::string &option) const {
+			return (std::find(tokens.begin(), tokens.end(), option)!= tokens.end());
+		}
+	private:
+		TokenList tokens;
+	};
+
+
 
 } // namespace SCATMECH
 

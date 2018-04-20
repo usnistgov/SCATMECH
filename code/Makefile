@@ -9,6 +9,8 @@
 #//** Phone: (301) 975-2876
 #//** Email: thomas.germer@nist.gov
 #//**
+#//** Version: 7.00 (January 2015)
+#//**
 #//******************************************************************************
 
 
@@ -24,7 +26,8 @@ EXE = .exe
 #COMPILEFLAGS = -O3 -mtune=pentium4 -DUSING_BLAS
 #COMPILEFLAGS = -O3 -mtune=pentium4 -DUSE_PTHREADS
 #COMPILEFLAGS = -O3 -D_DEBUG
-COMPILEFLAGS = -O3 
+COMPILEFLAGS = -O3 -march=haswell -Wno-deprecated-declarations
+
 
 #
 # TODO: Make sure all neccesary libraries are included...
@@ -138,6 +141,7 @@ OBJECTS = allrough.o \
 	twoface.o \
 	urough.o \
 	vector3d.o \
+	zernike.o \
 	zernikeexpansion.o 
 
 

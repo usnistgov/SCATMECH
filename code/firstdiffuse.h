@@ -59,8 +59,9 @@ namespace SCATMECH {
         public:
             virtual double f(double theta);
             DECLARE_MODEL();
-            DECLARE_PARAMETER(double,g);
-            DECLARE_PARAMETER(double,c);
+            DECLARE_PARAMETER(double,g1);
+			DECLARE_PARAMETER(double,g2);
+			DECLARE_PARAMETER(double,c);
     };
 
     class Isotropic_Phase_Function: public Phase_Function
@@ -129,6 +130,14 @@ namespace SCATMECH {
             DECLARE_PARAMETER(double,c5);
     };
 
+	class Gaussian_Phase_Function : public Phase_Function
+	{
+		public:
+			virtual double f(double theta);
+			DECLARE_MODEL();
+			DECLARE_PARAMETER(double, width);
+			DECLARE_PARAMETER(double, background);
+	};
 
     void Register(const First_Diffuse_BRDF_Model*);
     void Register(const Phase_Function* x);

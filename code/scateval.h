@@ -45,6 +45,7 @@ namespace SCATMECH {
                       bool _top=true                     ///< Normally true, but false for recursive calls
                      ) : input(str), variables(_variables), top(_top) {
 				if (top) {
+					// If top level, provide a meaningful error message...
 					try {
 						evaluate();
 					}

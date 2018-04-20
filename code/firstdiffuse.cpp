@@ -151,8 +151,8 @@ namespace SCATMECH {
     f(double theta)
     {
         SETUP();
-        double q1 = (1.-sqr(g))/pow(1.+sqr(g)-2.*g*cos(theta),1.5)/4./pi;
-        double q2 = (1.-sqr(g))/pow(1.+sqr(g)+2.*g*cos(theta),1.5)/4./pi;
+        double q1 = (1.-sqr(g1))/pow(1.+sqr(g1)-2.*g1*cos(theta),1.5)/4./pi;
+        double q2 = (1.-sqr(g2))/pow(1.+sqr(g2)-2.*g2*cos(theta),1.5)/4./pi;
         return fabs((1+c)/2.*q1+(1-c)/2.*q2);
     }
 
@@ -232,6 +232,19 @@ namespace SCATMECH {
 		return result;
 	}
 
+	double Gaussian_Phase_Function::f(double theta)
+	{
+		SETUP();
+		double wrad = width*deg;
+		double result = (1 - background)*exp(-sqr(theta / wrad) / 2) + background;
+		// The following is an approximation good for small widths ...
+		double wrad2 = sqr(wrad);
+		double wrad4 = sqr(wrad2);
+		double wrad6 = wrad4*wrad2;
+		double norm = 2 * background + (1 - background) * wrad2 + (background - 1) / 3 * wrad4 + (1 - background) / 15 * wrad6;
+		return result / norm / 2 / pi;
+	}
+
 
     void Register(const First_Diffuse_BRDF_Model* x)
     {
@@ -258,7 +271,8 @@ namespace SCATMECH {
             Register_Model(Isotropic_Phase_Function);
             Register_Model(Legendre_Phase_Function);
             Register_Model(Rayleigh_Phase_Function);
-            Register_Model(Table_Phase_Function);
+			Register_Model(Gaussian_Phase_Function);
+			Register_Model(Table_Phase_Function);
         }
     }
 
@@ -292,6 +306,9 @@ namespace SCATMECH {
     DEFINE_MODEL(Legendre_Phase_Function,Phase_Function,
                  "Phase function defined by a series of up to six Legendre polynomials (l=0 to l=5)");
 
+	DEFINE_MODEL(Gaussian_Phase_Function, Phase_Function,
+		"Phase function defined by a Gaussian");
+
     DEFINE_PARAMETER(First_Diffuse_BRDF_Model,double,l_scat,"Scatter mean free path [um]","1",0xFF);
 
     DEFINE_PTRPARAMETER(First_Diffuse_BRDF_Model,Phase_Function_Ptr,phase_function,"Phase Function","Henyey_Greenstein_Phase_Function",0xFF);
@@ -300,8 +317,9 @@ namespace SCATMECH {
 
     DEFINE_PARAMETER(Henyey_Greenstein_Phase_Function,double,g,"Asymmetry parameter (g)","0.01",0xFF);
 
-    DEFINE_PARAMETER(Double_Henyey_Greenstein_Phase_Function,double,g,"Asymmetry parameter (g)","0.01",0xFF);
-    DEFINE_PARAMETER(Double_Henyey_Greenstein_Phase_Function,double,c,"Parameter c","0.1",0xFF);
+    DEFINE_PARAMETER(Double_Henyey_Greenstein_Phase_Function,double,g1,"Asymmetry parameter (g1)","0.01",0xFF);
+	DEFINE_PARAMETER(Double_Henyey_Greenstein_Phase_Function,double,g2, "Asymmetry parameter (g2)", "0.01", 0xFF);
+	DEFINE_PARAMETER(Double_Henyey_Greenstein_Phase_Function,double,c,"Parameter c (-1<c<1)","0.1",0xFF);
 
     DEFINE_PARAMETER(Table_Phase_Function,Table,table,"Tabulated phase function","0.07957747",0xFF);
 
@@ -319,5 +337,7 @@ namespace SCATMECH {
     DEFINE_PARAMETER(Legendre_Phase_Function,double,c4,"Legendre coefficient (l=4)","0",0xFF);
     DEFINE_PARAMETER(Legendre_Phase_Function,double,c5,"Legendre coefficient (l=5)","0",0xFF);
 
+	DEFINE_PARAMETER(Gaussian_Phase_Function, double, width, "Width [deg] parameter", "20", 0xFF);
+	DEFINE_PARAMETER(Gaussian_Phase_Function, double, background, "Background parameter", "0.1", 0xFF);
 
 } // namespace SCATMECH
