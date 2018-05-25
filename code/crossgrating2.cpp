@@ -57,7 +57,47 @@ namespace SCATMECH {
         FourierFactorize();
     }
 
-    void Sphere_CrossGrating::setup()
+	void Rectangle_CrossGrating::setup()
+	{
+		Gridded_CrossGrating::setup();
+
+		levels = 1;
+		eps.allocate(grid1, grid2, levels);
+		thick.allocate(levels);
+
+		COMPLEX einside = epsilon(inside);
+		COMPLEX eoutside = epsilon(outside);
+
+		thick(1) = thickness;
+
+		double r1 = length1 / 2;
+		double r2 = length2 / 2;
+
+		double tanzetaa = tan(zetaa*deg);
+		double seczetaa = 1. / cos(zetaa*deg);
+
+		for (int i = 1; i <= grid1; ++i) {
+			for (int j = 1; j <= grid2; ++j) {
+				double x, y;
+				getxy(i, j, x, y);
+
+				double x1a = x - y*tanzetaa;
+				double x2a = y*seczetaa;
+
+				if (x1a<r1 && x1a>-r1 && x2a<r2 && x2a>-r2) {
+					eps(i, j, 1) = einside;
+				}
+				else
+				{
+					eps(i, j, 1) = eoutside;
+				}			
+			}
+		}
+
+		FourierFactorize();
+	}
+
+	void Sphere_CrossGrating::setup()
     {
         Gridded_CrossGrating::setup();
 
@@ -147,26 +187,33 @@ namespace SCATMECH {
     // (if true) the grating direction is aligned along the "2" axis.
     //
     //
-    void FillE0E1E2E3Matrices(CFARRAY& E0,CFARRAY& E1,CFARRAY& E2,CFARRAY& E3, int M1,int M2, int level2d, int level1d, Grating_Ptr& grating, bool flip)
-    {
+	void FillE0E1E2E3Matrices(CFARRAY& EPS0, CFARRAY& EPS11, CFARRAY& EPS12, CFARRAY& EPS2, CFARRAY& EPS3, 
+					   		CFARRAY& MU0, CFARRAY& MU11, CFARRAY& MU12, CFARRAY& MU2, CFARRAY& MU3, 
+							int M1, int M2, int level2d, int level1d, Grating_Ptr& grating, bool flip)
+	{
         int M = flip ? M2 : M1;
 
-        CFARRAY matrix(M,M);
-        for (int i=1; i<=M; ++i) {
+        CFARRAY ematrix(M,M);
+		CFARRAY mmatrix(M, M);
+		for (int i=1; i<=M; ++i) {
             for (int k=1; k<=M; ++k) {
-                matrix(i,k) = (grating->fourierz(i-k,level1d,0));
-            }
+				ematrix(i, k) = (grating->fourierz(i - k, level1d, 0));
+				mmatrix(i, k) = (grating->fouriermuz(i - k, level1d, 0));
+			}
         }
-        Inverse(matrix,M);
-        for (int i=1; i<=M1; ++i) {
+        Inverse(ematrix,M);
+		Inverse(mmatrix, M);
+		for (int i=1; i<=M1; ++i) {
             for (int j=1; j<=M2; ++j) {
                 for (int k=1; k<=M1; ++k) {
                     for (int l=1; l<=M2; ++l) {
                         if (flip) {
-                            E0(i,j,k,l,level2d) = (i==k) ? matrix(j,l) : 0.;
-                        } else {
-                            E0(i,j,k,l,level2d) = (j==l) ? matrix(i,k) : 0.;
-                        }
+							EPS0(i, j, k, l, level2d) = (i == k) ? ematrix(j, l) : 0.;
+							MU0(i, j, k, l, level2d) = (i == k) ? mmatrix(j, l) : 0.;
+						} else {
+							EPS0(i, j, k, l, level2d) = (j == l) ? ematrix(i, k) : 0.;
+							MU0(i, j, k, l, level2d) = (j == l) ? mmatrix(i, k) : 0.;
+						}
                     }
                 }
             }
@@ -174,21 +221,27 @@ namespace SCATMECH {
 
         for (int i=1; i<=M; ++i) {
             for (int j=1; j<=M; ++j) {
-                matrix(i,j) = (grating->fourierx(i-j,level1d,1));
-            }
+				ematrix(i, j) = (grating->fourierx(i - j, level1d, 1));
+				mmatrix(i, j) = (grating->fouriermux(i - j, level1d, 1));
+			}
         }
-        Inverse(matrix,M);
-        for (int i=1; i<=M1; ++i) {
+        Inverse(ematrix,M);
+		Inverse(mmatrix, M);
+		for (int i=1; i<=M1; ++i) {
             for (int j=1; j<=M2; ++j) {
                 for (int k=1; k<=M1; ++k) {
                     for (int l=1; l<=M2; ++l) {
                         if (flip) {
-                            E1(i,j,k,l,level2d) = (i==k) ? matrix(j,l) : 0.;
-                            E3(i,j,k,l,level2d) = (i==k) ? matrix(j,l) : 0.;
-                        } else {
-                            E1(i,j,k,l,level2d) = (j==l) ? matrix(i,k) : 0.;
-                            E2(i,j,k,l,level2d) = (j==l) ? matrix(i,k) : 0.;
-                        }
+							EPS12(i, j, k, l, level2d) = (i == k) ? ematrix(j, l) : 0.;
+							EPS3(i, j, k, l, level2d) = (i == k) ? ematrix(j, l) : 0.;
+							MU12(i, j, k, l, level2d) = (i == k) ? mmatrix(j, l) : 0.;
+							MU3(i, j, k, l, level2d) = (i == k) ? mmatrix(j, l) : 0.;
+						} else {
+							EPS11(i, j, k, l, level2d) = (j == l) ? ematrix(i, k) : 0.;
+							EPS2(i, j, k, l, level2d) = (j == l) ? ematrix(i, k) : 0.;
+							MU11(i, j, k, l, level2d) = (j == l) ? mmatrix(i, k) : 0.;
+							MU2(i, j, k, l, level2d) = (j == l) ? mmatrix(i, k) : 0.;
+						}
                     }
                 }
             }
@@ -196,18 +249,25 @@ namespace SCATMECH {
 
         for (int i=1; i<=M; ++i) {
             for (int k=1; k<=M; ++k) {
-                matrix(i,k) = (grating->fouriery(i-k,level1d,0));
-            }
+				ematrix(i, k) = (grating->fouriery(i - k, level1d, 0));
+				mmatrix(i, k) = (grating->fouriermuy(i - k, level1d, 0));
+			}
         }
         for (int i=1; i<=M1; ++i) {
             for (int j=1; j<=M2; ++j) {
                 for (int k=1; k<=M1; ++k) {
                     for (int l=1; l<=M2; ++l) {
                         if (flip) {
-                            E2(i,j,k,l,level2d) = (i==k) ? matrix(j,l) : 0.;
-                        } else {
-                            E3(i,j,k,l,level2d) = (j==l) ? matrix(i,k) : 0.;
-                        }
+							EPS11(i, j, k, l, level2d) = (i == k) ? ematrix(j, l) : 0.;
+							EPS2(i, j, k, l, level2d) = (i == k) ? ematrix(j, l) : 0.;
+							MU11(i, j, k, l, level2d) = (i == k) ? mmatrix(j, l) : 0.;
+							MU2(i, j, k, l, level2d) = (i == k) ? mmatrix(j, l) : 0.;
+						} else {
+							EPS12(i, j, k, l, level2d) = (j == l) ? ematrix(i, k) : 0.;
+							EPS3(i, j, k, l, level2d) = (j == l) ? ematrix(i, k) : 0.;
+							MU12(i, j, k, l, level2d) = (j == l) ? mmatrix(i, k) : 0.;
+							MU3(i, j, k, l, level2d) = (j == l) ? mmatrix(i, k) : 0.;
+						}
                     }
                 }
             }
@@ -222,7 +282,6 @@ namespace SCATMECH {
         if (grating->get_lambda()!=lambda) grating->set_lambda(lambda);
         if ((COMPLEX)grating->get_medium_i().index(lambda)!=(COMPLEX)medium_i.index(lambda)) error("grating.medium_i!=medium_i");
         if ((COMPLEX)grating->get_medium_t().index(lambda)!=(COMPLEX)medium_t.index(lambda)) error("grating.medium_t!=medium_t");
-        if (grating->is_magnetic()) error("Magnetic materials not supported");
 
         levels = grating->get_levels();
 
@@ -236,14 +295,22 @@ namespace SCATMECH {
         int M1 = 2*order1+1;
         int M2 = 2*order2+1;
 
-        E0.allocate(M1,M2,M1,M2,levels);
-        E1.allocate(M1,M2,M1,M2,levels);
-        E2.allocate(M1,M2,M1,M2,levels);
-        E3.allocate(M1,M2,M1,M2,levels);
+        EPS0.allocate(M1,M2,M1,M2,levels);
+        EPS11.allocate(M1,M2,M1,M2,levels);
+		EPS12.allocate(M1, M2, M1, M2, levels);
+		EPS2.allocate(M1,M2,M1,M2,levels);
+        EPS3.allocate(M1,M2,M1,M2,levels);
+		MU0.allocate(M1, M2, M1, M2, levels);
+		MU11.allocate(M1, M2, M1, M2, levels);
+		MU12.allocate(M1, M2, M1, M2, levels);
+		MU2.allocate(M1, M2, M1, M2, levels);
+		MU3.allocate(M1, M2, M1, M2, levels);
 
         for (int level=1; level<=levels; ++level) {
             thick(level) = grating->get_thickness(levels-level);
-            FillE0E1E2E3Matrices(E0,E1,E2,E3,M1,M2,level,levels-level,grating,false);
+            FillE0E1E2E3Matrices(EPS0,EPS11,EPS12,EPS2,EPS3,
+				MU0, MU11, MU12, MU2, MU3,
+				M1,M2,level,levels-level,grating,false);
         }
     }
 
@@ -276,24 +343,42 @@ namespace SCATMECH {
         d2 = top->get_d2();
         zeta = top->get_zeta();
 
-        CFARRAY tE0 = top->get_E0();
-        CFARRAY tE1 = top->get_E1();
-        CFARRAY tE2 = top->get_E2();
-        CFARRAY tE3 = top->get_E3();
+        CFARRAY tE0 = top->get_EPS0();
+        CFARRAY tE11 = top->get_EPS11();
+		CFARRAY tE12 = top->get_EPS12();
+		CFARRAY tE2 = top->get_EPS2();
+        CFARRAY tE3 = top->get_EPS3();
+		CFARRAY tMU0 = top->get_MU0();
+		CFARRAY tMU11 = top->get_MU11();
+		CFARRAY tMU12 = top->get_MU12();
+		CFARRAY tMU2 = top->get_MU2();
+		CFARRAY tMU3 = top->get_MU3();
 
-        CFARRAY bE0 = bottom->get_E0();
-        CFARRAY bE1 = bottom->get_E1();
-        CFARRAY bE2 = bottom->get_E2();
-        CFARRAY bE3 = bottom->get_E3();
+        CFARRAY bE0 = bottom->get_EPS0();
+        CFARRAY bE11 = bottom->get_EPS11();
+		CFARRAY bE12 = bottom->get_EPS12();
+		CFARRAY bE2 = bottom->get_EPS2();
+        CFARRAY bE3 = bottom->get_EPS3();
+		CFARRAY bMU0 = bottom->get_MU0();
+		CFARRAY bMU11 = bottom->get_MU11();
+		CFARRAY bMU12 = bottom->get_MU12();
+		CFARRAY bMU2 = bottom->get_MU2();
+		CFARRAY bMU3 = bottom->get_MU3();
 
         int M1 = 2*order1+1;
         int M2 = 2*order2+1;
 
-        E0.allocate(M1,M2,M1,M2,levels);
-        E1.allocate(M1,M2,M1,M2,levels);
-        E2.allocate(M1,M2,M1,M2,levels);
-        E3.allocate(M1,M2,M1,M2,levels);
-        thick.allocate(levels);
+        EPS0.allocate(M1,M2,M1,M2,levels);
+        EPS11.allocate(M1,M2,M1,M2,levels);
+		EPS12.allocate(M1,M2,M1,M2,levels);
+		EPS2.allocate(M1,M2,M1,M2,levels);
+        EPS3.allocate(M1,M2,M1,M2,levels);
+		MU0.allocate(M1, M2, M1, M2, levels);
+		MU11.allocate(M1, M2, M1, M2, levels);
+		MU12.allocate(M1, M2, M1, M2, levels);
+		MU2.allocate(M1, M2, M1, M2, levels);
+		MU3.allocate(M1, M2, M1, M2, levels);
+		thick.allocate(levels);
 
         double k1 = 2*pi/d1;
         double k2 = 2*pi/d2;
@@ -307,11 +392,17 @@ namespace SCATMECH {
                     for (int j=1; j<=M2; ++j) {
                         for (int k=1; k<=M1; ++k) {
                             for (int l=1; l<=M2; ++l) {
-                                E0(i,j,k,l,level) = bE0(i,j,k,l,blevel);
-                                E1(i,j,k,l,level) = bE1(i,j,k,l,blevel);
-                                E2(i,j,k,l,level) = bE2(i,j,k,l,blevel);
-                                E3(i,j,k,l,level) = bE3(i,j,k,l,blevel);
-                            }
+                                EPS0(i,j,k,l,level) = bE0(i,j,k,l,blevel);
+                                EPS11(i,j,k,l,level) = bE11(i,j,k,l,blevel);
+								EPS12(i, j, k, l, level) = bE12(i,j,k,l,blevel);
+								EPS2(i,j,k,l,level) = bE2(i,j,k,l,blevel);
+                                EPS3(i,j,k,l,level) = bE3(i,j,k,l,blevel);
+								MU0(i, j, k, l, level) = bMU0(i, j, k, l, blevel);
+								MU11(i, j, k, l, level) = bMU11(i, j, k, l, blevel);
+								MU12(i, j, k, l, level) = bMU12(i, j, k, l, blevel);
+								MU2(i, j, k, l, level) = bMU2(i, j, k, l, blevel);
+								MU3(i, j, k, l, level) = bMU3(i, j, k, l, blevel);
+							}
                         }
                     }
                 }
@@ -323,11 +414,17 @@ namespace SCATMECH {
                     for (int j=1; j<=M2; ++j) {
                         for (int k=1; k<=M1; ++k) {
                             for (int l=1; l<=M2; ++l) {
-                                E0(i,j,k,l,level) = (i==k && j==l) ? smedium : 0.;
-                                E1(i,j,k,l,level) = (i==k && j==l) ? smedium : 0.;
-                                E2(i,j,k,l,level) = (i==k && j==l) ? smedium : 0.;
-                                E3(i,j,k,l,level) = (i==k && j==l) ? smedium : 0.;
-                            }
+                                EPS0(i,j,k,l,level) = (i==k && j==l) ? smedium : 0.;
+                                EPS11(i,j,k,l,level) = (i==k && j==l) ? smedium : 0.;
+								EPS12(i,j,k,l,level) = (i == k && j == l) ? smedium : 0.;
+								EPS2(i,j,k,l,level) = (i==k && j==l) ? smedium : 0.;
+                                EPS3(i,j,k,l,level) = (i==k && j==l) ? smedium : 0.;
+								MU0(i, j, k, l, level) = (i == k && j == l) ? 1. : 0.;
+								MU11(i, j, k, l, level) = (i == k && j == l) ? 1. : 0.;
+								MU12(i, j, k, l, level) = (i == k && j == l) ? 1. : 0.;
+								MU2(i, j, k, l, level) = (i == k && j == l) ? 1. : 0.;
+								MU3(i, j, k, l, level) = (i == k && j == l) ? 1. : 0.;
+							}
                         }
                     }
                 }
@@ -341,11 +438,17 @@ namespace SCATMECH {
                         for (int k=1; k<=M1; ++k) {
                             for (int l=1; l<=M2; ++l) {
                                 COMPLEX phase = exp(-cI*(k1*overlay1*(i-k)+k2*overlay2*(j-l)));
-                                E0(i,j,k,l,level) = tE0(i,j,k,l,tlevel)*phase;
-                                E1(i,j,k,l,level) = tE1(i,j,k,l,tlevel)*phase;
-                                E2(i,j,k,l,level) = tE2(i,j,k,l,tlevel)*phase;
-                                E3(i,j,k,l,level) = tE3(i,j,k,l,tlevel)*phase;
-                            }
+                                EPS0(i,j,k,l,level) = tE0(i,j,k,l,tlevel)*phase;
+                                EPS11(i,j,k,l,level) = tE11(i,j,k,l,tlevel)*phase;
+								EPS12(i,j,k,l,level) = tE12(i,j,k,l,tlevel)*phase;
+								EPS2(i,j,k,l,level) = tE2(i,j,k,l,tlevel)*phase;
+                                EPS3(i,j,k,l,level) = tE3(i,j,k,l,tlevel)*phase;
+								MU0(i, j, k, l, level) = tMU0(i, j, k, l, tlevel)*phase;
+								MU11(i, j, k, l, level) = tMU11(i, j, k, l, tlevel)*phase;
+								MU12(i, j, k, l, level) = tMU12(i, j, k, l, tlevel)*phase;
+								MU2(i, j, k, l, level) = tMU2(i, j, k, l, tlevel)*phase;
+								MU3(i, j, k, l, level) = tMU3(i, j, k, l, tlevel)*phase;
+							}
                         }
                     }
                 }
@@ -382,10 +485,16 @@ namespace SCATMECH {
         int M1 = 2*order1+1;
         int M2 = 2*order2+1;
 
-        E0.allocate(M1,M2,M1,M2,levels);
-        E1.allocate(M1,M2,M1,M2,levels);
-        E2.allocate(M1,M2,M1,M2,levels);
-        E3.allocate(M1,M2,M1,M2,levels);
+        EPS0.allocate(M1,M2,M1,M2,levels);
+        EPS11.allocate(M1,M2,M1,M2,levels);
+		EPS12.allocate(M1,M2,M1,M2,levels);
+		EPS2.allocate(M1,M2,M1,M2,levels);
+        EPS3.allocate(M1,M2,M1,M2,levels);
+		MU0.allocate(M1, M2, M1, M2, levels);
+		MU11.allocate(M1, M2, M1, M2, levels);
+		MU12.allocate(M1, M2, M1, M2, levels);
+		MU2.allocate(M1, M2, M1, M2, levels);
+		MU3.allocate(M1, M2, M1, M2, levels);
 
         int iseparation = separation>0.? 1 : 0;
 
@@ -393,26 +502,50 @@ namespace SCATMECH {
             if (level<=blevels) {
                 int blevel = blevels-level;
                 thick(level) = bottom->get_thickness(blevel);
-                FillE0E1E2E3Matrices(E0,E1,E2,E3,M1,M2,level,blevel,bottom,true);
-            } else if (level==blevels+1 && separation>0.) {
+                FillE0E1E2E3Matrices(EPS0,EPS11,EPS12,EPS2,EPS3,
+					MU0, MU11, MU12, MU2, MU3,
+					M1,M2,level,blevel,bottom,true);
+			} else if (level==blevels+1 && separation>0.) {
                 thick(level) = separation;
                 COMPLEX smedium = top->get_medium_t().epsilon(lambda);
                 for (int i=1; i<=M1; ++i) {
                     for (int j=1; j<=M2; ++j) {
                         for (int k=1; k<=M1; ++k) {
                             for (int l=1; l<=M2; ++l) {
-                                E0(i,j,k,l,level) = (i==k && j==l) ? smedium : 0.;
-                                E1(i,j,k,l,level) = (i==k && j==l) ? smedium : 0.;
-                                E2(i,j,k,l,level) = (i==k && j==l) ? smedium : 0.;
-                                E3(i,j,k,l,level) = (i==k && j==l) ? smedium : 0.;
-                            }
+                                EPS0(i,j,k,l,level) = (i==k && j==l) ? smedium : 0.;
+                                EPS11(i,j,k,l,level) = (i==k && j==l) ? smedium : 0.;
+								EPS12(i,j,k,l,level) = (i==k && j==l) ? smedium : 0.;
+								EPS2(i,j,k,l,level) = (i==k && j==l) ? smedium : 0.;
+                                EPS3(i,j,k,l,level) = (i==k && j==l) ? smedium : 0.;
+								MU0(i, j, k, l, level) = (i == k && j == l) ? 1. : 0.;
+								MU11(i, j, k, l, level) = (i == k && j == l) ? 1. : 0.;
+								MU12(i, j, k, l, level) = (i == k && j == l) ? 1. : 0.;
+								MU2(i, j, k, l, level) = (i == k && j == l) ? 1. : 0.;
+								MU3(i, j, k, l, level) = (i == k && j == l) ? 1. : 0.;
+							}
                         }
                     }
                 }
             } else if (level>blevels + iseparation) {
                 int tlevel = blevels-level+blevels+iseparation;
                 thick(level) = top->get_thickness(tlevel);
-                FillE0E1E2E3Matrices(E0,E1,E2,E3,M1,M2,level,tlevel,top,false);
+                FillE0E1E2E3Matrices(EPS0,EPS11,EPS12,EPS2,EPS3,
+					MU0, MU11, MU12, MU2, MU3,
+					M1,M2,level,tlevel,top,false);
+				for (int i = 1; i <= M1; ++i) {
+					for (int j = 1; j <= M2; ++j) {
+						for (int k = 1; k <= M1; ++k) {
+							for (int l = 1; l <= M2; ++l) {
+								MU0(i, j, k, l, level) = (i == k && j == l) ? 1. : 0.;
+								MU11(i, j, k, l, level) = (i == k && j == l) ? 1. : 0.;
+								MU12(i, j, k, l, level) = (i == k && j == l) ? 1. : 0.;
+								MU2(i, j, k, l, level) = (i == k && j == l) ? 1. : 0.;
+								MU3(i, j, k, l, level) = (i == k && j == l) ? 1. : 0.;
+							}
+						}
+					}
+				}
+
             }
         }
     }
@@ -431,11 +564,17 @@ namespace SCATMECH {
         int M1 = 2*order1+1;
         int M2 = 2*order2+1;
 
-        E0.allocate(M1,M2,M1,M2,0);
-        E1.allocate(M1,M2,M1,M2,0);
-        E2.allocate(M1,M2,M1,M2,0);
-        E3.allocate(M1,M2,M1,M2,0);
-        thick.allocate(levels);
+        EPS0.allocate(M1,M2,M1,M2,0);
+        EPS11.allocate(M1,M2,M1,M2,0);
+		EPS12.allocate(M1,M2,M1,M2,0);
+		EPS2.allocate(M1,M2,M1,M2,0);
+        EPS3.allocate(M1,M2,M1,M2,0);
+		MU0.allocate(M1, M2, M1, M2, 0);
+		MU11.allocate(M1, M2, M1, M2, 0);
+		MU12.allocate(M1, M2, M1, M2, 0);
+		MU2.allocate(M1, M2, M1, M2, 0);
+		MU3.allocate(M1, M2, M1, M2, 0);
+		thick.allocate(levels);
     }
 
 
@@ -448,7 +587,15 @@ namespace SCATMECH {
     DEFINE_PARAMETER(Cylinder_CrossGrating,dielectric_function,inside,"Medium inside holes","(1,0)",0xFF);
     DEFINE_PARAMETER(Cylinder_CrossGrating,dielectric_function,outside,"Medium outside holes","(1.5,0)",0xFF);
 
-    DEFINE_MODEL(OneD_CrossGrating,CrossGrating,"One dimensional grating");
+	DEFINE_MODEL(Rectangle_CrossGrating, Gridded_CrossGrating, "Rectangles in a 2-d array");
+	DEFINE_PARAMETER(Rectangle_CrossGrating, double, length1, "Length of rectangle in first direction [um]", "0.1", 0xFF);
+	DEFINE_PARAMETER(Rectangle_CrossGrating, double, length2, "Length of rectangle in second direction [um]", "0.1", 0xFF);
+	DEFINE_PARAMETER(Rectangle_CrossGrating, double, zetaa, "Skew angle [deg]", "0", 0xFF);
+	DEFINE_PARAMETER(Rectangle_CrossGrating, double, thickness, "Thickness of grating [um]", "0.1", 0xFF);
+	DEFINE_PARAMETER(Rectangle_CrossGrating, dielectric_function, inside, "Medium inside rectangles", "(1,0)", 0xFF);
+	DEFINE_PARAMETER(Rectangle_CrossGrating, dielectric_function, outside, "Medium outside rectangles", "(1.5,0)", 0xFF);
+
+	DEFINE_MODEL(OneD_CrossGrating,CrossGrating,"One dimensional grating");
     DEFINE_PARAMETER(OneD_CrossGrating,double,d2,"Lattice constant #2 [um]","0.5",0xFF);
     DEFINE_PARAMETER(OneD_CrossGrating,double,zeta,"Angle of lattice vectors from perpendicular [deg]","0",0xFF);
     DEFINE_PTRPARAMETER(OneD_CrossGrating,Grating_Ptr,grating,"Grating","Single_Line_Grating",0xFF);

@@ -10,6 +10,7 @@
 //** Email: thomas.germer@nist.gov
 //**
 //******************************************************************************
+#include "zernike.h"
 #include "zernikeexpansion.h"
 #include "bobvlieg.h"
 
@@ -17,24 +18,6 @@ using namespace std;
 using namespace SCATMECH;
 
 namespace SCATMECH {
-
-///
-/// The following calculates the radial Zernike polynomial:
-/// where n is the radial order, l is the azimuthal order, and rho is the argument 
-/// 
-static double Radial_Zernike_Polynomial(int n,int l,double rho)
-{
-	using namespace BobVlieg_Supp; // This defines mpow and Fact (mpow(s) is (-1)^s), Fact(s) is factorial of s.
-
-	int m = abs(l);
-	if ((n-m)%2==1) return 0.;
-
-	double sum = 0;
-	for (int s=0;s<=(n-m)/2;++s) {
-		sum += mpow(s)*Fact(n-s)/Fact(s)/Fact((n+m)/2-s)/Fact((n-m)/2-s)*pow(rho,(double)(n-2*s));		
-	}
-	return sum;
-};
 
 // The azimuthal function 
 static double az(int k,double phi)

@@ -31,7 +31,21 @@ namespace SCATMECH {
             DECLARE_PARAMETER(dielectric_function,outside);
     };
 
-    class OneD_CrossGrating : public CrossGrating {
+	class Rectangle_CrossGrating : public Gridded_CrossGrating {
+	protected:
+
+		void setup();
+
+		DECLARE_MODEL();
+		DECLARE_PARAMETER(double, length1);
+		DECLARE_PARAMETER(double, length2);
+		DECLARE_PARAMETER(double, zetaa);
+		DECLARE_PARAMETER(double, thickness);
+		DECLARE_PARAMETER(dielectric_function, inside);
+		DECLARE_PARAMETER(dielectric_function, outside);
+	};
+
+	class OneD_CrossGrating : public CrossGrating {
         protected:
 
             void setup();

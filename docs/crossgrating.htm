@@ -48,6 +48,7 @@
 	<li><a href="#generic">Generic_CrossGrating</a>: A crossed grating described by a <a href="#file">grating description file</a>. 
 	      This description is the most general and can describe a wide variety of crossed gratinged with sharp material boundaries.
 	<li><a href="#Cylinder_CrossGrating">Cylinder_CrossGrating</a>: A cross grating described by an array of vertical cylinders.
+	<li><a href="#Rectangular_CrossGrating">Rectangular_CrossGrating</a>: A binary grating consisting of rectangles or parallelograms.
 	<li><a href="#Sphere_CrossGrating">Sphere_CrossGrating</a>: A cross grating described by an array of spheres embeded in a medium.
 	<li><a href="#Pyramidal_Pit_CrossGrating">Pyramidal_Pit_CrossGrating</a>: A cross grating described by an array of tetrahedral pits.
 	</ul>
@@ -566,6 +567,131 @@
           <tr>
             <td colspan="4" class="model">
 	      <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+              <a name="Rectangular_CrossGrating"><b>Rectangular_CrossGrating</b></a>:
+              A binary grating consisting of rectangulars (or parallelograms) of one index of refraction embedded in a film of another index of refraction.
+	    <br><center><img src="Images/RectangularCrossGrating.jpg" width="500" alt="Diagram showing a unit cell with a rectangular hole."></center>
+		<br>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="parameter">medium_i</td>
+            <td class="datatype"><a href="dielfunc.htm">dielectric_function</a></td>
+            <td class="description">The
+            optical constants of the incident medium, expressed as
+            a complex number (n,k) or, optionally, as a function of
+            wavelength. The material must be non-absorbing
+            (k=0). <br>
+	    (Inherited from <b>CrossGrating</b>.)
+            <td class="default">1</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">medium_t</td>
+            <td class="datatype"><a href="dielfunc.htm">dielectric_function</a></td>
+            <td class="description">The
+            optical constants of the transmitted medium, expressed as
+            a complex number (n,k) or, optionally, as a function of
+            wavelength.<br>
+	    (Inherited from <b>CrossGrating</b>.)
+            <td class="default">(4.05,0.05)</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">d1</td>
+            <td class="datatype">double</td>
+            <td class="description">The lattice constant along the 1st coordinate of the unit cell [&#181;m].<br>
+	    (Inherited from <b>Gridded_CrossGrating</b>.)
+            <td class="default">0.5</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">d2</td>
+            <td class="datatype">double</td>
+            <td class="description">The lattice constant along the 2nd coordinate of the unit cell [&#181;m].<br>
+	    (Inherited from <b>Gridded_CrossGrating</b>.)
+            <td class="default">0.5</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">zeta</td>
+            <td class="datatype">double</td>
+            <td class="description">The off-perpendicular angle of the unit cell [deg].  The angle zeta is zero for
+		a rectangular unit cell.<br>
+	    (Inherited from <b>Gridded_CrossGrating</b>.)
+            <td class="default">0</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">grid1</td>
+            <td class="datatype">int</td>
+            <td class="description">The number of grid elements in the unit cell along the 1st coordinate. This parameter is optimally a power of 2. 
+	      However, the fast fourier transform algorithm that is used can accept any value, but its speed improves when the prime factors of <tt>grid1</tt> are small. <br>
+	    (Inherited from <b>Gridded_CrossGrating</b>.)
+            <td class="default">1024</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">grid2</td>
+            <td class="datatype">int</td>
+            <td class="description">The number of grid elements in the unit cell along the 2nd coordinate. This parameter is optimally a power of 2. 
+	      However, the fast fourier transform algorithm that is used can accept any value, but its speed improves when the prime factors of <tt>grid2</tt> are small. <br>
+	    (Inherited from <b>Gridded_CrossGrating</b>.)
+            <td class="default">1024</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">length1</td>
+            <td class="datatype"><a href="scattabl.htm">Table</a></td>
+            <td class="description">The length of one of the sides of the rectangles [&#181;m].  If this size exceeds the boundaries of the grating unit cell, the rectangle is truncated.
+            <td class="default">0.05</td>
+          </tr>
+	  
+          <tr>
+            <td class="parameter">length2</td>
+            <td class="datatype"><a href="scattabl.htm">Table</a></td>
+            <td class="description">The length of the other sides of the rectangles [&#181;m].  If this size exceeds the boundaries of the grating unit cell, the rectangle is truncated.
+            <td class="default">0.05</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">zetaa</td>
+            <td class="datatype"><a href="scattabl.htm">Table</a></td>
+            <td class="description">The angle of the parallelogram [degrees].
+	      If this value is zero, then the shape is a rectangle. If the value is the same as <b>zeta</b>, the sides of the parallelogram line up with the unit cell.
+            <td class="default">0</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">thickness</td>
+            <td class="datatype">double</td>
+            <td class="description">The thickness of the layer, which is also the height of the cylinder [&#181;m].
+            <td class="default">0.05</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">inside</td>
+            <td class="datatype"><a href="dielfunc.htm">dielectric_function</a></td>
+            <td class="description">The
+            optical constants of the interior of the cylinder, expressed as
+            a complex number (n,k) or, optionally, as a function of
+            wavelength.
+            <td class="default">(4.05,0.05)</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">outside</td>
+            <td class="datatype"><a href="dielfunc.htm">dielectric_function</a></td>
+            <td class="description">The
+            optical constants of the exterior of the cylinder, expressed as
+            a complex number (n,k) or, optionally, as a function of
+            wavelength.
+            <td class="default">(4.05,0.05)</td>
+          </tr>
+
+          <tr>
+            <td colspan="4" class="model">
+	      <p><a href="#top"><span class="totop">Top of Page</span></a></p>
               <a name="Sphere_CrossGrating"><b>Sphere_CrossGrating</b></a>:
               A grating consisting of a film in which an array of spheres is embedded.<br>
 	    <br><center><img src="Images/sphere_crossgrating.jpg" width="500" alt="Diagram showing a unit cell consisting of a layer with an embedded sphere."></center>
@@ -930,11 +1056,11 @@
 	  <h4>MATERIALS Section:</h4>
 
 	  <p>The <b>MATERIALS</b> section is also essentially identical to that
-	  for <a href="grating.htm#file">Generic_Grating</a>, with the exception that
-	    anisotropic or magnetic materials are not supported.
+	  for <a href="grating.htm#file">Generic_Grating</a>. 
 	    As for the one-dimensional
 	  grating, the two materials <b>medium_i</b> and <b>medium_t</b> are
-	  predefined and determined by the class parameters.  Thus, for this simple grating, where we have no
+	    predefined and determined by the class parameters.
+	    Thus, for this simple grating, where we have no
 	  other materials, we would just use:
 
 	    <pre>
@@ -942,6 +1068,11 @@
             END
             </pre>
 
+	    Like the <a href="grating.htm#file">Generic_Grating</a>, the keywords <b>ANISO</b>, <b>MAGNETIC</b>, and <b>ANISOMAGNETIC</b> can be used
+	    for anisotropic, magnetic, and anisotropic magnetic media.  For cross gratings, when <b>zeta</b> is nonzero, the axes of the anisotropic
+	    media are the same as the unit cell vectors.
+	    
+	    
 	  <h4>VERTICES Section:</h4>
 
 	  <p>The <b>VERTICES</b> section is similar to that for a

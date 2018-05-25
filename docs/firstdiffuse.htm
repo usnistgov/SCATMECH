@@ -29,18 +29,17 @@
 	<p>
         The class <strong>First_Diffuse_BRDF_Model</strong> is a
         <a href="BRDF_Model.htm">BRDF_Model</a> that describes the
-        singly scattered light in a diffuse medium with a flat,
-        smooth interface. It assumes that the light is scattered by
-        Rayleigh-Gans scattering with a local angular distribution
-        given by a specified phase function. The abstract class
-        <a href="phase.htm">Phase_Function</a> provides a specific
-        phase function. The model requires a mean free path for
-        scattering, and uses the imaginary part of the optical
-        constant to determine the mean free path for absorption. If
-        the material is not absorbing, the result does not depend
-        upon the mean free path of scattering.  In general, one would 
-	add a Lambertian contribution to the result to account for 
-	multiply scattered light.
+        singly scattered light in a diffuse medium with a flat, smooth
+        interface. It assumes that the light is scattered by a
+        given <a href="polphase.htm">Polarized_Phase_Function</a>.
+        The model uses the imaginary part of the optical constant of
+        the medium and the absorption coefficient in
+        the <a href="polphase.htm">Polarized_Phase_Function</a> to
+        determine the total absorption coefficient.  In general, one
+        would add a Lambertian contribution
+        (using <a href="lambert.htm">Lambertian_BRDF_Model</a>
+        or <a href="diffuse.htm">Diffuse_Subsurface_BRDF_Model</a>) to
+        the result to account for multiply scattered light.
 	<br><br>
         <center>
           <img src="Images/firstdiffuse.gif" width="400" height=
@@ -110,30 +109,36 @@
           </tr>
 
           <tr>
-            <td class="parameter">l_scat</td>
+            <td class="parameter">depoll</td>
 
             <td class="datatype">double</td>
 
-            <td class="description">The mean
-            free path for scattering [&#181;m]. If the material is
-            lossless (the optical constant is real), then l_scat
-            has no effect on the resulting scattering
-            function.</td>
+            <td class="description">Linear depolarization coefficient. This parameter adds additional depolarization proportional to the distance traveled in the material.</td>
 
-            <td class="default">1</td>
+            <td class="default">0</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">depolc</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">Circular depolarization coefficient. This parameter adds additional depolarization proportional to the distance traveled in the material.</td>
+
+            <td class="default">0</td>
           </tr>
 
           <tr>
             <td class="parameter">phase_function</td>
 
-            <td class="datatype"><a href="phase.htm">Phase_Function_Ptr</a></td>
+            <td class="datatype"><a href="polphase.htm">Polarized_Phase_Function_Ptr</a></td>
 
             <td class="description">The bulk
             scattering function, specifying by the probability that
             light will scatter by a given angle each time it
-            scatters.</td>
+            scatters. <tt>Polarized_Phase_Function</tt> also handles the scattering and absorption coefficients.</td>
 
-            <td class="default">Henyey_Greenstein_Phase_Function</td>
+            <td class="default">Unpolarized_Phase_Function</td>
           </tr>
 
           <tr>

@@ -29,7 +29,7 @@ namespace SCATMECH {
     string
     Get_SCATMECH_Version()
     {
-        return std::string("SCATMECH 7.10 (Build: ") + std::string(__DATE__) + std::string(")");
+        return std::string("SCATMECH 7.20 (Build: ") + std::string(__DATE__) + std::string(")");
     }
 
     optical_constant default_substrate(4.15,0.05);
@@ -112,7 +112,7 @@ namespace SCATMECH {
                 if (file) return filename;
                 begin = end+1;
             }
-            throw SCATMECH_exception("Cannot open file " + name);
+            throw SCATMECH_exception("Cannot open file \"" + name + "\"");
         } else {
             return name;
         }

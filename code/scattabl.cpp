@@ -134,7 +134,8 @@ namespace SCATMECH {
                     double x;
                     charstream >> x;
                     if (charstream.fail()) isheader=true;
-                    isblankline=false;
+					if (charstream.peek() == ',') charstream.get();
+					isblankline=false;
                     ncol++;
                 }
             }
@@ -167,6 +168,7 @@ namespace SCATMECH {
                     if (!linestream.fail()) {
                         tempvals[i] = x;
                     } else i=ncol;
+					if (linestream.peek() == ',') linestream.get();
                 }
                 // If all of the columns are present, store the row...
                 if (i==ncol) {

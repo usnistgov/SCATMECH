@@ -21,6 +21,7 @@
 #include "rcw.h"
 #include "crossrcw.h"
 #include "zernikeexpansion.h"
+#include "polydisperse.h"
 
 namespace SCATMECH {
 
@@ -37,14 +38,15 @@ namespace SCATMECH {
             Register((Lambertian_BRDF_Model*)0);
             Register((Local_BRDF_Model*)0);
             Register((Instrument_BRDF_Model*)0);
-            Register((First_Diffuse_BRDF_Model*)0);
-            Register_Model(Two_Source_BRDF_Model);
+   	    Register((First_Diffuse_BRDF_Model*)0);
+	    Register_Model(Two_Source_BRDF_Model);
             Register_Model(Three_Source_BRDF_Model);
             Register_Model(Four_Source_BRDF_Model);
             Register_Model(Transmit_BRDF_Model);
             Register_Model(RCW_BRDF_Model);
             Register_Model(CrossRCW_BRDF_Model);
-			Register_Model(ZernikeExpansion_BRDF_Model);
+	    Register_Model(ZernikeExpansion_BRDF_Model);
+	    Register_Model(Polydisperse_Sphere_BRDF_Model);
 
         }
     }

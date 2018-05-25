@@ -1,0 +1,393 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://pages.nist.gov/nist-header-footer/css/nist-combined.css">
+<script src="https://pages.nist.gov/nist-header-footer/js/jquery-1.9.0.min.js" type="text/javascript" defer="defer"></script>
+<script src="https://pages.nist.gov/nist-header-footer/js/nist-header-footer.js" type="text/javascript" defer="defer"></script>
+  <meta name="generator" content=
+  "HTML Tidy for Cygwin (vers 1st September 2004), see www.w3.org">
+   <link rel="STYLESHEET" href="style.css" type="text/css">
+
+  <title>SCATMECH: Polarized_Phase_Function</title>
+<script language="JavaScript" id="_fed_an_js_tag" src="/js/federated-analytics.all.min.js?agency=NIST&subagency=pml&pua=UA-37115410-46&yt=true"></script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+});
+</script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+</script>
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+</head>
+
+<body><br>
+  <a name="top" id="top"><!-- --></a>
+
+  <table width="98%" border="0" cellpadding="0" cellspacing="0"
+  align="center">
+    <tr>
+      <td>
+        <p class="nav"><a href="index.htm">SCATMECH</a> &gt; <a href=
+        "classes.htm">Classes and Functions</a> &gt;
+        <a href="classes.htm#PropertyModels">Property Models</a>
+        &gt; Polarized_Phase_Function</p>
+
+	<h1>Abstract class Polarized_Phase_Function</h1>
+        
+        <hr>
+
+        <p>The abstract class <b>Polarized_Phase_Function</b> adds the polarization behavior and the coefficients for
+	  absorption and scattering to <a href="phase.htm">Phase_Function</a>. 
+	 This class is used to store 
+        information about the angular distribution of scattering in
+        bulk material, needed for example, by <a href=
+						 "firstdiffuse.htm">First_Diffuse_BRDF_Model</a>.
+	  While the code is configured to handle anisotropy, no models currently use that feature.
+
+	<p>The following models are available:
+	  <ul>
+	  <li><a href="polphase.htm">Abstract class Polarized_Phase_Function</a></li>
+	  <li><a href="polphase.htm#UnpolarizedPhaseFunction">class Unpolarized_Phase_Function</a></li>
+	  <li><a href="polphase.htm#CodeWhitneyPhaseFunction">class CodeWhitney_Phase_Function</a></li>
+	  <li><a href="polphase.htm#ConstrainedPhaseFunction">class Constrained_Phase_Function</a></li>
+	  <li><a href="polphase.htm#SphericalScattererPhaseFunction">class SphericalScatterer_Phase_Function</a></li>
+	  <li><a href="polphase.htm#DistributedMiePhaseFunction">class Distributed_Mie_Phase_Function</a></li>
+	</ul>
+
+	  
+        <h2>Instantiable Models and Their Parameters:</h2>
+
+        <table border="1" cellpadding="5">
+          <tr>
+            <th>Parameter</th>
+
+            <th>Data
+            Type</th>
+
+            <th>Description</th>
+
+            <th>Default</th>
+          </tr>
+
+          <tr>
+	    <a name="UnpolarizedPhaseFunction"></a>
+            <td colspan="4" class="model"><b>Unpolarized_Phase_Function</b>:<br>
+	      This model is a completely depolarizing phase function. 
+	    </td>
+          </tr>
+
+          <tr>
+            <td class="parameter">phase_function</td>
+            <td class="datatype"><a href="phase.htm">Phase_Function_Ptr</a></td>
+            <td class="description">The scalar part of the phase function.</td>
+            <td class="default">Henyey_Greenstein_Phase_Function</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">log_absorption</td>
+            <td class="datatype">double</td>
+            <td class="description">The natural logarithm of the Naperian absorption coefficient [1/&micro;m].</td>
+            <td class="default">-20</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">log_scattering</td>
+            <td class="datatype">double</td>
+            <td class="description">The natural logarithm of the Naperian scattering coefficient [1/&micro;m].</td>
+            <td class="default">0</td>
+          </tr>
+
+          <tr>
+	    <a name="CodeWhitneyPhaseFunction"></a>
+            <td colspan="4" class="model"><b>CodeWhitney_Phase_Function</b>:<br>
+	      The phase function defined by Code and Whitney [A.D. Code and B.A. Whitney, &quotePolarization from scattering in blobs,&quote;
+	      Astrophysical Journal <b>441</b>, 400-407 (1995)], adapted to allow for any scalar phase function. That is, the polarized phase function is
+	      given by
+	      \begin{equation}
+	      {\bf P}(\theta)=p(\theta)\times\left(
+	      \begin{array}{cccc}
+	      1 & - p_l \sin^2\theta-1)/(1+\cos^2\theta) & 0 & 0 \\
+	      - p_l \sin^2\theta-1)/(1+\cos^2\theta) & 1 & 0 & 0 \\
+	      0 & 0 & 2 \cos\theta/(1+\cos^2\theta) &  p_c \sin\theta_f/(1+\cos^2\theta_f) \\
+	      0 & 0 &   - p_c \sin\theta_f/(1+\cos^2\theta_f) & 2 \cos\theta/(1+\cos^2\theta) 
+	      \end{array}\right)
+	      \end{equation}
+	     where $p(\theta)$ is the scalar phase function, $\theta_f = \theta [1+3.13 s \exp(-7\theta/\pi)]$, and $p_l$, $p_c$, and $s$ are parameters.
+	    </td>
+          </tr>
+          <tr>
+            <td class="parameter">phase_function</td>
+            <td class="datatype"><a href="phase.htm">Phase_Function_Ptr</a></td>
+            <td class="description">The scalar part of the phase function.</td>
+            <td class="default">Henyey_Greenstein_Phase_Function</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">log_absorption</td>
+            <td class="datatype">double</td>
+            <td class="description">The natural logarithm of the Naperian absorption coefficient [1/&micro;m].</td>
+            <td class="default">-20</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">log_scattering</td>
+            <td class="datatype">double</td>
+            <td class="description">The natural logarithm of the Naperian scattering coefficient [1/&micro;m].</td>
+            <td class="default">0</td>
+          </tr>
+          <tr>
+            <td class="parameter">plmax</td>
+            <td class="datatype">double</td>
+            <td class="description">The maximum degree of linear polarization, $p_l$.</td>
+            <td class="default">1</td>
+          </tr>
+          <tr>
+            <td class="parameter">pcmax</td>
+            <td class="datatype">double</td>
+            <td class="description">The maximum degree of circular polarization, $p_c$.</td>
+            <td class="default">0</td>
+          </tr>
+          <tr>
+            <td class="parameter">s</td>
+            <td class="datatype">double</td>
+            <td class="description">The circular polarization asymmetry parameter, $s$.</td>
+            <td class="default">0</td>
+          </tr>
+
+          <tr>
+	    <a name="ConstrainedPhaseFunction"></a>
+            <td colspan="4" class="model"><b>Constrained_Phase_Function</b>:<br>
+	      The phase function defined by Germer [T.A. Germer, &quote;Polarized single-scattering phase function determined 
+	      for a common reflectance standard from bidirectional reflectance 
+	      measurements,&quote; Proc. SPIE <b>10655</b>, 1065504 (2018)]. It defines values for the polarized part of the phase function at
+	      0&deg;, 60&deg;, 120&deg;, and 180&deg;, imposing requirements in the forward and backward scattering direction, and performing
+	      a cubic spline for all other angles. The phase function is given by
+	      \begin{equation}
+	      {\bf P}(\theta)=p(\theta)\times\left(
+	      \begin{array}{cccc}
+	      1 & m_{01} & 0 & 0 \\
+	      m_{01} & m_{11} & 0 & 0 \\
+	      0 & 0 & m_{22} & m_{23} \\
+	      0 & 0 & -m_{23} & m_{33}
+	      \end{array}\right)
+	      \end{equation}
+	    </td>
+          </tr>
+          <tr>
+            <td class="parameter">phase_function</td>
+            <td class="datatype"><a href="phase.htm">Phase_Function_Ptr</a></td>
+            <td class="description">The scalar part of the phase function.</td>
+            <td class="default">Henyey_Greenstein_Phase_Function</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">log_absorption</td>
+            <td class="datatype">double</td>
+            <td class="description">The natural logarithm of the Naperian absorption coefficient [1/&micro;m].</td>
+            <td class="default">-20</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">log_scattering</td>
+            <td class="datatype">double</td>
+            <td class="description">The natural logarithm of the Naperian scattering coefficient [1/&micro;m].</td>
+            <td class="default">0</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">m11_0</td>
+            <td class="datatype">double</td>
+            <td class="description">The value of $m_{11}$ and $m_{22}$ at $\theta = 0^\circ$.</td>
+            <td class="default">1</td>
+          </tr>
+          <tr>
+            <td class="parameter">m11_60</td>
+            <td class="datatype">double</td>
+            <td class="description">The value of $m_{11}$ at $\theta = 60^\circ$.</td>
+            <td class="default">0</td>
+          </tr>
+          <tr>
+            <td class="parameter">m11_120</td>
+            <td class="datatype">double</td>
+            <td class="description">The value of $m_{11}$ at $\theta = 120^\circ$.</td>
+            <td class="default">0</td>
+          </tr>
+          <tr>
+            <td class="parameter">m11_180</td>
+            <td class="datatype">double</td>
+            <td class="description">The value of $m_{11}$ and $-m{22}$ at $\theta = 180^\circ$.</td>
+            <td class="default">0</td>
+          </tr>
+          <tr>
+            <td class="parameter">m22_60</td>
+            <td class="datatype">double</td>
+            <td class="description">The value of $m_{22}$ at $\theta = 60^\circ$.</td>
+            <td class="default">0</td>
+          </tr>
+          <tr>
+            <td class="parameter">m22_120</td>
+            <td class="datatype">double</td>
+            <td class="description">The value of $m_{22}$ at $\theta = 120^\circ$.</td>
+            <td class="default">0</td>
+          </tr>
+          <tr>
+            <td class="parameter">m33_0</td>
+            <td class="datatype">double</td>
+            <td class="description">The value of $m_{33}$ at $\theta = 0^\circ$.</td>
+            <td class="default">1</td>
+          </tr>
+          <tr>
+            <td class="parameter">m33_60</td>
+            <td class="datatype">double</td>
+            <td class="description">The value of $m_{33}$ at $\theta = 60^\circ$.</td>
+            <td class="default">1</td>
+          </tr>
+          <tr>
+            <td class="parameter">m33_120</td>
+            <td class="datatype">double</td>
+            <td class="description">The value of $m_{33}$ at $\theta = 120^\circ$.</td>
+            <td class="default">1</td>
+          </tr>
+          <tr>
+            <td class="parameter">m33_180</td>
+            <td class="datatype">double</td>
+            <td class="description">The value of $m_{33}$ at $\theta = 180^\circ$.</td>
+            <td class="default">1</td>
+          </tr>
+          <tr>
+            <td class="parameter">m10_60</td>
+            <td class="datatype">double</td>
+            <td class="description">The value of $m_{10}$ at $\theta = 60^\circ$.</td>
+            <td class="default">0</td>
+          </tr>
+          <tr>
+            <td class="parameter">m10_120</td>
+            <td class="datatype">double</td>
+            <td class="description">The value of $m_{10}$ at $\theta = 120^\circ$.</td>
+            <td class="default">0</td>
+          </tr>
+          <tr>
+            <td class="parameter">m23_60</td>
+            <td class="datatype">double</td>
+            <td class="description">The value of $m_{23}$ at $\theta = 60^\circ$.</td>
+            <td class="default">0</td>
+          </tr>
+          <tr>
+            <td class="parameter">m23_120</td>
+            <td class="datatype">double</td>
+            <td class="description">The value of $m_{23}$ at $\theta = 120^\circ$.</td>
+            <td class="default">0</td>
+          </tr>
+
+          <tr>
+	    <a name="SphericalScattererPhaseFunction"></a>
+            <td colspan="4" class="model"><b>SphericalScatterer_Phase_Function</b>:<br>
+	      This model uses a <a href="sphrscat.htm">SphericalScatterer</a> to determine the phase function. 
+	    </td>
+          </tr>
+          <tr>
+            <td class="parameter">scatterer</td>
+            <td class="datatype"><a href="sphrscat.htm">SphericalScatterer_Ptr</a></td>
+            <td class="description">The model for a spherical scatterer.</td>
+            <td class="default">MieScatterer</td>
+          </tr>
+          <tr>
+            <td class="parameter">volume_density</td>
+            <td class="datatype">double</td>
+            <td class="description">The volume number density of scatterers [&\micro;m<sup>-3</sup>].</td>
+            <td class="default">1E-4</td>
+          </tr>
+	  
+
+          <tr>
+	    <a name="DistributedMiePhaseFunction"></a>
+            <td colspan="4" class="model"><b>Distributed_Mie_Phase_Function</b>:<br>
+	      This model averages the Mie scattering function over a distribution of sphere sizes to determine the phase function. 
+	    </td>
+          </tr>
+          <tr>
+            <td class="parameter">lambda</td>
+            <td class="datatype">double</td>
+            <td class="description">The wavelength of the light in vacuum.</td>
+            <td class="default">0.532</td>
+          </tr>
+          <tr>
+            <td class="parameter">medium</td>
+            <td class="datatype"><a href="dielfunc.htm">dielectric_function</a></td>
+            <td class="description">The optical constants of the medium surrounding the spheres, expressed as a complex number (n,k) or, optionally, as a function of wavelength.</td>
+            <td class="default">0.532</td>
+          </tr>
+          <tr>
+            <td class="parameter">sphere</td>
+            <td class="datatype"><a href="dielfunc.htm">dielectric_function</a></td>
+            <td class="description">The optical constants of the spheres, expressed as a complex number (n,k) or, optionally, as a function of wavelength.</td>
+            <td class="default">0.532</td>
+          </tr>
+          <tr>
+            <td class="parameter">distribution</td>
+            <td class="datatype"><a href="sizedistribution.htm">VolumeParticleSizeDistribution_Ptr</a></td>
+            <td class="description">The diameter distribution and number of spheres.</td>
+            <td class="default">VolumeParticleSizeDistribution</td>
+          </tr>
+          <tr>
+            <td class="parameter">integralStart</td>
+            <td class="datatype">double</td>
+            <td class="description">The starting diameter for the integral over diameter [&micro;m].</td>
+            <td class="default">0.1</td>
+          </tr>
+          <tr>
+            <td class="parameter">integralEnd</td>
+            <td class="datatype">double</td>
+            <td class="description">The ending diameter for the integral over diameter [&micro;m].</td>
+            <td class="default">100</td>
+          </tr>
+          <tr>
+            <td class="parameter">integralStep</td>
+            <td class="datatype">double</td>
+            <td class="description">The fractional step diameter for integration. (The integral is performed logarithmically.)</td>
+            <td class="default">0.01</td>
+          </tr>
+	  </table>
+
+        <h2>See also:</h2>
+
+        <p><a href="index.htm">SCATMECH Home</a>, &nbsp;
+          <a href="firstdiffuse.htm">First_Diffuse_BRDF_Model</a>, &nbsp;
+	  <a href="phase.htm">Phase_Function</a>
+        &nbsp;</p>
+
+	<h2>Include file:</h2>
+
+          <pre>
+#include "<a href="../code/phasefunction.h">phasefunction.h</a>"
+</pre>
+        <h2>Source code:</h2>
+
+          <pre>
+<a href="../code/phasefunction.cpp">phasefunction.cpp</a>
+</pre>
+        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+<!-- START FOOTER -->
+<hr>
+<h2>For More Information</h2>
+
+<p>
+<a href="http://www.nist.gov/pml/div685/grp06/germer.cfm">SCATMECH Technical Information and Questions</a><br>
+<a href="http://www.nist.gov/pml/div685/index.cfm" target="_top">Sensor Science Division Home Page</a><br>
+<a href="mailto:fraser@nist.gov">Sensor Science Division Inquiries</a><br>
+<a href="mailto:thomas.germer@nist.gov">Website Comments</a>
+
+<p>
+Current SCATMECH version: <a href="./download.htm">7.10 (October 2017)</a><br>
+<br>
+
+</td>
+</tr>
+</table>
+
+</body>
+</html>

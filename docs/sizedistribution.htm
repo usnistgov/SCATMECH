@@ -1,0 +1,421 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://pages.nist.gov/nist-header-footer/css/nist-combined.css">
+<script src="https://pages.nist.gov/nist-header-footer/js/jquery-1.9.0.min.js" type="text/javascript" defer="defer"></script>
+<script src="https://pages.nist.gov/nist-header-footer/js/nist-header-footer.js" type="text/javascript" defer="defer"></script>
+  <meta name="generator" content=
+  "HTML Tidy for Cygwin (vers 1st September 2004), see www.w3.org">
+   <link rel="STYLESHEET" href="style.css" type="text/css">
+
+  <title>SCATMECH: Size Distributions</title>
+<script language="JavaScript" id="_fed_an_js_tag" src="/js/federated-analytics.all.min.js?agency=NIST&subagency=pml&pua=UA-37115410-46&yt=true"></script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+});
+</script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+</script>
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+</head>
+
+<body><br>
+  <a name="top" id="top"><!-- --></a>
+
+  <table width="98%" border="0" cellpadding="0" cellspacing="0" align="center">
+    <tr>
+      <td>
+        <p class="nav"><a href="index.htm">SCATMECH</a> &gt; <a href=
+        "classes.htm">Classes and Functions</a> &gt;
+        <a href="classes.htm#PropertyModels">Property Models</a>
+        &gt; Size Distributions</p>
+
+	<h1>Abstract class Distribution<br>
+	  class VolumeParticleSizeDistribution<br>
+	  class SurfaceParticleSizeDistribution	</h1>
+        
+        <hr>
+	<p>
+	  This page describes models for particle size distributions and number densities. The class <b>Distribution</b> describes the size distribution, while
+	  the classes <b>VolumeParticleSizeDistribution</b> and <b>SurfaceParticleSizeDistribution</b> define the particle size distributions and the number densities
+	  together. The two latter classes are defined separately, because the units for volume number density are different than those for surface number density. 
+	  These distributions are used by a number of models that average over particle size in SCATMECH.
+
+	<p>The following models are available:
+	  <ul>
+  	  <li><a href="sizedistribution.htm">Abstract class Distribution</a></li>
+	  <ul>
+	    <li><a href="#LogNormalDistribution">Log_Normal_Distribution</a></li>
+	    <li><a href="#ModifiedGammaDistribution">Modified_Gamma_Distribution</a></li>
+	    <li><a href="#NormalDistribution">Normal_Distribution</a></li>
+	    <li><a href="#WeibullDistribution">Weibull_Distribution</a></li>
+	    <li><a href="#BimodalDistribution">Bimodal_Distribution</a></li>
+	  </ul>
+	  <li><a href="#VolumeParticleSizeDistribution">class VolumeParticleSizeDistribution</a></li>
+	  <li><a href="#SurfaceParticleSizeDistribution">class SurfaceParticleSizeDistribution</a></li>
+	  <ul>
+	    <li><a href="#CC1246ESurfaceParticleSizeDistribution">class CC1246E_SurfaceParticleSizeDistribution</a></li>
+	    </ul>
+	  </ul>
+	  
+        <h2>Instantiable Models for Distribution and Their Parameters:</h2>
+
+        <table border="1" cellpadding="5">
+          <tr>
+            <th>Parameter</th>
+
+            <th>Data
+            Type</th>
+
+            <th>Description</th>
+
+            <th>Default</th>
+          </tr>
+
+          <tr>
+	    <a name="LogNormalDistribution"></a>
+            <td colspan="4" class="model"><b>Log_Normal_Distribution</b>:<br>
+	      This distribution specifies a log-normal distribution in particle diameter $D$, with its probability density function (PDF) given by
+	      \begin{equation}
+	      {\rm PDF}(D)=\frac{1}{D\sigma\sqrt{2\pi}}\exp\left[{-\frac{(\log D-\log\mu)^2}{2\sigma^2}}\right].
+	      \end{equation}
+            </td>
+          </tr>
+
+
+          <tr>
+            <td class="parameter">sigma</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The parameter $\sigma$, which is the standard deviation of $\log D$.</td>
+
+            <td class="default">0</td>
+          </tr>
+
+           <tr>
+            <td class="parameter">median</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The parameter $\mu$, which is the median of diameter $D$ [&micro;m].</td>
+
+            <td class="default">10</td>
+          </tr>
+
+	  <tr>
+	    <a name="ModifiedGammaDistribution"></a>
+	    <td colspan="4" class="model"><b>Modified_Gamma_Distribution</b>:<br>
+	      This distribution specifies the distribution described by Deirmendjian [in <i>Electromagnetic Scattering on Spherical Polydispersions</i> (Elsevier, 1969)].
+              The probability density function (PDF) is given by
+	      \begin{equation}
+	      {\rm PDF}(D)=\frac{1}{A} r^\mu \exp\left(-\Lambda r^\gamma\right)
+              \end{equation}
+              where
+	      \begin{equation}
+              A = \frac{\Lambda^{-(1+\mu)/\gamma}\Gamma[(1+\mu)/\gamma]}{\gamma}
+              \end{equation}
+              and $r=D/2$ is the radius.
+            </td>
+          </tr>
+
+
+          <tr>
+            <td class="parameter">mu</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The parameter $\mu$.</td>
+
+            <td class="default">8</td>
+          </tr>
+
+           <tr>
+            <td class="parameter">Lambda</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The parameter $\Lambda$.</td>
+
+            <td class="default">0.0417</td>
+          </tr>
+
+           <tr>
+            <td class="parameter">gamma</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The parameter $\gamma$.</td>
+
+            <td class="default">3</td>
+          </tr>
+
+	  <tr>
+	    <a name="NormalDistribution"></a>
+	    <td colspan="4" class="model"><b>Normal_Distribution</b>:<br>
+	      This distribution specifies the normal distribution. 
+              The probability density function (PDF) is given by
+	      \begin{equation}
+	      {\rm PDF}(D)=\frac{1}{\sigma\sqrt{2\pi}}\exp\left[-\frac{(D-\mu)^2}{2\sigma^2}\right].
+              \end{equation}
+            </td>
+          </tr>
+
+
+          <tr>
+            <td class="parameter">mean</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The mean $\mu$  [&micro;m].</td>
+
+            <td class="default">10</td>
+          </tr>
+
+           <tr>
+            <td class="parameter">sigma</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The standard deviation $\sigma$ [&micro;m].</td>
+
+            <td class="default">5</td>
+          </tr>
+
+	  <tr>
+	    <a name="WeibullDistribution"></a>
+	    <td colspan="4" class="model"><b>Weibull_Distribution</b>:<br>
+	      This distribution given by Weibull [J. Appl. Mech.-Trans. ASME <b>18</b>, 293-297 (1951)]. 
+              The probability density function (PDF) is given by
+	      \begin{equation}
+	      {\rm PDF}(D)=\frac{k}{\lambda}\left(\frac{D}{\lambda}\right)^{k-1}\exp[-(D/\lambda)^k].
+              \end{equation}
+            </td>
+          </tr>
+
+
+          <tr>
+            <td class="parameter">scale</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The parameter $\lambda$  [&micro;m].</td>
+
+            <td class="default">10</td>
+          </tr>
+
+           <tr>
+            <td class="parameter">exponent</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The parameter $k$.</td>
+
+            <td class="default">4</td>
+          </tr>
+
+	  <tr>
+	    <a name="BimodalDistribution"></a>
+	    <td colspan="4" class="model"><b>Bimodal_Distribution</b>:<br>
+	      This distribution given by the sum of any two partial distributions.
+              The probability density function (PDF) is given by
+	      \begin{equation}
+	      {\rm PDF}(D)=f_{\rm A} {\rm PDF}_{\rm A}(D) + (1-f_{\rm A}) {\rm PDF}_{\rm B}(D).
+              \end{equation}
+            </td>
+          </tr>
+
+          <tr>
+            <td class="parameter">distributionA</td>
+
+            <td class="datatype">Distribution_Ptr</td>
+
+            <td class="description">The distribution ${\rm PDF}_{\rm A}(D)$.</td>
+
+            <td class="default">Log_Normal_Distribution</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">distributionB</td>
+
+            <td class="datatype">Distribution_Ptr</td>
+
+            <td class="description">The distribution ${\rm PDF}_{\rm B}(D)$.</td>
+
+            <td class="default">Log_Normal_Distribution</td>
+          </tr>
+
+           <tr>
+            <td class="parameter">fractionA</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The fraction of distribution A, $f_A$.</td>
+
+            <td class="default">0.5</td>
+          </tr>
+	   
+	</table>
+
+        <h2>Instantiable Models for VolumeParticleSizeDistribution and Their Parameters:</h2>
+
+        <table border="1" cellpadding="5">
+          <tr>
+            <th>Parameter</th>
+
+            <th>Data
+            Type</th>
+
+            <th>Description</th>
+
+            <th>Default</th>
+          </tr>
+
+          <tr>
+	    <a name="VolumeParticleSizeDistribution"></a>
+            <td colspan="4" class="model"><b>VolumeParticleSizeDistribution</b>:<br>
+	      This volume particle diameter distribution specifies a distribution and the number of particles in a volume.
+            </td>
+          </tr>
+
+          <tr>
+            <td class="parameter">distribution</td>
+
+            <td class="datatype">Distribution_Ptr</td>
+
+            <td class="description">The diameter distribution ${\rm PDF}(D)$.</td>
+
+            <td class="default">Log_Normal_Distribution</td>
+          </tr>
+
+           <tr>
+            <td class="parameter">numberdensity</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The volume number density [&micro;m<sup>-3</sup>].</td>
+
+            <td class="default">0.00001</td>
+          </tr>
+	</table>
+
+        <h2>Instantiable Models for SurfaceParticleSizeDistribution and Their Parameters:</h2>
+
+        <table border="1" cellpadding="5">
+          <tr>
+            <th>Parameter</th>
+
+            <th>Data
+            Type</th>
+
+            <th>Description</th>
+
+            <th>Default</th>
+          </tr>
+
+          <tr>
+	    <a name="SurfaceParticleSizeDistribution"></a>
+            <td colspan="4" class="model"><b>SurfaceParticleSizeDistribution</b>:<br>
+	      This surface particle diameter distribution specifies a distribution and the number of particles per area on a surface.
+            </td>
+          </tr>
+
+          <tr>
+            <td class="parameter">distribution</td>
+
+            <td class="datatype">Distribution_Ptr</td>
+
+            <td class="description">The diameter distribution ${\rm PDF}(D)$.</td>
+
+            <td class="default">Log_Normal_Distribution</td>
+          </tr>
+
+           <tr>
+            <td class="parameter">numberdensity</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The surface number density [&micro;m<sup>-2</sup>].</td>
+
+            <td class="default">0.001</td>
+           </tr>
+
+          <tr>
+	    <a name="CC1246ESurfaceParticleSizeDistribution"></a>
+            <td colspan="4" class="model"><b>CC1246E_SurfaceParticleSizeDistribution</b>:<br>
+	      The distribution given by IEST-STD-CC1246E, which specifies the number of particles on an area 0.1 m<sup>2</sup> having diameter greater than $D$ given by
+	      \begin{equation}
+	      N(D) = 10^{0.926[(\log_{10} L)^2-(\log_{10} D)^2]}.
+	      \end{equation}
+	      where $L$ is the cleanliness level.<br>
+	      <b>Note:</b> The parameter <tt>SurfaceParticleSizeDistribution::numberdensity</tt> is not used by this model, as its function is
+	      overridden by the cleanliness level. 
+            </td>
+          </tr>
+
+          <tr>
+            <td class="parameter">cleanliness</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The cleanliness level $L$.</td>
+
+            <td class="default">1000</td>
+          </tr>
+
+           <tr>
+            <td class="parameter">slope</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">The slope parameter, which is defined by the standard as 0.926, but which can be changed for this model.</td>
+
+            <td class="default">0.926</td>
+           </tr>
+	   
+	   
+	</table>
+	
+        <h2>See also:</h2>
+
+        <p><a href=
+        "index.htm">SCATMECH Home</a>, &nbsp; <a href=
+        "convent.htm">Conventions</a>, &nbsp; <a href=
+        "facet.htm">Facet_BRDF_Model</a> &nbsp;</p>
+
+	<h2>Include file:</h2>
+
+          <pre>
+#include "<a href="../code/sizedistribution.h">sizedistribution.h</a>"
+</pre>
+        <h2>Source code:</h2>
+
+          <pre>
+<a href="../code/sizedistribution.cpp">sizedistribution.cpp</a>
+</pre>
+
+<!-- START FOOTER -->
+<hr>
+<h2>For More Information</h2>
+
+<p>
+<a href="http://www.nist.gov/pml/div685/grp06/germer.cfm">SCATMECH Technical Information and Questions</a><br>
+<a href="http://www.nist.gov/pml/div685/index.cfm" target="_top">Sensor Science Division Home Page</a><br>
+<a href="mailto:fraser@nist.gov">Sensor Science Division Inquiries</a><br>
+<a href="mailto:thomas.germer@nist.gov">Website Comments</a>
+
+<p>
+Current SCATMECH version: <a href="./download.htm">7.10 (October 2017)</a><br>
+<br>
+
+</td>
+</tr>
+</table>
+
+</body>
+</html>

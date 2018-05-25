@@ -53,7 +53,6 @@ namespace SCATMECH {
         }
 
         int i,j,k,l,q;
-        HERE;
 
         // The grating needs the wavelength and the orders to calculate
         // the Fourier factorization...
@@ -67,10 +66,17 @@ namespace SCATMECH {
 
         // These are the four types of Fourier transforms as described in Ref. (1).
         // It is the job of CrossGrating to provide these...
-        CFARRAY E0 = grating->get_E0(); // Eq. 5 for eps
-        CFARRAY E1 = grating->get_E1(); // Eq. 5 for 1/eps
-        CFARRAY E2 = grating->get_E2(); // Eq. 8
-        CFARRAY E3 = grating->get_E3(); // Eq. 9
+        CFARRAY E0 = grating->get_EPS0(); // Eq. 5 for eps
+        CFARRAY E11 = grating->get_EPS11(); // Eq. 5 for 1/eps1
+		CFARRAY E12 = grating->get_EPS12(); // Eq. 5 for 1/eps2
+		CFARRAY E2 = grating->get_EPS2(); // Eq. 8
+        CFARRAY E3 = grating->get_EPS3(); // Eq. 9
+
+		CFARRAY MU0 = grating->get_MU0(); // Eq. 5 for mu
+		CFARRAY MU11 = grating->get_MU11(); // Eq. 5 for 1/mu1
+		CFARRAY MU12 = grating->get_MU12(); // Eq. 5 for 1/mu2
+		CFARRAY MU2 = grating->get_MU2(); // Eq. 8
+		CFARRAY MU3 = grating->get_MU3(); // Eq. 9
 
         // Get some other information about the grating...
         int    levels = grating->get_levels();
@@ -96,9 +102,15 @@ namespace SCATMECH {
         int MM2 = MM*2;
 
         E0.array(M1,M2,M1,M2,levels);
-        E1.array(M1,M2,M1,M2,levels);
-        E2.array(M1,M2,M1,M2,levels);
+        E11.array(M1,M2,M1,M2,levels);
+		E12.array(M1, M2, M1, M2, levels);
+		E2.array(M1,M2,M1,M2,levels);
         E3.array(M1,M2,M1,M2,levels);
+		MU0.array(M1, M2, M1, M2, levels);
+		MU11.array(M1, M2, M1, M2, levels);
+		MU12.array(M1, M2, M1, M2, levels);
+		MU2.array(M1, M2, M1, M2, levels);
+		MU3.array(M1, M2, M1, M2, levels);
 
         double phi = -rotation*deg;
         double cosphi = cos(phi);
@@ -291,23 +303,39 @@ namespace SCATMECH {
             // If the layer is homogeneous ...
             if (homogeneous) {
 
-                COMPLEX elevel = E1(1,1,1,1,level);
-                COMPLEX klevel = k0*sqrt(elevel*mu);
+                COMPLEX elevel1 = E11(1,1,1,1,level);
+				COMPLEX elevel2 = E12(1, 1, 1, 1, level);
+				COMPLEX elevel3 = E0(1, 1, 1, 1, level);
+				COMPLEX klevel1 = k0*sqrt(elevel1*mu);
+				COMPLEX klevel2 = k0*sqrt(elevel2*mu);
+				COMPLEX klevel3 = k0*sqrt(elevel3*mu);
 
-                CFARRAY _gamma=gamma;
-                _gamma.array(M1,M2,2);
+				CFARRAY _gamma1 = gamma;
+				CFARRAY _gamma2 = gamma;
+				CFARRAY _gamma3 = gamma;
+				_gamma1.array(M1,M2,2);
+				_gamma2.array(M1, M2, 2);
+				_gamma3.array(M1, M2, 2);
 
                 k=0;
                 for (i=1; i<=M1; ++i) {
                     for (j=1; j<=M2; ++j) {
                         // From Eq. 15 of (1)...
-                        COMPLEX kxy2=(sqr(alpha(i))+sqr(beta(j))-2*alpha(i)*beta(j)*sinzeta)*sqr(seczeta);
-                        COMPLEX g = sqrt(sqr(klevel)-kxy2);
-                        // Eq. 16 of (1)...
-                        g = (real(g)+imag(g)>0) ? g : -g;
-                        _gamma(i,j,1) = g;
-                        _gamma(i,j,2) = _gamma(i,j,1);
-                        ++k;
+                        COMPLEX kxy2 = (sqr(alpha(i))+sqr(beta(j))-2*alpha(i)*beta(j)*sinzeta)*sqr(seczeta);
+						COMPLEX g1 = sqrt(sqr(klevel1) - kxy2);
+						COMPLEX g2 = sqrt(sqr(klevel2) - kxy2);
+						COMPLEX g3 = sqrt(sqr(klevel3) - kxy2);
+						// Eq. 16 of (1)...
+                        g1 = (real(g1) + imag(g1)>0) ? g1 : -g1;
+						g2 = (real(g2) + imag(g2)>0) ? g2 : -g2;
+						g3 = (real(g3) + imag(g3)>0) ? g3 : -g3;
+						_gamma1(i, j, 1) = g1;
+						_gamma2(i, j, 1) = g2;
+						_gamma3(i, j, 1) = g3;
+						_gamma1(i, j, 2) = _gamma1(i, j, 1);
+						_gamma2(i, j, 2) = _gamma2(i, j, 1);
+						_gamma3(i, j, 2) = _gamma3(i, j, 1);
+						++k;
                     }
                 }
 
@@ -315,9 +343,9 @@ namespace SCATMECH {
                 if (write_eigenvalues.size()!=0) {
                     for (i=1; i<=M1; ++i) {
                         for (j=1; j<=M2; ++j) {
-                            COMPLEX g = _gamma(i,j,1);
-                            eigenfile << level << tab << k << tab << real(g) << tab << imag(g) << endl;
-                            eigenfile << level << tab << k << tab << real(g) << tab << imag(g) << endl;
+                            COMPLEX g1 = _gamma1(i,j,1);
+                            eigenfile << level << tab << k << tab << real(g1) << tab << imag(g1) << endl;
+                            eigenfile << level << tab << k << tab << real(g1) << tab << imag(g1) << endl;
                         }
                     }
                     eigenfile << endl;
@@ -333,8 +361,12 @@ namespace SCATMECH {
                 _W21.array(M1,M2,2,M1,M2,2);
 
                 // Initialize W, which is now $W^(L+1)$ for the last application of Eq. 7 of (2)...
-                COMPLEX elevelmuk0k0 = elevel*mu*k0*k0;
-                COMPLEX elevelmuk0k0sinzeta = elevelmuk0k0*sinzeta;
+                COMPLEX elevel1muk0k0 = elevel1*mu*k0*k0;
+                COMPLEX elevel1muk0k0sinzeta = elevel1muk0k0*sinzeta;
+				COMPLEX elevel2muk0k0 = elevel2*mu*k0*k0;
+				COMPLEX elevel2muk0k0sinzeta = elevel2muk0k0*sinzeta;
+				COMPLEX elevel3muk0k0 = elevel3*mu*k0*k0;
+				COMPLEX elevel3muk0k0sinzeta = elevel3muk0k0*sinzeta;
 
                 for (i=1; i<=MM2*MM2; ++i) _W11inv(i)=0.;
                 for (i=1; i<=MM2*MM2; ++i) _W21inv(i)=0.;
@@ -353,10 +385,12 @@ namespace SCATMECH {
                         _W11(i,j,2,i,j,2) = 1.;
 
                         // H field components...
-                        COMPLEX a = (elevelmuk0k0sinzeta-alpha(i)*beta(j))*seczetaovermuk0/_gamma(i,j);
-                        COMPLEX b = (alpha(i)*alpha(i)-elevelmuk0k0)*seczetaovermuk0/_gamma(i,j);
-                        COMPLEX c = (elevelmuk0k0-beta(j)*beta(j))*seczetaovermuk0/_gamma(i,j);
-                        COMPLEX d = (alpha(i)*beta(j)-elevelmuk0k0sinzeta)*seczetaovermuk0/_gamma(i,j);
+						// TODO: The anisotropic case needs to be checked...
+                        COMPLEX a = (elevel1muk0k0sinzeta-alpha(i)*beta(j))*seczetaovermuk0/_gamma3(i,j);
+                        COMPLEX b = (alpha(i)*alpha(i)-elevel2muk0k0)*seczetaovermuk0/_gamma3(i,j);
+                        COMPLEX c = (elevel1muk0k0-beta(j)*beta(j))*seczetaovermuk0/_gamma3(i,j);
+						// TODO: should this be beta(i)*alpha(j)? ...
+                        COMPLEX d = (alpha(i)*beta(j)-elevel2muk0k0sinzeta)*seczetaovermuk0/_gamma3(i,j);
                         COMPLEX det = a*d-b*c;
                         _W21inv(i,j,1,i,j,1) =  d/det;
                         _W21inv(i,j,1,i,j,2) = -b/det;
@@ -378,31 +412,32 @@ namespace SCATMECH {
                         for (k=1; k<=M1; ++k) {
                             for (l=1; l<=M2; ++l) {
                                 COMPLEX _E0 = E0(i,j,k,l,level);
-                                COMPLEX _E1 = E1(i,j,k,l,level);
-                                COMPLEX _E2 = E2(i,j,k,l,level);
+                                COMPLEX _E11 = E11(i,j,k,l,level);
+								COMPLEX _E12 = E12(i,j,k,l,level);
+								COMPLEX _E2 = E2(i,j,k,l,level);
                                 COMPLEX _E3 = E3(i,j,k,l,level);
-                                // The mostly-nondiagonal elements...
-                                F(i,j,1,k,l,1) =  alpha(i)*_E0*beta(l);
-                                F(i,j,1,k,l,2) = -alpha(i)*_E0*alpha(k);
-                                F(i,j,2,k,l,1) =  beta(j)* _E0*beta(l);
-                                F(i,j,2,k,l,2) = -beta(j)* _E0*alpha(k);
-                                COMPLEX sinzeta_E1 = sinzeta*_E1;
-                                COMPLEX sqrsinzeta_E1 = sinzeta*sinzeta_E1;
-                                G(i,j,1,k,l,1) =  muk0k0*sinzeta_E1;
-                                G(i,j,1,k,l,2) = -muk0k0*(sqrcoszeta*_E3+sqrsinzeta_E1);
-                                G(i,j,2,k,l,1) =  muk0k0*(sqrcoszeta*_E2+sqrsinzeta_E1);
-                                G(i,j,2,k,l,2) = -muk0k0*sinzeta_E1;
-                                // Add the diagonal terms...
-                                if (i==k&&j==l) {
-                                    F(i,j,1,k,l,1) += -muk0k0*sinzeta;
-                                    F(i,j,1,k,l,2) +=  muk0k0;
-                                    F(i,j,2,k,l,1) += -muk0k0;
-                                    F(i,j,2,k,l,2) +=  muk0k0*sinzeta;
-                                    G(i,j,1,k,l,1) += -alpha(i)*beta(j);
-                                    G(i,j,1,k,l,2) +=  alpha(i)*alpha(i);
-                                    G(i,j,2,k,l,1) += -beta(j)*beta(j);
-                                    G(i,j,2,k,l,2) +=  alpha(i)*beta(j);
-                                }
+								COMPLEX _MU0 = MU0(i, j, k, l, level);
+								COMPLEX _MU11 = MU11(i, j, k, l, level);
+								COMPLEX _MU12 = MU12(i, j, k, l, level);
+								COMPLEX _MU2 = MU2(i, j, k, l, level);
+								COMPLEX _MU3 = MU3(i, j, k, l, level);
+								// The mostly-nondiagonal elements...
+								COMPLEX sinzeta_E11 = sinzeta*_E11;
+								COMPLEX sinzeta_E12 = sinzeta*_E12;
+								COMPLEX sqrsinzeta_E11 = sinzeta*sinzeta_E11;
+								COMPLEX sqrsinzeta_E12 = sinzeta*sinzeta_E12;
+								COMPLEX sinzeta_MU11 = sinzeta*_MU11;
+								COMPLEX sinzeta_MU12 = sinzeta*_MU12;
+								COMPLEX sqrsinzeta_MU11 = sinzeta*sinzeta_MU11;
+								COMPLEX sqrsinzeta_MU12 = sinzeta*sinzeta_MU12;
+								F(i,j,1,k,l,1) =  alpha(i)*_E0*beta(l) - muk0k0*sinzeta_MU11;
+                                F(i,j,1,k,l,2) = -alpha(i)*_E0*alpha(k) + muk0k0*(sqrcoszeta*_MU3+sqrsinzeta_MU12);
+                                F(i,j,2,k,l,1) =  beta(j)* _E0*beta(l) - muk0k0*(sqrcoszeta*_MU2 + sqrsinzeta_MU11);
+                                F(i,j,2,k,l,2) = -beta(j)* _E0*alpha(k) + muk0k0*sinzeta*_MU12;
+								G(i,j,1,k,l,1) = -alpha(i)*_MU0*beta(l) + muk0k0*sinzeta_E11;
+                                G(i,j,1,k,l,2) =  alpha(i)*_MU0*alpha(k) -muk0k0*(sqrcoszeta*_E3+sqrsinzeta_E12) ;
+                                G(i,j,2,k,l,1) = -beta(j)* _MU0*beta(l)+ muk0k0*(sqrcoszeta*_E2+sqrsinzeta_E11);
+								G(i,j,2,k,l,2) =  beta(j)*_MU0*alpha(k) -muk0k0*sinzeta_E12 ;
                             }
                         }
                     }
@@ -716,7 +751,7 @@ namespace SCATMECH {
                     CVector Pout = cross(Kout,Sout)/km1;
 
                     // Wavevectors in SCATMECH x,y,z basis (where sample is rotated, not incident beam)...
-                    Vt(i,j) = CVector(Kout.x*cosphi+Kout.y*sinphi,-Kout.x*sinphi+Kout.y*cosphi,-Kout.z);
+                    Vt(i,j) = CVector(Kout.x*cosphi+Kout.y*sinphi,-Kout.x*sinphi+Kout.y*cosphi,Kout.z);
 
                     COMPLEX Er1s = bsup1*Sout;
                     COMPLEX Er2s = bsup2*Sout;
@@ -780,7 +815,9 @@ namespace SCATMECH {
         i = i+order1+1;
         j = j+order2+1;
 
-        return ((type&0x01) ? Vt(i,j) : Vr(i,j));
+        CVector result = ((type&0x01) ? Vt(i,j) : Vr(i,j));
+		if (type == 2 || type == 3) result.z = -result.z; 
+		return result;
     }
 
     JonesMatrix CrossRCW_Model::GetAmplitude(int i,int j)
@@ -854,7 +891,8 @@ namespace SCATMECH {
                 double y = real(kvector.y);
                 double rho = sqrt(x*x+y*y);
                 COMPLEX k = k0 * (type==0 || type==3 ? nI : conj(nII));
-                CVector s = rotation!=0 ? CVector(-y/rho,x/rho,0) : CVector(0,1,0);
+                //CVector s = rotation!=0 ? CVector(-y/rho,x/rho,0) : CVector(0,1,0);
+				CVector s = CVector(-y / rho, x / rho, 0);
                 CVector p = cross(kvector,s)/k;
                 COMPLEX phase = exp(cI*(kvector*(CVector)R));
                 result += (out.S()*s+out.P()*p)*phase;
@@ -903,7 +941,8 @@ namespace SCATMECH {
                 COMPLEX N = (type==0 || type==3 ? nI : conj(nII));
                 double rho = sqrt(x*x+y*y);
                 COMPLEX k = k0 * N;
-                CVector p = rotation!=0 ? CVector(y/rho,-x/rho,0) : CVector(0,-1,0);
+                //CVector p = rotation!=0 ? CVector(y/rho,-x/rho,0) : CVector(0,-1,0);
+				CVector p = CVector(y / rho, -x / rho, 0);
                 CVector s = cross(p,kvector)/k;
                 COMPLEX phase = N*exp(cI*(kvector*(CVector)R));
                 result += (out.S()*s+out.P()*p)*phase;
@@ -962,11 +1001,11 @@ namespace SCATMECH {
         V.allocate(M1,M2);
         R.allocate(M1,M2);
 
-        for (int i=1; i<=M1; ++i) {
+		for (int i=1; i<=M1; ++i) {
             for (int j=1; j<=M2; ++j) {
                 V(i,j)=RCW.GetDirection(i-order1-1,j-order2-1);
                 R(i,j)=RCW.GetIntensity(i-order1-1,j-order2-1);
-            }
+			}
         }
 
         if (alpha==0.) error("alpha cannot be zero");
@@ -983,6 +1022,7 @@ namespace SCATMECH {
         for (int i=1; i<=M1; ++i) {
             for (int j=1; j<=M2; ++j) {
                 Vector _V = V(i,j);
+				if (type == 1 || type == 2) _V.z = -_V.z;
                 if (_V.z!=0) {
                     if (_V*v>=cosalpha) {
                         result += R(i,j)/(Omega*v.z);

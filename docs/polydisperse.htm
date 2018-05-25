@@ -1,0 +1,258 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://pages.nist.gov/nist-header-footer/css/nist-combined.css">
+<script src="https://pages.nist.gov/nist-header-footer/js/jquery-1.9.0.min.js" type="text/javascript" defer="defer"></script>
+<script src="https://pages.nist.gov/nist-header-footer/js/nist-header-footer.js" type="text/javascript" defer="defer"></script>
+  <meta name="generator" content="HTML Tidy for Cygwin (vers 1st September 2004), see www.w3.org">
+   <link rel="STYLESHEET" href="style.css" type="text/css">
+
+  <title>SCATMECH: Polydisperse_Sphere_BRDF_Model</title>
+<script language="JavaScript" id="_fed_an_js_tag" src="/js/federated-analytics.all.min.js?agency=NIST&subagency=pml&pua=UA-37115410-46&yt=true"></script>
+
+
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+    </script>
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script type="text/javascript" async
+            src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+
+</head>
+
+<body><br>
+  <a name="top" id="top"><!-- --></a>
+
+  <table width="98%" border="0" cellpadding="0" cellspacing="0"
+  align="center">
+    <tr>
+      <td>
+        <p class="nav"><a href="index.htm">SCATMECH</a> &gt; <a href=
+        "classes.htm">Classes and Functions</a> &gt;
+        <a href="classes.htm#SSM">Surface Scattering Models</a>
+        &gt; Polydisperse_Sphere_BRDF_Model</p>
+
+	<h1>class Polydisperse_Sphere_BRDF_Model</h1>
+        
+        <hr>
+	<p>
+        The class <strong>Polydisperse_Sphere_BRDF_Model</strong> is a
+        <a href="BRDF_Model.htm">BRDF_Model</a> that uses the 
+        <a href="sphrpart.htm">Double_Interaction_BRDF_Model</a>
+        with 
+        <a href="miescat.htm">MieScatterer</a>
+        and with a diameter distribution given by 
+        <a href="sizedistribution.htm">SurfaceParticleSizeDistribution</a>. This model is useful for estimating scatter from contaminated surfaces.
+	<br><br>
+        <center>
+          <img src="Images/PolydisperseSphereBRDFModel.jpg" width="400" height=
+          "212" alt=
+          "Rendered image showing many spheres on a surface with different diameters.">
+          </center>
+	  
+        This model evaluates the Mueller matrix BRDF ${\bf f}_{\rm r}$ by integrating over the particle size distribution $N(D)$,
+        \begin{equation}
+        {\bf f}_{\rm r} = \int_{D_{\rm start}}^{D_{\rm end}} {\bf f}_{\rm r}^{\rm sphere}[D,N(D)]\; {\rm d}D.
+        \label{EqA}
+        \end{equation}
+        where ${\bf f}_{\rm r}^{\rm sphere}[D,N(D)]$ is the Mueller matrix BRDF for spheres of diameter $D$ and surface particle density $N(D)$. <a href="sphrpart.htm">Double_Interaction_BRDF_Model</a>
+        with <a href="miescat.htm">MieScatterer</a> is used to evaluate ${\bf f}_{\rm r}^{\rm sphere}[D,N(D)]$. A change of
+        variables can be made in Eq. $(\ref{EqA})$, so that it can be written as
+        \begin{equation}
+        {\bf f}_{\rm r} = \int_{\log D_{\rm start}}^{\log D_{\rm end}} {\bf f}_{\rm r}^{\rm sphere}[D,N(D)]\; D \; {\rm d}(\log D).        
+        \label{EqB}
+        \end{equation}
+        Finally, Eq. $(\ref{EqB})$ is approximated by the sum
+        \begin{equation}
+        {\bf f}_{\rm r} = \sum_{i=0}^n {\bf f}_{\rm r}^{\rm sphere}(D_i) \;N(D_i)\;D_i \; s.
+        \label{EqC}
+        \end{equation}
+        where $D_i=(1+s)^i D_{\rm start}$ and $n={\rm floor}[\log(D_{\rm end}/D_{\rm start})/\log(1+s)]$. 
+        The user chooses $D_{\rm start}$, $D_{\rm end}$, and $s\ll 1$ and should check that the result has converged.
+
+	  <h2>Parameters:</h2>
+
+        <table border="1" cellpadding="5">
+          <tr>
+            <th>Parameter</th>
+
+            <th>Data
+            Type</th>
+
+            <th>Description</th>
+
+            <th>Default</th>
+          </tr>
+
+          <tr>
+            <td class="parameter">lambda</td>
+
+            <td class="datatype">double</td>
+
+            <td class="description">Wavelength of the light
+            in vacuum [&#181;m].<br>
+            (Inherited from <a href=
+            "BRDF_Model.htm">BRDF_Model</a>.)</td>
+
+            <td class="default">0.532</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">type</td>
+            <td class="datatype">int</td>
+            <td class="description">
+	      Indicates whether the light is incident from above the
+            substrate or from within the substrate and whether the
+            scattering is evaluated in reflection or transmission.
+            The choices are:<br>
+	      <b>0</b> : Light is incident from the above the substrate, and scattering is evaluated in reflection.<br>
+	      <b>1</b> : Light is incident from the above the substrate, and scattering is evaluated in transmission.<br>
+	      <b>2</b> : Light is incident from the within the substrate, and scattering is evaluated in reflection.<br>
+	      <b>3</b> : Light is incident from the within the substrate, and scattering is evaluated in transmission.<br>
+	      For <b>1</b>, <b>2</b>, and <b>3</b>, the substrate must be non-absorbing.<br>
+            (Inherited from <a href=
+            "BRDF_Model.htm">BRDF_Model</a>).</td>
+            <td class="default">0</td>
+          </tr>
+
+          <tr>
+            <td class="parameter">substrate</td>
+
+            <td class="datatype"><a href="dielfunc.htm">dielectric_function</a></td>
+
+            <td class="description">The
+            optical constants of the substrate, expressed as a
+            complex number (n,k) or, optionally, as a function of
+            wavelength.<br>
+            (Inherited from <a href=
+            "BRDF_Model.htm">BRDF_Model</a>.)</td>
+
+            <td class="default">(4.05,0.05)</td>
+          </tr>
+
+            <tr>
+                <td class="parameter">distribution</td>
+                <td class="datatype"><a href="sizedistribution.htm">SurfaceParticleSizeDistribution</a></td>
+                <td class="description">
+                    The distribution of sphere diameters and the total number of spheres per unit area .
+                </td>
+                <td class="default">SurfaceParticleSizeDistribution</td>
+            </tr>
+
+            <tr>
+                <td class="parameter">stack</td>
+                <td class="datatype"><a href="stackmodel.htm">StackModel_Ptr</a></td>
+                <td class="description">Description of any stack of films deposited on the substrate.</td>
+                <td class="default">No_StackModel</td>
+            </tr>
+
+            <tr>
+                <td class="parameter">particle</td>
+                <td class="datatype"><a href="dielfunc.htm">dielectric_function</a></td>
+                <td class="description">
+                    The
+                    optical constants of the spheres, expressed as a
+                    complex number (n,k) or, optionally, as a function of
+                    wavelength.
+                </td>
+                <td class="default">(1.5,0.0)</td>
+            </tr>
+
+
+          <tr>
+            <td class="parameter">Dstart</td>
+            <td class="datatype">double</td>
+            <td class="description">The starting diameter [$D_{\rm start}$ in Eq. $(\ref{EqA})$] for the integration [&micro;m]. This parameter
+              should be at least as small as the smallest diameter in the distribution that will contribute significantly to the BRDF.</td>
+            <td class="default">0.1</td>
+          </tr>
+
+            <tr>
+                <td class="parameter">Dend</td>
+                <td class="datatype">double</td>
+                <td class="description">The ending diameter [$D_{\rm end}$ in Eq. $(\ref{EqA})$] for the integration [&micro;m]. This parameter 
+                should be at least as large as the largest diameter in the distribution that will contribute significantly to the BRDF.</td>
+                <td class="default">100</td>
+            </tr>
+
+            <tr>
+                <td class="parameter">Dstep</td>
+                <td class="datatype">double</td>
+                <td class="description">The fractional step size [$s$ in Eq. $(\ref{EqC})$] for the integration. This parameter should be 
+                much less than 1.</td>
+                <td class="default">0.01</td>
+            </tr>
+
+          <tr>
+            <td class="parameter">antirainbow</td>
+            <td class="datatype">double</td>
+            <td class="description">Non-absorbing spheres usually exhibit rainbows. This parameter adds a small amount of absorption to the spheres. The minimum extinction coefficient 
+              is determined to be $k=a\lambda/(4D\pi)$, where $a$ is the antirainbow parameter, $\lambda$ is the wavelength, and $D$ is the diameter. That is, if $a=1$, the 
+              particles will have an absorption coefficient given by $1/D$.  To eliminate rainbows, a value of $a=10$ is usually sufficient.</td>
+            <td class="default">0</td>
+          </tr>
+
+        </table>
+
+	<h2>See also:</h2>
+
+        <p><a href=
+        "index.htm">SCATMECH Home</a>, &nbsp; 
+          <a href="convent.htm">Conventions</a>, &nbsp; 
+          <a href="BRDF_Model.htm">BRDF_Model</a>, &nbsp; 
+          <a href="dielstack.htm">dielectric_stack</a>, &nbsp;
+          <a href="sphrpart.htm">Double_Interaction_BRDF_Model</a>, &nbsp;
+          <a href="miescat.htm">MieScatterer</a>, &nbsp;
+          <a href="sizedistribution.htm">SurfaceParticleSizeDistribution</a>.
+          </p>
+
+          <p>
+              K. B. Nahm and W. L. Wolfe, "Light-scattering models for
+              spheres on a conducting plane: comparison with experiment,"
+              Appl. Opt. <b>26</b>, 2995-2999 (1987).
+          </p>
+
+          <p>R.V. Peterson, P.G. Magallanes, and D.F. Rock, &quot;Tailored particle distributions derived from MIL-STD-1246,&quot; 
+          Proc. SPIE <b>4774</b>, 79-98 (2002).</b></p>
+
+          <p>J. Fleming, B. Matheson, M.G. Dittman, F. Grochocki, and B. Firth, &quot;Modeling particle distributions for stray light analysis,&quote;
+          Proc. SPIE <b>6291</b>, 62910T (2006).</p>
+
+          <p>K. Balasubramanian, S. Shaklan, and A. Give'on, &quot;Stellar coronagraph performance impact due to particulate contamination and scatter,&quot;
+          Proc. SPIE <b>7440</b>, 74400T (2009).</p>
+
+        <h2>Include file:</h2>
+
+          <pre>
+#include "<a href="../code/polydisperse.h">polydisperse.h</a>"
+</pre>
+        <h2>Source code:</h2>
+
+          <pre>
+<a href="../code/polydisperse.cpp">polydisperse.cpp</a>
+</pre>
+
+<!-- START FOOTER -->
+<hr>
+<h2>For More Information</h2>
+
+<p>
+<a href="http://www.nist.gov/pml/div685/grp06/germer.cfm">SCATMECH Technical Information and Questions</a><br>
+<a href="http://www.nist.gov/pml/div685/index.cfm" target="_top">Sensor Science Division Home Page</a><br>
+<a href="mailto:fraser@nist.gov">Sensor Science Division Inquiries</a><br>
+<a href="mailto:thomas.germer@nist.gov">Website Comments</a>
+
+<p>
+Current SCATMECH version: <a href="./download.htm">7.10 (October 2017)</a><br>
+<br>
+
+</td>
+</tr>
+</table>
+
+</body>
+</html>
