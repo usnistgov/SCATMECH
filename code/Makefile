@@ -109,6 +109,8 @@ OBJECTS = allrough.o \
 	nsphere.o \
 	oasphere.o \
 	onelayer.o \
+	phasefunction.o \
+	polydisperse.o \
 	random.o \
 	raygscat.o \
 	rayinst.o \
@@ -128,6 +130,7 @@ OBJECTS = allrough.o \
 	scateval.o \
 	scatmatrix.o \
 	scattabl.o \
+	sizedistribution.o \
 	sphdfct.o \
 	sphprt.o \
 	sphrscat.o \
@@ -182,7 +185,7 @@ execlean:
 #	rm $(OBJECTS) $(EXEOBJS) $(EXEEXE) Makefile.sub
 
 
-Makefile.sub : 
+Makefile.sub : Makefile
 	$(COMPILE) $(DEPEND) *.cpp > Makefile.sub
 
 include Makefile.sub

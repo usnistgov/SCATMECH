@@ -31,26 +31,61 @@ namespace SCATMECH {
             // Return the fourier decomposition Toeplitz matrices for specific order of a specific level.
             // Returns CFARRAY(2*order1+1,2*order2+1,2*order1+1,2*order2+1,levels);
             // level = 0 is the closest level to the incident direction.
-            // type = 0 returns the inverse of the Fourier matrix of eps ([[eps]]^-1) ...
-            CFARRAY get_E0() {
+            
+			// type = 0 returns the inverse of the Fourier matrix of eps_z ([[eps_z]]^-1) ...
+			CFARRAY get_EPS0() {
                 SETUP();
-                return E0;
+                return EPS0;
             }
-            // type = 1 returns the inverse of the Fourier matrix of 1/eps ([[1/eps]]^-1) ...
-            CFARRAY get_E1() {
+            // type = 11 returns the inverse of the Fourier matrix of 1/eps_1 ([[1/eps_1]]^-1) ...
+            CFARRAY get_EPS11() {
                 SETUP();
-                return E1;
+                return EPS11;
             }
-            // type = 2 returns Eq. (8) of LF Li....
-            CFARRAY get_E2() {
+			// type = 11 returns the inverse of the Fourier matrix of 1/eps_2 ([[1/eps_2]]^-1) ...
+			CFARRAY get_EPS12() {
+				SETUP();
+				return EPS12;
+			}
+
+            // type = 2 returns Eq. (8) of LF Li, with eps -> eps_1
+            CFARRAY get_EPS2() {
                 SETUP();
-                return E2;
+                return EPS2;
             }
-            // type = 3 returns Eq. (9) of LF Li....
-            CFARRAY get_E3() {
+            // type = 3 returns Eq. (9) of LF Li, with eps -> eps_2
+            CFARRAY get_EPS3() {
                 SETUP();
-                return E3;
+                return EPS3;
             }
+
+			// type = 0 returns the inverse of the Fourier matrix of eps_z ([[eps_z]]^-1) ...
+			CFARRAY get_MU0() {
+				SETUP();
+				return MU0;
+			}
+			// type = 11 returns the inverse of the Fourier matrix of 1/eps_1 ([[1/eps_1]]^-1) ...
+			CFARRAY get_MU11() {
+				SETUP();
+				return MU11;
+			}
+			// type = 11 returns the inverse of the Fourier matrix of 1/eps_2 ([[1/eps_2]]^-1) ...
+			CFARRAY get_MU12() {
+				SETUP();
+				return MU12;
+			}
+
+			// type = 2 returns Eq. (8) of LF Li, with eps -> eps_1
+			CFARRAY get_MU2() {
+				SETUP();
+				return MU2;
+			}
+			// type = 3 returns Eq. (9) of LF Li, with eps -> eps_2
+			CFARRAY get_MU3() {
+				SETUP();
+				return MU3;
+			}
+
 
             // Return the thickness of a specific level (counting from TOP)...
             double get_thick(int level) {
@@ -121,10 +156,16 @@ namespace SCATMECH {
 
             // Child class must allocate and fill the Fourier factorization of the grating
             // Each of these is dimensioned (2*order1+1,2*order2+1,2*order1+1,2*order2+1,levels)
-            CFARRAY E0;  // E0(i,j,k,l,level) is the inverse of the Fourier matrix of eps ([[eps]]^-1) ...
-            CFARRAY E1;  // E1(i,j,k,l,level) is the inverse of the Fourier matrix of 1/eps ([[1/eps]]^-1)
-            CFARRAY E2;  // E2(i,j,k,l,level) is Eq. (8) of LF Li
-            CFARRAY E3;  // E3(i,j,k,l,level) is Eq. (9) of LF Li
+            CFARRAY EPS0;  // EPS0(i,j,k,l,level) is the inverse of the Fourier matrix of eps ([[eps_3]]^-1) ...
+            CFARRAY EPS11;  // EPS11(i,j,k,l,level) is the inverse of the Fourier matrix of 1/eps_1 ([[1/eps_1]]^-1)
+			CFARRAY EPS12;  // EPS12(i,j,k,l,level) is the inverse of the Fourier matrix of 1/eps_2 ([[1/eps_2]]^-1)
+			CFARRAY EPS2;  // EPS2(i,j,k,l,level) is Eq. (8) of LF Li with eps --> eps_1
+            CFARRAY EPS3;  // EPS3(i,j,k,l,level) is Eq. (9) of LF Li with eps --> eps_2
+			CFARRAY MU0;  // MU0(i,j,k,l,level) is the inverse of the Fourier matrix of mu ([[mu_3]]^-1) ...
+			CFARRAY MU11;  // MU11(i,j,k,l,level) is the inverse of the Fourier matrix of 1/mu_1 ([[1/mu_1]]^-1)
+			CFARRAY MU12;  // MU12(i,j,k,l,level) is the inverse of the Fourier matrix of 1/mu_2 ([[1/mu_2]]^-1)
+			CFARRAY MU2;  // MU2(i,j,k,l,level) is Eq. (8) of LF Li with eps --> mu_1
+			CFARRAY MU3;  // MU3(i,j,k,l,level) is Eq. (9) of LF Li with eps --> mu_2
 
             // It is the responsibility of any child class to set these values...
             int levels;	   // <-- The number of levels in the structure
@@ -158,6 +199,8 @@ namespace SCATMECH {
             DECLARE_PARAMETER(int,grid1);
             DECLARE_PARAMETER(int,grid2);
 
+		public: 
+			Gridded_CrossGrating() : nonmagnetic(true), isotropic(true) {}
         protected:
             void setup() {
                 CrossGrating::setup();
@@ -176,11 +219,21 @@ namespace SCATMECH {
                 const STRING& value      ///< String represention of a value
             );
 
-            // It is up to the child class to allocate and set this [with eps.allocate(grid1,grid2,levels)]:
+            // It is up to the child class to allocate and set this [with eps.allocate(grid1,grid2,levels)]
+			// if isotropic is set:
             CFARRAY eps;
+
+			// It is up to the child class to allocate and set these [with, e.g., eps1.allocate(grid1,grid2,levels)] 
+			// if the isotropic is unset or nonmagnetic is unset;
+			CFARRAY eps1, eps2, eps3;
+			CFARRAY mu;
+			CFARRAY mu1, mu2, mu3;
 
             // Child class must call FourierFactorize at end of setup(), after setting eps
             void FourierFactorize();
+
+			// The following is called by FourierFactorize...
+			void FourierFactorize(CFARRAY& eps1, CFARRAY& eps2, CFARRAY& eps3, CFARRAY& _EPS0, CFARRAY& _EPS11, CFARRAY& _EPS12, CFARRAY& _EPS2, CFARRAY& _EPS3);
 
             // epsilon returns the dielectric function at lambda in form N+iK
             COMPLEX epsilon(const dielectric_function& e) {
@@ -190,7 +243,9 @@ namespace SCATMECH {
             double coszeta,sinzeta;
             // The following gives the x and y coordinates of an index (i,j) in eps.
             void getxy(int i,int j,double &x, double &y);
-
+			
+			bool isotropic;
+			bool nonmagnetic;
     };
 
     void Register(const CrossGrating* x);

@@ -44,7 +44,50 @@ namespace SCATMECH {
         Model::setup();
     }
 
-    void Gridded_CrossGrating::FourierFactorize()
+	void Gridded_CrossGrating::FourierFactorize()
+	{
+		if (isotropic) {
+			FourierFactorize(eps, eps, eps, EPS0, EPS11, EPS12, EPS2, EPS3);
+		} else {
+			FourierFactorize(eps1, eps2, eps3, EPS0, EPS11, EPS12, EPS2, EPS3);
+		}
+		if (nonmagnetic) {
+			int M1 = 2 * order1 + 1;
+			int M2 = 2 * order2 + 1;
+			MU0.allocate(M1, M2, M1, M2, levels);
+			MU11.allocate(M1, M2, M1, M2, levels);
+			MU12.allocate(M1, M2, M1, M2, levels);
+			MU2.allocate(M1, M2, M1, M2, levels);
+			MU3.allocate(M1, M2, M1, M2, levels);
+
+			for (int level = 1;level <= levels;++level) {
+				for (int i = 1; i <= M1; ++i) {
+					for (int j = 1; j <= M2; ++j) {
+						for (int k = 1; k <= M1; ++k) {
+							for (int l = 1; l <= M2; ++l) {
+								if (i == k&&j == l) {
+									MU0(i, j, k, l, level) = MU11(i, j, k, l, level) = MU12(i, j, k, l, level) = MU2(i, j, k, l, level) = MU3(i, j, k, l, level) = 1.;
+								}
+								else {
+									MU0(i, j, k, l, level) = MU11(i, j, k, l, level) = MU12(i, j, k, l, level) = MU2(i, j, k, l, level) = MU3(i, j, k, l, level) = 0.;
+								}
+							}
+						}
+					}
+				}
+			}
+		} else {
+			if (isotropic) {
+				FourierFactorize(mu, mu, mu, MU0, MU11, MU12, MU2, MU3);
+			}
+			else {
+				FourierFactorize(mu1, mu2, mu3, MU0, MU11, MU12, MU2, MU3);
+			}
+		}
+	}
+
+
+    void Gridded_CrossGrating::FourierFactorize(CFARRAY& eps1, CFARRAY& eps2, CFARRAY& eps3,CFARRAY& _EPS0,CFARRAY& _EPS11,CFARRAY& _EPS12,CFARRAY& _EPS2, CFARRAY& _EPS3)
     {
 		using BobVlieg_Supp::mpow;
         CrossGrating::zeta = Gridded_CrossGrating::zeta;
@@ -64,19 +107,22 @@ namespace SCATMECH {
         int N1 = grid1;
         int N2 = grid2;
 
-        E0.allocate(M1,M2,M1,M2,levels);
-        E1.allocate(M1,M2,M1,M2,levels);
-        E2.allocate(M1,M2,M1,M2,levels);
-        E3.allocate(M1,M2,M1,M2,levels);
+        _EPS0.allocate(M1,M2,M1,M2,levels);
+        _EPS11.allocate(M1,M2,M1,M2,levels);
+		_EPS12.allocate(M1,M2,M1,M2, levels);
+		_EPS2.allocate(M1,M2,M1,M2,levels);
+        _EPS3.allocate(M1,M2,M1,M2,levels);
 
         CFARRAY epsFT0(M1a,M2a);
-        CFARRAY epsFT1(M1a,M2a);
+        CFARRAY epsFT11(M1a,M2a);
+		CFARRAY epsFT12(M1a,M2a);
         CFARRAY epsFT2(M1,M1,M2a);
         CFARRAY epsFT3(M2,M2,M1a);
 
         CFARRAY epsFT0a(M1a,N2);
-        CFARRAY epsFT1a(M1a,N2);
-        CFARRAY epsFT2a(M1a,N2);
+        CFARRAY epsFT11a(M1a,N2);
+		CFARRAY epsFT12a(M1a,N2);
+		CFARRAY epsFT2a(M1a,N2);
         CFARRAY epsFT3a(M2a,N1);
 
         CFARRAY epsFT2b(M1,M1,N2);
@@ -96,48 +142,72 @@ namespace SCATMECH {
         for (level=1; level<=levels; ++level) {
 
             // Start with FT'ing along 1st dimension...
-            for (j=1; j<=N2; ++j) {
-                for (i=1; i<=N1; ++i) tempN1(i) = eps(i,j,level);
-                fft1d(tempN1,N1,-1);
-                for (i=1; i<=M1a; ++i) epsFT0a(i,j) = tempN1((i-M1+N1)%N1+1)/(double)N1;
+			for (j = 1; j <= N2; ++j) {
+				for (i = 1; i <= N1; ++i) tempN1(i) = eps3(i, j, level); // This is eps3
+				fft1d(tempN1, N1, -1);
+				for (i = 1; i <= M1a; ++i) epsFT0a(i, j) = tempN1((i - M1 + N1) % N1 + 1) / (double)N1;
 
-                for (i=1; i<=N1; ++i) tempN1(i) = 1./eps(i,j,level);
-                fft1d(tempN1,N1,-1);
-                for (i=1; i<=M1a; ++i) {
-                    epsFT1a(i,j) = tempN1((i-M1+N1)%N1+1)/(double)N1;
-                    epsFT2a(i,j) = tempN1((i-M1+N1)%N1+1)/(double)N1;
-                }
-            }
+				for (i = 1; i <= N1; ++i) tempN1(i) = 1. / eps1(i, j, level); // This is eps1
+				fft1d(tempN1, N1, -1);
+				for (i = 1; i <= M1a; ++i) {
+					epsFT11a(i, j) = tempN1((i - M1 + N1) % N1 + 1) / (double)N1;
+					epsFT2a(i, j) = tempN1((i - M1 + N1) % N1 + 1) / (double)N1;
+				}
+				if (isotropic) {
+					for (i = 1; i <= M1a; ++i) {
+						epsFT12a(i, j) = epsFT12a(i, j);
+					}
+				} else {
+					for (i = 1; i <= N1; ++i) tempN1(i) = 1. / eps2(i, j, level); // This is eps2
+					fft1d(tempN1, N1, -1);
+					for (i = 1; i <= M1a; ++i) {
+						epsFT12a(i, j) = tempN1((i - M1 + N1) % N1 + 1) / (double)N1;
+					}
+				}
+			}
 
             // First FT for type 3 is along x2 direction...
             for (j=1; j<=N1; ++j) {
-                for (i=1; i<=N2; ++i) tempN2(i) = 1./eps(j,i,level);
+                for (i=1; i<=N2; ++i) tempN2(i) = 1./eps2(j,i,level); // This is eps2
                 fft1d(tempN2,N2,-1);
-                for (i=1; i<=M2a; ++i) epsFT3a(i,j) = tempN2((i-M2+N2)%N2+1)/(double)N2;
+                for (i=1; i<=M2a; ++i) epsFT3a(i,j) = tempN2((i-M2+N2)%N2+1)/(double)N2; 
             }
 
             // For types 0 and 1, finish the FT along the other dimension...
             for (i=1; i<=M1a; ++i) {
-                for (j=1; j<=N2; ++j) tempN2(j) = epsFT0a(i,j);
+                for (j=1; j<=N2; ++j) tempN2(j) = epsFT0a(i,j); 
                 fft1d(tempN2,N2,-1);
-                for (j=1; j<=M2a; ++j) epsFT0(i,j) = tempN2((j-M2+N2)%N2+1)/(double)N2;
+                for (j=1; j<=M2a; ++j) epsFT0(i,j) = tempN2((j-M2+N2)%N2+1)/(double)N2; 
 
-                for (j=1; j<=N2; ++j) tempN2(j) = epsFT1a(i,j);
+                for (j=1; j<=N2; ++j) tempN2(j) = epsFT11a(i,j); 
                 fft1d(tempN2,N2,-1);
-                for (j=1; j<=M2a; ++j) epsFT1(i,j) = tempN2((j-M2+N2)%N2+1)/(double)N2;
+				for (j = 1; j <= M2a; ++j) {
+					epsFT11(i, j) = tempN2((j - M2 + N2) % N2 + 1) / (double)N2;
+				}
+				if (isotropic) {
+					for (j = 1; j <= M2a; ++j) {
+						epsFT12(i, j) = epsFT11(i, j);
+					}
+				} else {
+					for (j = 1; j <= N2; ++j) tempN2(j) = epsFT12a(i, j);
+					fft1d(tempN2, N2, -1);
+					for (j = 1; j <= M2a; ++j) {
+						epsFT12(i, j) = tempN2((j - M2 + N2) % N2 + 1) / (double)N2;
+					}
+				}
             }
 
             // Invert the partial 1/e matrices for type 2 ...
             for (i=1; i<=N2; ++i) {
                 for (j=1; j<=M1; ++j) {
                     for (k=1; k<=M1; ++k) {
-                        matrix1(j,k) = epsFT2a(j-k+2*order1+1,i);
+                        matrix1(j,k) = epsFT2a(j-k+2*order1+1,i); 
                     }
                 }
                 Inverse(matrix1,M1);
                 for (j=1; j<=M1; ++j) {
                     for (k=1; k<=M1; ++k) {
-                        epsFT2b(j,k,i) = matrix1(j,k);
+                        epsFT2b(j,k,i) = matrix1(j,k); 
                     }
                 }
             }
@@ -146,13 +216,13 @@ namespace SCATMECH {
             for (i=1; i<=N1; ++i) {
                 for (j=1; j<=M2; ++j) {
                     for (k=1; k<=M2; ++k) {
-                        matrix2(j,k) = epsFT3a(j-k+2*order2+1,i);
+                        matrix2(j,k) = epsFT3a(j-k+2*order2+1,i); 
                     }
                 }
                 Inverse(matrix2,M2);
                 for (j=1; j<=M2; ++j) {
                     for (k=1; k<=M2; ++k) {
-                        epsFT3b(j,k,i) = matrix2(j,k);
+                        epsFT3b(j,k,i) = matrix2(j,k); 
                     }
                 }
             }
@@ -160,9 +230,9 @@ namespace SCATMECH {
             // Then finish FT'ing the type 2 matrices by integrating along x2 direction...
             for (i=1; i<=M1; ++i) {
                 for (j=1; j<=M1; ++j) {
-                    for (l=1; l<=N2; ++l) tempN2(l) = epsFT2b(i,j,l);
+                    for (l=1; l<=N2; ++l) tempN2(l) = epsFT2b(i,j,l); 
                     fft1d(tempN2,N2,-1);
-                    for (l=1; l<=M2a; ++l) epsFT2(i,j,l) = tempN2((l-M2+N2)%N2+1)/(double)N2;
+                    for (l=1; l<=M2a; ++l) epsFT2(i,j,l) = tempN2((l-M2+N2)%N2+1)/(double)N2; 
                 }
             }
 
@@ -179,8 +249,8 @@ namespace SCATMECH {
                 for (j=1; j<=M2; ++j) {
                     for (k=1; k<=M1; ++k) {
                         for (l=1; l<=M2; ++l) {
-                            E2(i,j,k,l,level) = epsFT2(i,k,j-l+2*order2+1);
-                            E3(i,j,k,l,level) = epsFT3(j,l,i-k+2*order1+1);
+                            _EPS2(i,j,k,l,level) = epsFT2(i,k,j-l+2*order2+1);
+                            _EPS3(i,j,k,l,level) = epsFT3(j,l,i-k+2*order1+1);
                         }
                     }
                 }
@@ -202,7 +272,7 @@ namespace SCATMECH {
                 for (j=1; j<=M2; ++j) {
                     for (k=1; k<=M1; ++k) {
                         for (l=1; l<=M2; ++l) {
-                            E0(i,j,k,l,level) = matrix3(i,j,k,l);
+                            _EPS0(i,j,k,l,level) = matrix3(i,j,k,l);
                         }
                     }
                 }
@@ -212,7 +282,7 @@ namespace SCATMECH {
                 for (j=1; j<=M2; ++j) {
                     for (k=1; k<=M1; ++k) {
                         for (l=1; l<=M2; ++l) {
-                            matrix3(i,j,k,l) = epsFT1(i-k+2*order1+1,j-l+2*order2+1);
+                            matrix3(i,j,k,l) = epsFT11(i-k+2*order1+1,j-l+2*order2+1); 
                         }
                     }
                 }
@@ -224,11 +294,44 @@ namespace SCATMECH {
                 for (j=1; j<=M2; ++j) {
                     for (k=1; k<=M1; ++k) {
                         for (l=1; l<=M2; ++l) {
-                            E1(i,j,k,l,level) = matrix3(i,j,k,l);
-                        }
+							_EPS11(i, j, k, l, level) = matrix3(i,j,k,l);
+						}
                     }
                 }
             }
+			if (isotropic) {
+				for (i = 1; i <= M1; ++i) {
+					for (j = 1; j <= M2; ++j) {
+						for (k = 1; k <= M1; ++k) {
+							for (l = 1; l <= M2; ++l) {
+								_EPS12(i, j, k, l, level) = matrix3(i, j, k, l);
+							}
+						}
+					}
+				}
+			} else {
+				for (i = 1; i <= M1; ++i) {
+					for (j = 1; j <= M2; ++j) {
+						for (k = 1; k <= M1; ++k) {
+							for (l = 1; l <= M2; ++l) {
+								matrix3(i, j, k, l) = epsFT12(i - k + 2 * order1 + 1, j - l + 2 * order2 + 1); 
+							}
+						}
+					}
+				}
+
+				Inverse(matrix3, MM);
+
+				for (i = 1; i <= M1; ++i) {
+					for (j = 1; j <= M2; ++j) {
+						for (k = 1; k <= M1; ++k) {
+							for (l = 1; l <= M2; ++l) {
+								_EPS12(i, j, k, l, level) = matrix3(i, j, k, l);
+							}
+						}
+					}
+				}
+			}
         }
     }
 
@@ -254,22 +357,35 @@ namespace SCATMECH {
             ofstream image(value.c_str());
             if (!image) error("Cannot open file: " + value);
             for (int level=1; level<=levels; ++level) {
-                print(E0(1,1,1,1,level),M1*M2,M1*M2,image);
+                print(EPS0(1,1,1,1,level),M1*M2,M1*M2,image);
                 image << endl;
             }
             set_recalc(0);
-        } else if (parameter=="SaveGratingE1") {
-            SETUP();
-            int M1 = 2*order1+1;
-            int M2 = 2*order2+1;
+		}
+		else if (parameter == "SaveGratingE11") {
+			SETUP();
+			int M1 = 2 * order1 + 1;
+			int M2 = 2 * order2 + 1;
 
-            ofstream image(value.c_str());
-            if (!image) error("Cannot open file: " + value);
-            for (int level=1; level<=levels; ++level) {
-                print(E1(1,1,1,1,level),M1*M2,M1*M2,image);
-                image << endl;
-            }
-            set_recalc(0);
+			ofstream image(value.c_str());
+			if (!image) error("Cannot open file: " + value);
+			for (int level = 1; level <= levels; ++level) {
+				print(EPS11(1, 1, 1, 1, level), M1*M2, M1*M2, image);
+				image << endl;
+			}
+			set_recalc(0);
+		} else if (parameter == "SaveGratingE12") {
+				SETUP();
+				int M1 = 2 * order1 + 1;
+				int M2 = 2 * order2 + 1;
+
+				ofstream image(value.c_str());
+				if (!image) error("Cannot open file: " + value);
+				for (int level = 1; level <= levels; ++level) {
+					print(EPS12(1, 1, 1, 1, level), M1*M2, M1*M2, image);
+					image << endl;
+				}
+				set_recalc(0);
         } else if (parameter=="SaveGratingE2") {
             SETUP();
             int M1 = 2*order1+1;
@@ -278,7 +394,7 @@ namespace SCATMECH {
             ofstream image(value.c_str());
             if (!image) error("Cannot open file: " + value);
             for (int level=1; level<=levels; ++level) {
-                print(E2(1,1,1,1,level),M1*M2,M1*M2,image);
+                print(EPS2(1,1,1,1,level),M1*M2,M1*M2,image);
                 image << endl;
             }
             set_recalc(0);
@@ -290,7 +406,7 @@ namespace SCATMECH {
             ofstream image(value.c_str());
             if (!image) error("Cannot open file: " + value);
             for (int level=1; level<=levels; ++level) {
-                print(E3(1,1,1,1,level),M1*M2,M1*M2,image);
+                print(EPS3(1,1,1,1,level),M1*M2,M1*M2,image);
                 image << endl;
             }
             set_recalc(0);
@@ -365,7 +481,8 @@ namespace SCATMECH {
             Register_Model(Null_CrossGrating);
             Register_Model(Gridded_CrossGrating);
             Register_Model(Cylinder_CrossGrating);
-            Register_Model(Sphere_CrossGrating);
+			Register_Model(Rectangle_CrossGrating);
+			Register_Model(Sphere_CrossGrating);
             Register_Model(Pyramidal_Pit_CrossGrating);
             Register_Model(Generic_CrossGrating);
         }

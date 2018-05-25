@@ -175,7 +175,8 @@ namespace SCATMECH {
     /// find_epsilon is a function which returns the dielectric constant at location s.
     /// If throwerror is true and the function finds an inconsistency, then an exception is thrown.
     ///
-    COMPLEX Generic_CrossGrating::find_epsilon(const Vector& s,bool throwerror)
+	Generic_CrossGrating::material 
+		Generic_CrossGrating::find_epsilon(const Vector& s,bool throwerror)
     {
         //
         // Make lists of boundaries passed in the x, y, and z directions, respectively...
@@ -245,7 +246,7 @@ namespace SCATMECH {
         boundslistz.unique();
 
         // matxa and matxb are the materials at the two ends of the line segment going through s in the x-direction...
-        COMPLEX matxa(0,0),matxb(0,0);
+        material matxa(0.,0.,0.,0.,0.,0.),matxb(0.,0.,0.,0.,0.,0.);
         if (!boundslistx.empty()) {
             matxa=boundslistx.back().mat2;
             matxb=boundslistx.front().mat1;
@@ -261,7 +262,7 @@ namespace SCATMECH {
 
 
         // Repeat in the y direction...
-        COMPLEX matya(0,0),matyb(0,0);
+        material matya(0.,0.,0.,0.,0.,0.),matyb(0., 0., 0., 0., 0., 0.);
         if (!boundslisty.empty()) {
             matya=boundslisty.back().mat2;
             matyb=boundslisty.front().mat1;
@@ -274,7 +275,7 @@ namespace SCATMECH {
         }
 
         // repeat in the z direction...
-        COMPLEX matza=eps_t,matzb=eps_i;
+        material matza=mat_t,matzb=mat_i;
         if (boundslistz.empty()) error("Cannot find boundary from medium_i to medium_t at " + to_string(s));
 
         for (list<bounds>::iterator r=boundslistz.begin(); r!=boundslistz.end(); ++r) {
@@ -291,11 +292,11 @@ namespace SCATMECH {
                     << "The boundaries found were:" << endl;
                 for (list<bounds>::iterator p=boundslistx.begin(); p!=boundslistx.end(); ++p) {
                     err << "x=" << p->x << " boundary #" << p->n
-                        << " (defined as " << *(p->text) << ") from eps " << p->mat1 << " to eps " << p->mat2 << endl;
+                        << " (defined as " << *(p->text) << ") from eps1 " << p->mat1.eps1 << " to eps1 " << p->mat2.eps2 << endl;
                 }
-                err << "matxa = " << matxa << ", matxb = " << matxb << endl;
-                err << "matya = " << matxa << ", matyb = " << matxb << endl;
-                err << "matza = " << matxa << ", matzb = " << matxb << endl;
+                err << "matxa = " << matxa.eps1 << ", matxb = " << matxb.eps1 << endl;
+                err << "matya = " << matxa.eps1 << ", matyb = " << matxb.eps1 << endl;
+                err << "matza = " << matxa.eps1 << ", matzb = " << matxb.eps1 << endl;
                 err << endl;
                 error(err.str());
             }
@@ -306,11 +307,11 @@ namespace SCATMECH {
                     << "The boundaries found were:" << endl;
                 for (list<bounds>::iterator p=boundslisty.begin(); p!=boundslisty.end(); ++p) {
                     err << "y=" << p->x << " boundary #" << p->n
-                        << " (defined as " << *(p->text) << ") from eps " << p->mat1 << " to eps " << p->mat2 << endl;
+                        << " (defined as " << *(p->text) << ") from eps1 " << p->mat1.eps1 << " to eps1 " << p->mat2.eps1 << endl;
                 }
-                err << "matxa = " << matxa << ", matxb = " << matxb << endl;
-                err << "matya = " << matxa << ", matyb = " << matxb << endl;
-                err << "matza = " << matxa << ", matzb = " << matxb << endl;
+                err << "matxa = " << matxa.eps1 << ", matxb = " << matxb.eps1 << endl;
+                err << "matya = " << matxa.eps1 << ", matyb = " << matxb.eps1 << endl;
+                err << "matza = " << matxa.eps1 << ", matzb = " << matxb.eps1 << endl;
                 err << endl;
                 error(err.str());
             }
@@ -321,11 +322,11 @@ namespace SCATMECH {
                     << "The boundaries found were:" << endl;
                 for (list<bounds>::iterator p=boundslistz.begin(); p!=boundslistz.end(); ++p) {
                     err << "z=" << p->x << " boundary #" << p->n
-                        << " (defined as " << *(p->text) << ") from eps " << p->mat1 << " to eps " << p->mat2 << endl;
+                        << " (defined as " << *(p->text) << ") from eps1 " << p->mat1.eps1 << " to eps1 " << p->mat2.eps1 << endl;
                 }
-                err << "matxa = " << matxa << ", matxb = " << matxb << endl;
-                err << "matya = " << matxa << ", matyb = " << matxb << endl;
-                err << "matza = " << matxa << ", matzb = " << matxb << endl;
+                err << "matxa = " << matxa.eps1 << ", matxb = " << matxb.eps1 << endl;
+                err << "matya = " << matxa.eps1 << ", matyb = " << matxb.eps1 << endl;
+                err << "matza = " << matxa.eps1 << ", matzb = " << matxb.eps1 << endl;
 
                 err << endl;
                 error(err.str());
@@ -333,12 +334,12 @@ namespace SCATMECH {
             if (!boundslistx.empty() && matxa!=matza) {
                 ostringstream err;
                 err << "Inconsistent optical properties found at " << s << " in x and z scans. " << endl
-                    << "x scan said the material should be " << matxa << endl
-                    << "z scan said the material should be " << matza << endl;
+                    << "x scan said the material should be " << matxa.eps1 << endl
+                    << "z scan said the material should be " << matza.eps1 << endl;
 
-                err << "matxa = " << matxa << ", matxb = " << matxb << endl;
-                err << "matya = " << matxa << ", matyb = " << matxb << endl;
-                err << "matza = " << matxa << ", matzb = " << matxb << endl;
+                err << "matxa = " << matxa.eps1 << ", matxb = " << matxb.eps1 << endl;
+                err << "matya = " << matxa.eps1 << ", matyb = " << matxb.eps1 << endl;
+                err << "matza = " << matxa.eps1 << ", matzb = " << matxb.eps1 << endl;
 
                 err << endl;
                 error(err.str());
@@ -346,11 +347,11 @@ namespace SCATMECH {
             if (!boundslisty.empty() && matya!=matza) {
                 ostringstream err;
                 err << "Inconsistent optical properties found at " << s << " in y and z scans. " << endl
-                    << "y scan said the material should be " << matya << endl
-                    << "z scan said the material should be " << matza << endl;
-                err << "matxa = " << matxa << ", matxb = " << matxb << endl;
-                err << "matya = " << matxa << ", matyb = " << matxb << endl;
-                err << "matza = " << matxa << ", matzb = " << matxb << endl;
+                    << "y scan said the material should be " << matya.eps1 << endl
+                    << "z scan said the material should be " << matza.eps1 << endl;
+                err << "matxa = " << matxa.eps1 << ", matxb = " << matxb.eps1 << endl;
+                err << "matya = " << matxa.eps1 << ", matyb = " << matxb.eps1 << endl;
+                err << "matza = " << matxa.eps1 << ", matzb = " << matxb.eps1 << endl;
 
                 err << endl;
                 error(err.str());
@@ -358,21 +359,38 @@ namespace SCATMECH {
         }
         return matza;
     }
+	
+	COMPLEX Generic_CrossGrating::stringToEpsilon(const string& expression, Generic_CrossGrating::varsmap& vars)
+	{
+		string expressiona;
+		try {
+			expressiona = Evaluator(expression, vars).ResultString();
+		}
+		catch (SCATMECH_exception&) {
+			expressiona = expression;
+		}
+		dielectric_function df(expressiona);
+		return epsilon(df);
+	}
+
 
     void Generic_CrossGrating::setup()
     {
         CrossGrating::setup();
+		
+		isotropic = true;
+		nonmagnetic = true;
 
         string fname = find_file(filename);
         ifstream_with_comments file(fname.c_str());
         if (!file) error("Cannot open file");
 
         int i,j;
+		matmap.clear();
 
-        eps0.clear();
-        position.clear();
+		//position.clear();
         thickness.clear();
-        material.clear();
+        //material.clear();
         vars.clear();
         boundaries.clear();
 
@@ -460,35 +478,78 @@ namespace SCATMECH {
 
         if (stemp!="MATERIALS") error("Expected MATERIALS label");
 
-        eps0["medium_i"] = epsilon(medium_i);
-        eps0["medium_t"] = epsilon(medium_t);
+		matmap["medium_i"] = mat_i = material(epsilon(medium_i), epsilon(medium_i), epsilon(medium_i), 1., 1., 1.);
+		matmap["medium_t"] = mat_t = material(epsilon(medium_t), epsilon(medium_t), epsilon(medium_t), 1., 1., 1.);
 
         while (1) {
             // Read material index...
             file >> stemp;
             if (stemp=="END") break;
 
-            // Read material dielectric function...
-            string smaterial = read_paren(file);
+			if (stemp == "ANISO") {
+				isotropic = false;
+				file >> stemp;
+				if (file.fail()) error("Error reading file in MATERIALS section for ANISO material");
+				string smaterial1 = read_paren(file);
+				string smaterial2 = read_paren(file);
+				string smaterial3 = read_paren(file);
+				if (file.fail()) error("Error reading file in MATERIALS section for ANISO material");
 
-            if (file.fail()) error("Error reading file in MATERIALS section");
+				COMPLEX e1 = stringToEpsilon(smaterial1, vars);
+				COMPLEX e2 = stringToEpsilon(smaterial2, vars);
+				COMPLEX e3 = stringToEpsilon(smaterial3, vars);
 
-            string smaterial2;
-            try {
-                smaterial2 = Evaluator(smaterial,vars).ResultString();
-            } catch (SCATMECH_exception&) {
-                smaterial2 = smaterial;
-            }
-            dielectric_function df(smaterial2);
+				matmap[stemp] = material(e1, e2, e3, 1., 1., 1.);
 
-            epsmap::iterator a = eps0.find(stemp);
-            if (a!=eps0.end()) error("Duplicate material index: " + stemp);
-            COMPLEX e = epsilon(df);
-            eps0.insert(a,epsmap::value_type(stemp,e));
+			} else if (stemp == "MAGNETIC") {
+				nonmagnetic = false;
+
+				file >> stemp;
+				if (file.fail()) error("Error reading file in MATERIALS section for MAGNETIC material");
+				string smaterial1 = read_paren(file);
+				string smaterial2 = read_paren(file);
+				if (file.fail()) error("Error reading file in MATERIALS section for MAGNETIC material");
+
+				COMPLEX e = stringToEpsilon(smaterial1, vars);
+				COMPLEX m = stringToEpsilon(smaterial2, vars);
+
+				matmap[stemp] = material(e,e,e,m,m,m);
+
+			} else if (stemp == "ANISOMAGNETIC") {
+				isotropic = false;
+				nonmagnetic = false;
+
+				file >> stemp;
+				if (file.fail()) error("Error reading file in MATERIALS section for ANISOMAGNETIC material");
+				string smaterial1 = read_paren(file);
+				string smaterial2 = read_paren(file);
+				string smaterial3 = read_paren(file);
+				string smaterial4 = read_paren(file);
+				string smaterial5 = read_paren(file);
+				string smaterial6 = read_paren(file);
+				if (file.fail()) error("Error reading file in MATERIALS section for ANISOMAGNETIC material");
+
+				COMPLEX e1 = stringToEpsilon(smaterial1, vars);
+				COMPLEX e2 = stringToEpsilon(smaterial2, vars);
+				COMPLEX e3 = stringToEpsilon(smaterial3, vars);
+				COMPLEX m1 = stringToEpsilon(smaterial4, vars);
+				COMPLEX m2 = stringToEpsilon(smaterial5, vars);
+				COMPLEX m3 = stringToEpsilon(smaterial6, vars);
+	
+				matmap[stemp] = material(e1, e2, e3, m1, m2, m3);
+
+			} else { // Isotropic material...
+				// Read material dielectric function...
+				string smaterial = read_paren(file);
+	
+				if (file.fail()) error("Error reading file in MATERIALS section");
+	
+				COMPLEX e = stringToEpsilon(smaterial, vars);
+	
+				matmap[stemp] = material(e, e, e, 1., 1., 1.);
+			}
         }
 
-        eps_i = epsilon(medium_i);
-        eps_t = epsilon(medium_t);
 
         //*****************************************************************
         //*
@@ -578,14 +639,14 @@ namespace SCATMECH {
                 // Read left material index...
                 file >> imat1;
                 if (file.fail()) error("Error reading file at material #1");
-                epsmap::iterator m1 = eps0.find(imat1);
-                if (m1==eps0.end()) error ("Unknown material label: " + imat1);
+                Materialmap::iterator m1 = matmap.find(imat1);
+                if (m1==matmap.end()) error ("Unknown material label: " + imat1);
 
                 // Read right material index...
                 file >> imat2;
                 if (file.fail()) error("Error reading file at material #2");
-                epsmap::iterator m2 = eps0.find(imat2);
-                if (m2==eps0.end()) error ("Unknown material: " + imat2);
+                Materialmap::iterator m2 = matmap.find(imat2);
+                if (m2==matmap.end()) error ("Unknown material: " + imat2);
 
                 string *text = StringTrash.New();
                 *text = "QUAD " + vertex1 + " " + vertex2 + " " + vertex3 + " " + vertex4 + " " + imat1 + " " + imat2;
@@ -597,20 +658,20 @@ namespace SCATMECH {
                 tb1.vertex1=v1->second;
                 tb1.vertex2=v2->second;
                 tb1.vertex3=v3->second;
-                tb1.mat1=eps0[imat1];
-                tb1.mat2=eps0[imat2];
+				tb1.mat1 = matmap[imat1];
+				tb1.mat2 = matmap[imat2];
 
-                // Load into a triangle boundary...
+				// Load into a triangle boundary...
                 boundary tb2;
                 tb2.n=ibound;
                 tb2.text=text;
                 tb2.vertex1=v1->second;
                 tb2.vertex2=v3->second;
                 tb2.vertex3=v4->second;
-                tb2.mat1=eps0[imat1];
-                tb2.mat2=eps0[imat2];
+				tb2.mat1 = matmap[imat1];
+				tb2.mat2 = matmap[imat2];
 
-                // Store in list of boundaries...
+				// Store in list of boundaries...
                 boundaries.push_back(tb1);
                 boundaries.push_back(tb2);
                 ++ibound;
@@ -636,14 +697,14 @@ namespace SCATMECH {
                 // Read left material index...
                 file >> imat1;
                 if (file.fail()) error("Error reading file at material #1");
-                epsmap::iterator m1 = eps0.find(imat1);
-                if (m1==eps0.end()) error ("Unknown material label: " + imat1);
+                Materialmap::iterator m1 = matmap.find(imat1);
+                if (m1==matmap.end()) error ("Unknown material label: " + imat1);
 
                 // Read right material index...
                 file >> imat2;
                 if (file.fail()) error("Error reading file at material #2");
-                epsmap::iterator m2 = eps0.find(imat2);
-                if (m2==eps0.end()) error ("Unknown material: " + imat2);
+                Materialmap::iterator m2 = matmap.find(imat2);
+                if (m2==matmap.end()) error ("Unknown material: " + imat2);
 
                 string *text = StringTrash.New();
                 *text = vertex1 + " " + vertex2 + " " + vertex3 + " " + imat1 + " " + imat2;
@@ -655,8 +716,8 @@ namespace SCATMECH {
                 tb.vertex1=v1->second;
                 tb.vertex2=v2->second;
                 tb.vertex3=v3->second;
-                tb.mat1=eps0[imat1];
-                tb.mat2=eps0[imat2];
+				tb.mat1 = matmap[imat1];
+				tb.mat2 = matmap[imat2];
 
                 // Store in list of boundaries...
                 boundaries.push_back(tb);
@@ -838,7 +899,24 @@ namespace SCATMECH {
             ++kk;
         }
 
-        eps.allocate(grid1,grid2,levels);
+		if (isotropic) {
+			eps.allocate(grid1, grid2, levels);
+		} else {
+			eps1.allocate(grid1, grid2, levels);
+			eps2.allocate(grid1, grid2, levels);
+			eps3.allocate(grid1, grid2, levels);
+		}
+
+		if (!nonmagnetic) {
+			if (isotropic) {
+				mu.allocate(grid1, grid2, levels);
+			}
+			else {
+				mu1.allocate(grid1, grid2, levels);
+				mu2.allocate(grid1, grid2, levels);
+				mu3.allocate(grid1, grid2, levels);
+			}
+		}
         message("Number of levels: " + to_string(levels) + "\n");
 
         //*****************************************************************
@@ -891,29 +969,79 @@ namespace SCATMECH {
                     boundslist.sort();
                     boundslist.unique();
                     if (boundslist.empty()) {
-                        COMPLEX e = find_epsilon(Vector(x,Y.front()*0.1111111+Y.back()*0.8888889,h),false);
+                        material e = find_epsilon(Vector(x,Y.front()*0.1111111+Y.back()*0.8888889,h),false);
                         for (int m=0; m<grid2; ++m) {
-                            eps(jj+1,m+1,(k+i+1)) = e;
-                        }
+							if (isotropic) {
+								eps(jj + 1, m + 1, (k + i + 1)) = e.eps1;
+							} else {
+								eps1(jj + 1, m + 1, (k + i + 1)) = e.eps1;
+								eps2(jj + 1, m + 1, (k + i + 1)) = e.eps2;
+								eps3(jj + 1, m + 1, (k + i + 1)) = e.eps3;
+							}
+							if (!nonmagnetic) {
+								if (isotropic) {
+									mu(jj + 1, m + 1, (k + i + 1)) = e.mu1;
+								}
+								else {
+									mu1(jj + 1, m + 1, (k + i + 1)) = e.mu1;
+									mu2(jj + 1, m + 1, (k + i + 1)) = e.mu2;
+									mu3(jj + 1, m + 1, (k + i + 1)) = e.mu3;
+								}
+							}
+						}
                     } else {
                         int j=0;
 
-                        COMPLEX mat = boundslist.back().mat2;
+                        material mat = boundslist.back().mat2;
 
                         for (list<bounds>::iterator q=boundslist.begin(); q!=boundslist.end(); ++q) {
 
                             int knext = int((q->x - firsty)/d2*grid2);
 
                             for (int m=j; m<knext; ++m) {
-                                eps(jj+1,m+1,(k+i+1))=mat;
+								if (isotropic) {
+									eps(jj + 1, m + 1, (k + i + 1)) = mat.eps1;
+								}
+								else {
+									eps1(jj + 1, m + 1, (k + i + 1)) = mat.eps1;
+									eps2(jj + 1, m + 1, (k + i + 1)) = mat.eps2;
+									eps3(jj + 1, m + 1, (k + i + 1)) = mat.eps3;
+								}
+								if (!nonmagnetic) {
+									if (isotropic) {
+										mu(jj + 1, m + 1, (k + i + 1)) = mat.mu1;
+									}
+									else {
+										mu1(jj + 1, m + 1, (k + i + 1)) = mat.mu1;
+										mu2(jj + 1, m + 1, (k + i + 1)) = mat.mu2;
+										mu3(jj + 1, m + 1, (k + i + 1)) = mat.mu3;
+									}
+								}
                             }
 
                             mat = q->mat2;
                             j=knext;
                         }
                         for (int m=j; m<grid2; ++m) {
-                            eps(jj+1,m+1,(k+i+1)) = mat;
-                        }
+							if (isotropic) {
+								eps(jj + 1, m + 1, (k + i + 1)) = mat.eps1;
+							}
+							else {
+								eps1(jj + 1, m + 1, (k + i + 1)) = mat.eps1;
+								eps2(jj + 1, m + 1, (k + i + 1)) = mat.eps2;
+								eps3(jj + 1, m + 1, (k + i + 1)) = mat.eps3;
+							}
+							if (!nonmagnetic) {
+								if (isotropic) {
+									mu(jj + 1, m + 1, (k + i + 1)) = mat.mu1;
+								}
+								else {
+									mu1(jj + 1, m + 1, (k + i + 1)) = mat.mu1;
+									mu2(jj + 1, m + 1, (k + i + 1)) = mat.mu2;
+									mu3(jj + 1, m + 1, (k + i + 1)) = mat.mu3;
+								}
+							}
+						}
                     }
                 }
                 thickness.push_back(subheight/mlayers);
@@ -958,10 +1086,10 @@ namespace SCATMECH {
     {
         ofstream file("bounds.dat");
         for (boundary_vector::const_iterator q=boundaries.begin(); q!=boundaries.end(); ++q) {
-            file << q->mat1 << tab << q->mat2 << tab << q->vertex1.x << tab << q->vertex1.y << tab << q->vertex1.z << endl
-                 << q->mat1 << tab << q->mat2 << tab << q->vertex2.x << tab << q->vertex2.y << tab << q->vertex2.z << endl
-                 << q->mat1 << tab << q->mat2 << tab << q->vertex3.x << tab << q->vertex3.y << tab << q->vertex3.z << endl
-                 << q->mat1 << tab << q->mat2 << tab << q->vertex1.x << tab << q->vertex1.y << tab << q->vertex1.z << endl << endl;
+            file << q->mat1.eps1 << tab << q->mat2.eps1 << tab << q->vertex1.x << tab << q->vertex1.y << tab << q->vertex1.z << endl
+                 << q->mat1.eps1 << tab << q->mat2.eps1 << tab << q->vertex2.x << tab << q->vertex2.y << tab << q->vertex2.z << endl
+                 << q->mat1.eps1 << tab << q->mat2.eps1 << tab << q->vertex3.x << tab << q->vertex3.y << tab << q->vertex3.z << endl
+                 << q->mat1.eps1 << tab << q->mat2.eps1 << tab << q->vertex1.x << tab << q->vertex1.y << tab << q->vertex1.z << endl << endl;
         }
         ofstream varfile("vardump.dat");
         varfile << "Variables: " << endl << endl;
@@ -975,7 +1103,7 @@ namespace SCATMECH {
 
         varfile << endl << "Boundaries: " << endl << endl;
         for (boundary_vector::const_iterator s=boundaries.begin(); s!=boundaries.end(); ++s) {
-            varfile << s->n << ": " << *(s->text) << " : " << s->mat1 << tab << s->mat2 << tab << s->vertex1 << tab << s->vertex2 << tab << s->vertex3  << endl;
+            varfile << s->n << ": " << *(s->text) << " : " << s->mat1.eps1 << tab << s->mat2.eps1 << tab << s->vertex1 << tab << s->vertex2 << tab << s->vertex3  << endl;
         }
 
         Model::error("(input file = " + filename + "): " + message + " (addtional information sent to file vardump.dat)");
@@ -1002,10 +1130,10 @@ namespace SCATMECH {
             ofstream file(value.c_str());
             if (!file) error("Cannot open file: " + value);
             for (boundary_vector::iterator p=boundaries.begin(); p!=boundaries.end(); ++p) {
-                file << p->mat1 << tab << p->mat2 << tab << p->vertex1.x << tab << p->vertex1.y << tab << p->vertex1.z << endl
-                     << p->mat1 << tab << p->mat2 << tab << p->vertex2.x << tab << p->vertex2.y << tab << p->vertex2.z << endl
-                     << p->mat1 << tab << p->mat2 << tab << p->vertex3.x << tab << p->vertex3.y << tab << p->vertex3.z << endl
-                     << p->mat1 << tab << p->mat2 << tab << p->vertex1.x << tab << p->vertex1.y << tab << p->vertex1.z << endl << endl;
+                file << p->mat1.eps1 << tab << p->mat2.eps1 << tab << p->vertex1.x << tab << p->vertex1.y << tab << p->vertex1.z << endl
+                     << p->mat1.eps1 << tab << p->mat2.eps1 << tab << p->vertex2.x << tab << p->vertex2.y << tab << p->vertex2.z << endl
+                     << p->mat1.eps1 << tab << p->mat2.eps1 << tab << p->vertex3.x << tab << p->vertex3.y << tab << p->vertex3.z << endl
+                     << p->mat1.eps1 << tab << p->mat2.eps1 << tab << p->vertex1.x << tab << p->vertex1.y << tab << p->vertex1.z << endl << endl;
             }
             set_recalc(0);
         } else {
