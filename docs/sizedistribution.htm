@@ -48,7 +48,7 @@ MathJax.Hub.Config({
 
 	<p>The following models are available:
 	  <ul>
-  	  <li><a href="sizedistribution.htm">Abstract class Distribution</a></li>
+  	  <li>Abstract class Distribution</li>
 	  <ul>
 	    <li><a href="#LogNormalDistribution">Log_Normal_Distribution</a></li>
 	    <li><a href="#ModifiedGammaDistribution">Modified_Gamma_Distribution</a></li>
@@ -56,13 +56,17 @@ MathJax.Hub.Config({
 	    <li><a href="#WeibullDistribution">Weibull_Distribution</a></li>
 	    <li><a href="#BimodalDistribution">Bimodal_Distribution</a></li>
 	  </ul>
-	  <li><a href="#VolumeParticleSizeDistribution">class VolumeParticleSizeDistribution</a></li>
-	  <li><a href="#SurfaceParticleSizeDistribution">class SurfaceParticleSizeDistribution</a></li>
-	  <ul>
-	    <li><a href="#CC1246ESurfaceParticleSizeDistribution">class CC1246E_SurfaceParticleSizeDistribution</a></li>
-	    </ul>
-	  </ul>
-	  
+	  <li>Abstract class VolumeParticleSizeDistribution</li>
+        <ul>
+            <li><a href="#RegularVolumeParticleSizeDistribution">class Regular_VolumeParticleSizeDistribution</a></li>
+        </ul>   
+      <li>Abstract class SurfaceParticleSizeDistribution</li>
+        <ul>
+            <li><a href="#RegularSurfaceParticleSizeDistribution">class Regular_SurfaceParticleSizeDistribution</a></li>
+            <li><a href="#CC1246ESurfaceParticleSizeDistribution">class CC1246E_SurfaceParticleSizeDistribution</a></li>
+        </ul>
+      </ul>
+
         <h2>Instantiable Models for Distribution and Their Parameters:</h2>
 
         <table border="1" cellpadding="5">
@@ -277,8 +281,8 @@ MathJax.Hub.Config({
           </tr>
 
           <tr>
-	    <a name="VolumeParticleSizeDistribution"></a>
-            <td colspan="4" class="model"><b>VolumeParticleSizeDistribution</b>:<br>
+	    <a name="RegularVolumeParticleSizeDistribution"></a>
+            <td colspan="4" class="model"><b>Regular_VolumeParticleSizeDistribution</b>:<br>
 	      This volume particle diameter distribution specifies a distribution and the number of particles in a volume.
             </td>
           </tr>
@@ -319,8 +323,8 @@ MathJax.Hub.Config({
           </tr>
 
           <tr>
-	    <a name="SurfaceParticleSizeDistribution"></a>
-            <td colspan="4" class="model"><b>SurfaceParticleSizeDistribution</b>:<br>
+	    <a name="RegularSurfaceParticleSizeDistribution"></a>
+            <td colspan="4" class="model"><b>Regular_SurfaceParticleSizeDistribution</b>:<br>
 	      This surface particle diameter distribution specifies a distribution and the number of particles per area on a surface.
             </td>
           </tr>
@@ -352,9 +356,7 @@ MathJax.Hub.Config({
 	      \begin{equation}
 	      N(D) = 10^{0.926[(\log_{10} L)^2-(\log_{10} D)^2]}.
 	      \end{equation}
-	      where $L$ is the cleanliness level.<br>
-	      <b>Note:</b> The parameter <tt>SurfaceParticleSizeDistribution::numberdensity</tt> is not used by this model, as its function is
-	      overridden by the cleanliness level. 
+	      where $L$ is the cleanliness level.
             </td>
           </tr>
 
