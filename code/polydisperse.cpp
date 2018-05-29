@@ -90,7 +90,7 @@ mueller()
 }
 
 DEFINE_MODEL(Polydisperse_Sphere_BRDF_Model,BRDF_Model,"Double interaction theory with a Mie scatterer and polydispersity.");
-DEFINE_PTRPARAMETER(Polydisperse_Sphere_BRDF_Model,SurfaceParticleSizeDistribution_Ptr,distribution,"Size distribution","SurfaceParticleSizeDistribution",0xFF);
+DEFINE_PTRPARAMETER(Polydisperse_Sphere_BRDF_Model,SurfaceParticleSizeDistribution_Ptr,distribution,"Size distribution","Regular_SurfaceParticleSizeDistribution",0xFF);
 DEFINE_PTRPARAMETER(Polydisperse_Sphere_BRDF_Model,StackModel_Ptr,stack,"Films on substrate","No_StackModel",0xFF);
 DEFINE_PARAMETER(Polydisperse_Sphere_BRDF_Model,dielectric_function,particle,"Optical properties of the particle","(1.5,0.0)",0xFF);
 DEFINE_PARAMETER(Polydisperse_Sphere_BRDF_Model,double,Dstart,"Starting diameter [um]","1",0xFF);

@@ -38,7 +38,20 @@ namespace SCATMECH {
 	class VolumeParticleSizeDistribution : public Model {
 	public:
 		/// Returns the number of particles having diameter between D and D+dD, divided by dD.
-		virtual double volumedensity(double D) {       
+		virtual double volumedensity(double D) = 0;
+
+		DECLARE_MODEL();
+	};
+
+	typedef Model_Ptr<VolumeParticleSizeDistribution> VolumeParticleSizeDistribution_Ptr;
+
+	///
+	/// @brief Volumetric particle diameter distribution that takes ad Distribution_Ptr
+	/// 
+	class Regular_VolumeParticleSizeDistribution : public Model {
+	public:
+		/// Returns the number of particles having diameter between D and D+dD, divided by dD.
+		virtual double volumedensity(double D) {
 			return distribution->pdf(D)*numberdensity;
 		};
 		DECLARE_MODEL();
@@ -46,12 +59,23 @@ namespace SCATMECH {
 		DECLARE_PARAMETER(double, numberdensity);          ///< The total number of particles divided by volume
 	};
 
-	typedef Model_Ptr<VolumeParticleSizeDistribution> VolumeParticleSizeDistribution_Ptr;
-
 	///
 	/// @brief Class for a particle diameter distribution on a surface
 	///
 	class SurfaceParticleSizeDistribution : public Model {
+	public:
+		/// Returns the number of particles having diameter between D and D+dD, divided by dD.
+		virtual double surfacedensity(double d) = 0;
+
+		DECLARE_MODEL();
+	};
+
+	typedef Model_Ptr<SurfaceParticleSizeDistribution> SurfaceParticleSizeDistribution_Ptr;
+
+	///
+	/// @brief SurfaceParticleSizeDistribution that takes a Distribution_Ptr
+	///
+	class Regular_SurfaceParticleSizeDistribution : public Model {
 	public:
 		/// Returns the number of particles having diameter between D and D+dD, divided by dD.
 		virtual double surfacedensity(double d) {
@@ -62,8 +86,6 @@ namespace SCATMECH {
 		DECLARE_PARAMETER(Distribution_Ptr, distribution); ///< The normalized size diameter distribution
 		DECLARE_PARAMETER(double, numberdensity);          ///< The total number of particles divided by area
 	};
-
-	typedef Model_Ptr<SurfaceParticleSizeDistribution> SurfaceParticleSizeDistribution_Ptr;
 
 	///
 	/// @brief A log-normal distribution

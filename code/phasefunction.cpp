@@ -503,7 +503,7 @@ DEFINE_MODEL(Distributed_Mie_Phase_Function, Polarized_Phase_Function, "A phase 
 DEFINE_PARAMETER(Distributed_Mie_Phase_Function, double, lambda, "Wavelength [um]", "0.532", 0xFF);
 DEFINE_PARAMETER(Distributed_Mie_Phase_Function, dielectric_function, medium, "Medium surrounding spheres", "(1.33,0)", 0xFF);
 DEFINE_PARAMETER(Distributed_Mie_Phase_Function, dielectric_function, sphere, "Sphere medium", "(1,0)", 0xFF);
-DEFINE_PTRPARAMETER(Distributed_Mie_Phase_Function, VolumeParticleSizeDistribution_Ptr, distribution, "Size distribution", "VolumeParticleSizeDistribution", 0xFF);
+DEFINE_PTRPARAMETER(Distributed_Mie_Phase_Function, VolumeParticleSizeDistribution_Ptr, distribution, "Size distribution", "Regular_VolumeParticleSizeDistribution", 0xFF);
 DEFINE_PARAMETER(Distributed_Mie_Phase_Function, double, integralStart, "Start diameter for integration [um]", "0.1", 0xFF);
 DEFINE_PARAMETER(Distributed_Mie_Phase_Function, double, integralEnd, "End diameter for integration [um]", "100", 0xFF);
 DEFINE_PARAMETER(Distributed_Mie_Phase_Function, double, integralStep, "Fractional step diameter for integration", "0.01", 0xFF);

@@ -75,20 +75,26 @@ namespace SCATMECH {
 			Register_Model(Weibull_Distribution);
 			Register_Model(Bimodal_Distribution);
 			Register_Model(VolumeParticleSizeDistribution);
+			Register_Model(Regular_VolumeParticleSizeDistribution);
 			Register_Model(SurfaceParticleSizeDistribution);
+			Register_Model(Regular_SurfaceParticleSizeDistribution);
 			Register_Model(CC1246E_SurfaceParticleSizeDistribution);
 		}
 	}
 
 	DEFINE_VIRTUAL_MODEL(Distribution, Model, "Base class for diameter distributions");
 
-	DEFINE_MODEL(VolumeParticleSizeDistribution, Model, "Volume particle size and number distribution");
-	DEFINE_PTRPARAMETER(VolumeParticleSizeDistribution, Distribution_Ptr, distribution, "Diameter distribution", "Log_Normal_Distribution", 0xFF);
-	DEFINE_PARAMETER(VolumeParticleSizeDistribution, double, numberdensity, "Volume number density [1/um^3]", "0.00001", 0xFF);
+	DEFINE_VIRTUAL_MODEL(VolumeParticleSizeDistribution, Model, "Volume particle size and number distribution");
 
-	DEFINE_MODEL(SurfaceParticleSizeDistribution, Model, "Surface particle size and number distribution");
-	DEFINE_PTRPARAMETER(SurfaceParticleSizeDistribution, Distribution_Ptr, distribution, "Diameter distribution","Log_Normal_Distribution",0xFF);
-	DEFINE_PARAMETER(SurfaceParticleSizeDistribution, double, numberdensity,"Surface number density [1/um^2]", "0.001", 0xFF);
+	DEFINE_MODEL(Regular_VolumeParticleSizeDistribution, VolumeParticleSizeDistribution, "Volume particle size and number distribution");
+	DEFINE_PTRPARAMETER(Regular_VolumeParticleSizeDistribution, Distribution_Ptr, distribution, "Diameter distribution", "Log_Normal_Distribution", 0xFF);
+	DEFINE_PARAMETER(Regular_VolumeParticleSizeDistribution, double, numberdensity, "Volume number density [1/um^3]", "0.00001", 0xFF);
+
+	DEFINE_VIRTUAL_MODEL(SurfaceParticleSizeDistribution, Model, "Surface particle size and number distribution");
+
+	DEFINE_MODEL(Regular_SurfaceParticleSizeDistribution, SurfaceParticleSizeDistribution, "Surface particle size and number distribution");
+	DEFINE_PTRPARAMETER(Regular_SurfaceParticleSizeDistribution, Distribution_Ptr, distribution, "Diameter distribution", "Log_Normal_Distribution", 0xFF);
+	DEFINE_PARAMETER(Regular_SurfaceParticleSizeDistribution, double, numberdensity, "Surface number density [1/um^2]", "0.001", 0xFF);
 
 	DEFINE_MODEL(Log_Normal_Distribution, Distribution, "Log-Normal distribution");
 	DEFINE_PARAMETER(Log_Normal_Distribution, double, sigma, "Standard deviation of log(diameter)", "1", 0xFF);
