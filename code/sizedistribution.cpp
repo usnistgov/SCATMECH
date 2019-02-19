@@ -59,7 +59,9 @@ namespace SCATMECH {
 		if (d < 1.) return 0.;
 
 		/// cdf = pow(10., 0.926*(sqr(log10(cleanliness)) - sqr(log10(d))) - 11.);
-		return 8.68589E-12 * exp(-0.434294*slope*sqr(log(d)) + 0.402157*sqr(log(cleanliness)))*slope*log(d) / d;
+		// The following was changed 2/19/2019...
+		// return 8.68589E-12 * exp(-0.434294*slope*sqr(log(d)) + 0.402157*sqr(log(cleanliness)))*slope*log(d) / d;
+		return 8.68589E-12 * exp(0.434294*slope*(sqr(log(cleanliness))-sqr(log(d))))*slope*log(d) / d;
 	}
 
 	void Register(const Distribution* x)
@@ -74,8 +76,28 @@ namespace SCATMECH {
 			Register_Model(Modified_Gamma_Distribution);
 			Register_Model(Weibull_Distribution);
 			Register_Model(Bimodal_Distribution);
-			Register_Model(VolumeParticleSizeDistribution);
+			Register((VolumeParticleSizeDistribution*)0);
+			Register((SurfaceParticleSizeDistribution*)0);
+		}
+	}
+
+	void Register(const VolumeParticleSizeDistribution* x)
+	{
+		static bool regd = false;
+		if (!regd) {
+			regd = true;
+
+			Register_Model(VolumeParticleSizeDistribution);			
 			Register_Model(Regular_VolumeParticleSizeDistribution);
+		}
+	}
+	
+	void Register(const SurfaceParticleSizeDistribution* x)
+	{
+		static bool regd = false;
+		if (!regd) {
+			regd = true;
+
 			Register_Model(SurfaceParticleSizeDistribution);
 			Register_Model(Regular_SurfaceParticleSizeDistribution);
 			Register_Model(CC1246E_SurfaceParticleSizeDistribution);

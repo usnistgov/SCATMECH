@@ -44,6 +44,7 @@ namespace SCATMECH {
 	};
 
 	typedef Model_Ptr<VolumeParticleSizeDistribution> VolumeParticleSizeDistribution_Ptr;
+	void Register(const VolumeParticleSizeDistribution* x);
 
 	///
 	/// @brief Volumetric particle diameter distribution that takes ad Distribution_Ptr
@@ -71,6 +72,7 @@ namespace SCATMECH {
 	};
 
 	typedef Model_Ptr<SurfaceParticleSizeDistribution> SurfaceParticleSizeDistribution_Ptr;
+	void Register(const SurfaceParticleSizeDistribution* x);
 
 	///
 	/// @brief SurfaceParticleSizeDistribution that takes a Distribution_Ptr
