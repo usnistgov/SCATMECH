@@ -161,7 +161,12 @@ namespace SCATMECH {
 		DECLARE_MODEL();
 		DECLARE_PARAMETER(double, cleanliness);  ///< The cleanliness parameter
 		DECLARE_PARAMETER(double, slope);        ///< Defined as 0.926 by the standard
-
+	protected:
+		void setup();
+	private:
+		double coverage(double slope, double level);
+		double cov926;
+		double cov;
 	};
 
 } // namespace SCATMECH
