@@ -51,6 +51,33 @@ namespace SCATMECH {
 		return fractionA*distributionA->pdf(d) + (1 - fractionA)*distributionB->pdf(d);
 	}
 
+	double CC1246E_SurfaceParticleSizeDistribution::coverage(double slope, double level)
+	{
+		// This expression is the fractional area coverage of the CC1246E distribution
+		// for spheres having diameters from 1 micrometer to 1000 micrometers.
+		return (1.481352804281975e-12*pow(10., 1 / slope)*
+			exp(0.43429448190325176*slope*pow(log(level), 2))*
+			((-1.7763568394002505e-15 +
+				exp(-2.302585092994046 / slope - 20.723265836946414*slope)*
+				(-5.301898110478397e6 +
+					5.301898110478399*exp(20.723265836946414*slope)))*
+				sqrt(slope) + 14.25982376258241*
+				erf(1.5174271293851465 / sqrt(slope)) +
+				((-14.259823762582409 + 42.77947128774722*slope)*
+					erf((1.5174271293851465*fabs(1. - 3.*slope)) / sqrt(slope))) /
+				fabs(1. - 3.*slope))) / sqrt(slope);
+	}
+	void CC1246E_SurfaceParticleSizeDistribution::setup()
+	{
+		SurfaceParticleSizeDistribution::setup();
+
+		// Calculate the coverages for slope=0.926 and for the requested slope, 
+		// so that the coverage is equivalent to that for slope 0.926 of the same 
+		// cleanliness.
+		cov926 = coverage(0.926, cleanliness);
+		cov = coverage(slope, cleanliness);
+	}
+
 	double CC1246E_SurfaceParticleSizeDistribution::surfacedensity(double d)
 	{
 		SETUP();
@@ -59,7 +86,11 @@ namespace SCATMECH {
 		if (d < 1.) return 0.;
 
 		/// cdf = pow(10., 0.926*(sqr(log10(cleanliness)) - sqr(log10(d))) - 11.);
-		return 8.68589E-12 * exp(-0.434294*slope*sqr(log(d)) + 0.402157*sqr(log(cleanliness)))*slope*log(d) / d;
+		// The following was changed 2/19/2019...
+		// return 8.68589E-12 * exp(-0.434294*slope*sqr(log(d)) + 0.402157*sqr(log(cleanliness)))*slope*log(d) / d;
+		// Then changed again 2/21/2019...
+		// return 8.68589E-12 * exp(0.434294*slope*(sqr(log(cleanliness)) - sqr(log(d))))*slope*log(d) / d;
+		return 8.68589E-12 * exp(0.434294*slope*(sqr(log(cleanliness)) - sqr(log(d))))*slope*log(d) / d * (cov926/cov);
 	}
 
 	void Register(const Distribution* x)
@@ -74,21 +105,47 @@ namespace SCATMECH {
 			Register_Model(Modified_Gamma_Distribution);
 			Register_Model(Weibull_Distribution);
 			Register_Model(Bimodal_Distribution);
-			Register_Model(VolumeParticleSizeDistribution);
+			Register((VolumeParticleSizeDistribution*)0);
+			Register((SurfaceParticleSizeDistribution*)0);
+		}
+	}
+
+	void Register(const VolumeParticleSizeDistribution* x)
+	{
+		static bool regd = false;
+		if (!regd) {
+			regd = true;
+
+			Register_Model(VolumeParticleSizeDistribution);			
+			Register_Model(Regular_VolumeParticleSizeDistribution);
+		}
+	}
+	
+	void Register(const SurfaceParticleSizeDistribution* x)
+	{
+		static bool regd = false;
+		if (!regd) {
+			regd = true;
+
 			Register_Model(SurfaceParticleSizeDistribution);
+			Register_Model(Regular_SurfaceParticleSizeDistribution);
 			Register_Model(CC1246E_SurfaceParticleSizeDistribution);
 		}
 	}
 
 	DEFINE_VIRTUAL_MODEL(Distribution, Model, "Base class for diameter distributions");
 
-	DEFINE_MODEL(VolumeParticleSizeDistribution, Model, "Volume particle size and number distribution");
-	DEFINE_PTRPARAMETER(VolumeParticleSizeDistribution, Distribution_Ptr, distribution, "Diameter distribution", "Log_Normal_Distribution", 0xFF);
-	DEFINE_PARAMETER(VolumeParticleSizeDistribution, double, numberdensity, "Volume number density [1/um^3]", "0.00001", 0xFF);
+	DEFINE_VIRTUAL_MODEL(VolumeParticleSizeDistribution, Model, "Volume particle size and number distribution");
 
-	DEFINE_MODEL(SurfaceParticleSizeDistribution, Model, "Surface particle size and number distribution");
-	DEFINE_PTRPARAMETER(SurfaceParticleSizeDistribution, Distribution_Ptr, distribution, "Diameter distribution","Log_Normal_Distribution",0xFF);
-	DEFINE_PARAMETER(SurfaceParticleSizeDistribution, double, numberdensity,"Surface number density [1/um^2]", "0.001", 0xFF);
+	DEFINE_MODEL(Regular_VolumeParticleSizeDistribution, VolumeParticleSizeDistribution, "Volume particle size and number distribution");
+	DEFINE_PTRPARAMETER(Regular_VolumeParticleSizeDistribution, Distribution_Ptr, distribution, "Diameter distribution", "Log_Normal_Distribution", 0xFF);
+	DEFINE_PARAMETER(Regular_VolumeParticleSizeDistribution, double, numberdensity, "Volume number density [1/um^3]", "0.00001", 0xFF);
+
+	DEFINE_VIRTUAL_MODEL(SurfaceParticleSizeDistribution, Model, "Surface particle size and number distribution");
+
+	DEFINE_MODEL(Regular_SurfaceParticleSizeDistribution, SurfaceParticleSizeDistribution, "Surface particle size and number distribution");
+	DEFINE_PTRPARAMETER(Regular_SurfaceParticleSizeDistribution, Distribution_Ptr, distribution, "Diameter distribution", "Log_Normal_Distribution", 0xFF);
+	DEFINE_PARAMETER(Regular_SurfaceParticleSizeDistribution, double, numberdensity, "Surface number density [1/um^2]", "0.001", 0xFF);
 
 	DEFINE_MODEL(Log_Normal_Distribution, Distribution, "Log-Normal distribution");
 	DEFINE_PARAMETER(Log_Normal_Distribution, double, sigma, "Standard deviation of log(diameter)", "1", 0xFF);
