@@ -68,7 +68,7 @@
         \end{equation}
         Finally, Eq. $(\ref{EqB})$ is approximated by the sum
         \begin{equation}
-        {\bf f}_{\rm r} = \sum_{i=0}^n {\bf f}_{\rm r}^{\rm sphere}(D_i) \;N(D_i)\;D_i \; s.
+        {\bf f}_{\rm r} = \sum_{i=0}^n {\bf f}_{\rm r}^{\rm sphere}[D_i,N(D_i)]\;D_i \; s.
         \label{EqC}
         \end{equation}
         where $D_i=(1+s)^i D_{\rm start}$ and $n={\rm floor}[\log(D_{\rm end}/D_{\rm start})/\log(1+s)]$. 
@@ -187,6 +187,22 @@
                 <td class="default">0.01</td>
             </tr>
 
+            <tr>
+                <td class="parameter">fractional_coverage</td>
+                <td class="datatype">double</td>
+                <td class="description">
+                    If <tt class="parameter">fractional_coverage</tt> is non-zero, then the model will scale the distribution so that the fractional area
+                    coverage of the spheres on the surface is <tt class="parameter">fractional_coverage</tt>. The fractional area coverage $f_A$ of the distribution
+                    is determined by integrating
+                    \begin{equation}
+                    f_A = \int_{D_{\rm start}}^{D_{\rm end}} N(D)\; \pi (D/2)^2\; {\rm d}D \approx \sum_{i=0}^n N(D_i) \;\pi (D_i/2)^2 \; D_i \;s.
+                    \end{equation}
+                    If <tt class="parameter">fractional_coverage</tt> is zero, then the model will assume that the distribution is appropriately normalized to give the
+                    fractional area coverage.
+                </td>
+                <td class="default">1E-4</td>
+            </tr>
+
           <tr>
             <td class="parameter">antirainbow</td>
             <td class="datatype">double</td>
@@ -217,7 +233,9 @@
           </p>
 
           <p>R.V. Peterson, P.G. Magallanes, and D.F. Rock, &quot;Tailored particle distributions derived from MIL-STD-1246,&quot; 
-          Proc. SPIE <b>4774</b>, 79-98 (2002).</b></p>
+          Proc. SPIE <b>4774</b>, 79-98 (2002).</p>
+
+          <p>M. G. Dittman, &quot;Contamination scatter functions for stray-light analysis,&quot; Proc. SPIE <b>4774</b>, 99-110 (2002).</p>
 
           <p>J. Fleming, B. Matheson, M.G. Dittman, F. Grochocki, and B. Firth, &quot;Modeling particle distributions for stray light analysis,&quote;
           Proc. SPIE <b>6291</b>, 62910T (2006).</p>
