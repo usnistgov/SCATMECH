@@ -53,6 +53,7 @@ namespace SCATMECH {
 	public:
 		/// Returns the number of particles having diameter between D and D+dD, divided by dD.
 		virtual double volumedensity(double D) {
+			SETUP();
 			return distribution->pdf(D)*numberdensity;
 		};
 		DECLARE_MODEL();
@@ -77,10 +78,11 @@ namespace SCATMECH {
 	///
 	/// @brief SurfaceParticleSizeDistribution that takes a Distribution_Ptr
 	///
-	class Regular_SurfaceParticleSizeDistribution : public Model {
+	class Regular_SurfaceParticleSizeDistribution : public SurfaceParticleSizeDistribution {
 	public:
 		/// Returns the number of particles having diameter between D and D+dD, divided by dD.
 		virtual double surfacedensity(double d) {
+			SETUP();
 			return distribution->pdf(d)*numberdensity;
 		}
 

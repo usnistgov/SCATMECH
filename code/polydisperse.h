@@ -50,6 +50,10 @@ namespace SCATMECH {
 		/// The fractional step for integration
 		DECLARE_PARAMETER(double, Dstep);
 
+		/// If non-zero, the fractional area coverage of spheres.
+		/// If zero, use distribution to determine coverage.
+		DECLARE_PARAMETER(double, fractional_coverage);
+
 		/// A parameter that requires minimum absorption for the particle
 		/// to eliminate rainbow effects. The additional absorption is diameter dependent, 
 		/// so that there is 1/e absorption over the diameter of the particle when
@@ -67,6 +71,8 @@ namespace SCATMECH {
 		typedef ModelList::iterator ModelListIterator;
 
 		ModelList submodels;
+
+		double distributioncoverage;
 	};
 
 

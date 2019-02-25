@@ -159,7 +159,7 @@ namespace SCATMECH {
 	DEFINE_MODEL(Weibull_Distribution, Distribution, "Weibull distribution");
 	DEFINE_PARAMETER(Weibull_Distribution, double, scale, "Scale (lambda) [um]", "10", 0xFF);
 	DEFINE_PARAMETER(Weibull_Distribution, double, exponent, "Exponent (k)", "4", 0xFF);
-	
+
 	DEFINE_MODEL(Normal_Distribution, Distribution, "Normal distribution");
 	DEFINE_PARAMETER(Normal_Distribution, double, mean, "Mean diameter [um]", "10", 0xFF);
 	DEFINE_PARAMETER(Normal_Distribution, double, sigma, "Standard deviation [um]", "5", 0xFF);
