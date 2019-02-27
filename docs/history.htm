@@ -22,7 +22,7 @@
                     <hr>
 
                     <ul>
-
+                        <li><a href="#v7.21">Version 7.21</a> (February 2019)</li>
                         <li><a href="#v7.20">Version 7.20</a> (May 2018)</li>
                         <li><a href="#v7.10">Version 7.10</a> (October 2017)</li>
                         <li><a href="#v7.01">Version 7.01</a> (September 2017)</li>
@@ -42,7 +42,17 @@
                         <li><a href="#v1.01">Version 1.01</a> (July 2000)</li>
                         <li>Version 1.00 (March 2000)</li>
                     </ul>
-                    <a name="v7.20" id="v7.10"><!-- --></a>
+                    <a name="v7.21" id="v7.21"><!-- --></a>
+                    <h2>Version 7.21 (February 2019)</h2>
+
+                    <p>Modified <a href="polydisperse.htm">Polydisperse_Sphere_BRDF_Model</a> to add a parameter <b>fractional_coverage</b> that, if
+                    non-zero, renormalizes the distribution to a given fractional coverage of spheres on the surface. </p>
+
+                    <p>Modified <a href="sizedistribution.htm#CC1246ESurfaceParticleSizeDistribution">CC1246E_SurfaceParticleSizeDistribution</a> so 
+                    that, the distribution is renormalized to the same fractional coverage of spheres on the surface (with sizes from 1&nbsp;&micro;m to 
+                    1000&nbsp;&micro;m) as when <b>slope</b> = 0.926 with the given value of <b>cleanliness</b>.</p>
+
+                    <a name="v7.20" id="v7.20"><!-- --></a>
                     <h2>Version 7.20 (May 2018)</h2>
 
                     <p>Added the model <a href="polydisperse.htm">Polydisperse_Sphere_BRDF_Model</a>, which uses 
