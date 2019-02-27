@@ -107,7 +107,7 @@ DEFINE_PARAMETER(Polydisperse_Sphere_BRDF_Model,dielectric_function,particle,"Op
 DEFINE_PARAMETER(Polydisperse_Sphere_BRDF_Model,double,Dstart,"Starting diameter [um]","1",0xFF);
 DEFINE_PARAMETER(Polydisperse_Sphere_BRDF_Model,double,Dend,"Ending diameter [um]","1000",0xFF);
 DEFINE_PARAMETER(Polydisperse_Sphere_BRDF_Model,double,Dstep,"Fractional diameter step","0.01",0xFF);
-DEFINE_PARAMETER(Polydisperse_Sphere_BRDF_Model, double, fractional_coverage, "Fractional area coverage (0 = use distribution's coverage)", "1E-4", 0xFF);
+DEFINE_PARAMETER(Polydisperse_Sphere_BRDF_Model, double, fractional_coverage, "Fractional area coverage (0 = use distribution's coverage)", "0", 0xFF);
 DEFINE_PARAMETER(Polydisperse_Sphere_BRDF_Model, double, antirainbow, "Anti-rainbow factor", "0", 0xFF);
 
 }

@@ -269,6 +269,8 @@ namespace SCATMECH {
     Inheritance::
     get_named_inheritance(const std::string& model,bool nothrow) const
     {
+		if (model == name) return this;
+
         InheritanceList ilist;
         get_model_inheritance_list(ilist);
 
@@ -289,7 +291,7 @@ namespace SCATMECH {
         }  else {
             return (const Inheritance* )0;
         }
-    }
+	} 
 
     ModelParameterBase::
     ModelParameterBase(const std::string& _name,
@@ -527,7 +529,7 @@ namespace SCATMECH {
         throw SCATMECH_exception(message2+out.str());
     }
 
-    Inheritance Model::inheritance("Model","Generalized Model",0,0);
+    Inheritance Model::inheritance("Model","Generalized Model","",0,0);
 
 
 } // namespace SCATMECH

@@ -322,9 +322,10 @@ namespace SCATMECH {
             Inheritance(
                 const STRING& _name,      ///< Name of class
                 const STRING& _desc,      ///< Description
+				const STRING& _parentname, ///< Parent's name
                 Model_Maker_Base *_maker, ///< Class which creates new instances of class
                 Inheritance *_parent      ///< Pointer to Parent inheritance
-            ) : name(_name),description(_desc),
+            ) : name(_name),description(_desc),parentname(_parentname),
                 maker(_maker),parent(_parent),
                 virt(_maker==0),registered(false) {}
 
@@ -382,11 +383,11 @@ namespace SCATMECH {
             }
 
             /// Return the Inheritance for a named progeny.
-            const Inheritance*
-            get_named_inheritance(
-                const STRING& model,  ///< Name of the model
-                bool nothrow=false    ///< Will throw exception if not found.
-            ) const;
+			const Inheritance*
+			get_named_inheritance(
+				const STRING& model,  ///< Name of the model
+				bool nothrow = false    ///< Will throw exception if not found.
+			) const;
 
             /// Get list of model parameters.
             ModelParameterList get_parameters() const {
@@ -410,9 +411,14 @@ namespace SCATMECH {
 
             /// @brief Register the class' existence.
             /// Registers with its own list and with its parent's list.
-            void Register_Model() {
+            void Register_Model(Inheritance& topModel = Model::inheritance) {
                 if (!registered) {
-                    if (parent) parent->add_child(this);
+					if (parent) { 
+						// This part was modified 6/2018 in a step to enable models to be added by DLL. 
+						// parent->add_child(this);
+						Inheritance* in = const_cast<Inheritance*>(topModel.get_named_inheritance(parentname));
+						if (in) in->add_child(this);
+					}
                     registered=true;
                 }
             }
@@ -422,7 +428,7 @@ namespace SCATMECH {
 
             /// Adds a class to the list this class' inherited classes...
             void add_child(
-                const Inheritance* ib   ///< Pointer to class inheritance to add
+                Inheritance* ib   ///< Pointer to class inheritance to add
             ) {
                 children.push_back(ib);
             }
@@ -439,6 +445,9 @@ namespace SCATMECH {
 
             /// A string description for the class
             STRING description;
+
+			/// A string giving the name of the class' parent
+			STRING parentname;
 
             /// A list of pointers to inherited classes
             InheritanceList children;
@@ -877,54 +886,53 @@ namespace SCATMECH {
 
             // A pointer to member for the actual parameter
             TYPE MODEL::*parameter;
-    };
+	};
 
-    ///
-    /// @brief Macro used in the declaration of a Model
-    ///
-    /// Each model should have this macro in its declaration.  It declares a
-    /// static Inheritance for the model, a get_inheritance() function, and
-    /// a clone() function.
-    ///
+	///
+	/// @brief Macro used in the declaration of a Model
+	///
+	/// Each model should have this macro in its declaration.  It declares a
+	/// static Inheritance for the model, a get_inheritance() function, and
+	/// a clone() function.
+	///
 #define DECLARE_MODEL() \
 		public: static SCATMECH::Inheritance inheritance; \
 		public: SCATMECH::Model* clone() const {return inheritance.clone(*this);} \
 		public: virtual const SCATMECH::Inheritance& get_inheritance() const \
 						{return inheritance;}
 
-    ///
-    ///  @brief Macro declare a parameter in a class declaration.
-    ///
-    ///  Each parameter in a model should be declared using this macro.  It declares
-    ///  the parameter as protected, member set_ and get_ functions as public,
-    ///  and a static private ModelParameter variable.
-    ///
-    ///  @param TYPE is the data type for the parameter
-    ///  @param PARAMETER is the variable name.
-    ///
+	///
+	///  @brief Macro declare a parameter in a class declaration.
+	///
+	///  Each parameter in a model should be declared using this macro.  It declares
+	///  the parameter as protected, member set_ and get_ functions as public,
+	///  and a static private ModelParameter variable.
+	///
+	///  @param TYPE is the data type for the parameter
+	///  @param PARAMETER is the variable name.
+	///
 #define DECLARE_PARAMETER(TYPE,PARAMETER) \
 		public:    const TYPE& get_##PARAMETER() const {return PARAMETER;} \
 		public:    void set_##PARAMETER(const TYPE& __x) {PARAMETER = __x; set_recalc(MP_##PARAMETER->recalclevel);} \
 		protected: TYPE PARAMETER; \
 		private: static SCATMECH::ModelParameterBasePtr MP_##PARAMETER;
 
-    ///
-    /// @brief Macro to define a instantiable model's static Inheritance element
-    ///
-    /// DEFINE_MODEL aids the programmer in defining a Model's
-    /// static Inheritance element.
-    ///
-    /// @param child is the class which has the member inheritance which needs defining.
-    /// @param parent is the parent class
-    /// @param name is a string version of the name of the class
-    /// @param desc is a string description of the class
-    ///
+	///
+	/// @brief Macro to define a instantiable model's static Inheritance element
+	///
+	/// DEFINE_MODEL aids the programmer in defining a Model's
+	/// static Inheritance element.
+	///
+	/// @param child is the class which has the member inheritance which needs defining.
+	/// @param parent is the parent class
+	/// @param name is a string version of the name of the class
+	/// @param desc is a string description of the class
+	///
 #define DEFINE_MODEL(child,parent,desc) \
 	SCATMECH::Inheritance child::inheritance(#child, \
-		desc, \
+		desc, #parent, \
 		new SCATMECH::Model_Maker<child>(), \
 		&parent::inheritance);
-
 
     ///
     /// @brief Macro to define a non-instantiable model's static Inheritance element
@@ -939,7 +947,7 @@ namespace SCATMECH {
     ///
 #define DEFINE_VIRTUAL_MODEL(child,parent,desc) \
 	SCATMECH::Inheritance child::inheritance(#child, \
-		desc, \
+		desc, #parent, \
 		0, \
 		&parent::inheritance);
 

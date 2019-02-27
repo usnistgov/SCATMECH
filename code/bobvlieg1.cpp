@@ -834,7 +834,7 @@ Line10:
         // an incident angle of theta and polarization pol, where the "partial"
         // means the following: when type=0 or type=2, the reflectance changes
         // by a factor exp(-sigma*density/cos(theta)) and for type=1 or type=3, the
-        // transmittance changes by a factor exp(-sigma*density/cos(theta). The total
+        // transmittance changes by a factor exp(-sigma*density/cos(theta)). The total
         // extinction cross section is the sum of these values for type=0 and type=1,
         // for light incident downward, or the sum of these values for type=2 and type=3,
         // for light incident upward. The value of the partial extinction cross

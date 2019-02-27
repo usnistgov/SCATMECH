@@ -26,6 +26,7 @@ namespace SCATMECH {
             DECLARE_MODEL();
             DECLARE_PARAMETER(StackModel_Ptr,stack);
 
+
         protected:
 
             void setup();

@@ -94,6 +94,8 @@ namespace SCATMECH {
     //C***ROUTINES CALLED  I1MACH,XERROR
     //C***END PROLOGUE  UNI
 
+	static mutex_t mutex;
+
     namespace CMLIB {
 
         UNIrand::UNIrand()
@@ -148,7 +150,11 @@ namespace SCATMECH {
 
         double UNIrand::operator()()
         {
-            if (!seeded) seed((int)time(NULL)+(seed_add+=seed_adder));
+			if (!seeded) {
+				mutex.lock();
+				seed((int)time(NULL) + (seed_add += seed_adder));
+				mutex.unlock();
+			}
             int K=M[I-1]-M[J-1];
             if (K < 0) K=K+M1;
             M[J-1]=K;
@@ -292,7 +298,9 @@ namespace SCATMECH {
     }
 
     void Random_Number::initialize() {
+		mutex.lock();
         set_seed(-(int)time(NULL)+(seed_add+=seed_adder));
+		mutex.unlock();
     }
 
     int Random_Number::seed_add=12345;
