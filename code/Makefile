@@ -9,7 +9,6 @@
 #//** Phone: (301) 975-2876
 #//** Email: thomas.germer@nist.gov
 #//**
-#//** Version: 7.00 (January 2015)
 #//**
 #//******************************************************************************
 
@@ -32,7 +31,7 @@ COMPILEFLAGS = -O3 -march=haswell -Wno-deprecated-declarations
 #
 # TODO: Make sure all neccesary libraries are included...
 #
-LIBRARIES = ./scatmech.a -lstdc++ 
+LIBRARIES = ./scatmech.a -lstdc++ -lm
 
 #
 # TODO: Set compiler flag to create Makefile dependencies...
