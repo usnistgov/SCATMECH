@@ -19,9 +19,6 @@ using namespace std;
 
 namespace SCATMECH {
 
-
-    Unit_Slope_Distribution_Function unit_sdf;
-
     double
     Facet_BRDF_Model::
     jacobian(double ti,double tt,double pt)
