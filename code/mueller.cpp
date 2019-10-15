@@ -465,25 +465,28 @@ namespace SCATMECH {
     bool
     MuellerMatrix::valid() const
     {
-        int i;
+		// Expanding the Mueller matrix slightly helps to ensure that numerical errors don't cause 
+		// legitimate Mueller matrices to appear invalid.
+		MuellerMatrix expanded = *this + sqrt(numeric_limits<double>::epsilon()) * MuellerDepolarizer(1, 1);
         CFARRAY Q(4,1);
         CFARRAY W(4,4);
         CFARRAY M(4,4);
-        for (i=1; i<=4; ++i) {
+        for (int i=1; i<=4; ++i) {
             double Gi = i==1 ? 1 : -1;
             for (int j=1; j<=4; ++j) {
                 M(i,j) = 0;
                 for (int k=1; k<=4; ++k) {
                     double Gk = k==1 ? 1 : -1;
-                    M(i,j) += Gi*m[k-1][i-1]*Gk*m[k-1][j-1];
+                    M(i,j) += Gi*expanded.m[k-1][i-1]*Gk*expanded.m[k-1][j-1];
                 }
             }
         }
         eigen(M,Q,W,4);
         int imax=0;
         double max = -numeric_limits<double>::max();
-        for (i=1; i<=4; ++i) {
-            if (fabs(imag(Q(i)))>fabs(real(Q(i)))*10.*numeric_limits<double>::epsilon()) return false;
+		double small = (norm(Q(1)) + norm(Q(2)) + norm(Q(3)) + norm(Q(4)))*numeric_limits<double>::epsilon()*10.;
+        for (int i=1; i<=4; ++i) {
+            if (fabs(imag(Q(i)))>small) return false;
             if (abs(Q(i))>max) {
                 max = abs(Q(i));
                 imax = i;
@@ -553,8 +556,11 @@ namespace SCATMECH {
 
         MuellerToHermitian(*this,M);
         eigen(M,Q,W,4);
+		double small = (norm(Q(1)) + norm(Q(2)) + norm(Q(3)) + norm(Q(4))) * numeric_limits<double>::epsilon() * 10.;
         for (int i=1; i<=4; ++i) {
-            if (real(Q(i))<0.) return false;
+			// Eigenvalues must be real and positive...
+            if (real(Q(i)) < -small) return false;
+			if (fabs(imag(Q(i))) > small) return false;
         }
         return true;
     }
