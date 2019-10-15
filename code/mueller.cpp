@@ -467,7 +467,7 @@ namespace SCATMECH {
     {
 		// Expanding the Mueller matrix slightly helps to ensure that numerical errors don't cause 
 		// legitimate Mueller matrices to appear invalid.
-		MuellerMatrix expanded = *this + sqrt(numeric_limits<double>::epsilon()) * MuellerDepolarizer(1, 1);
+		MuellerMatrix expanded = *this + sqrt(numeric_limits<double>::epsilon()) * MuellerDepolarizer(m[0][0], 1);
         CFARRAY Q(4,1);
         CFARRAY W(4,4);
         CFARRAY M(4,4);
