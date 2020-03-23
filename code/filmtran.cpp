@@ -611,14 +611,11 @@ namespace SCATMECH {
     ModelParameterSet(dielectric_stack& variable,const string& parameter,const string& value)
     {
         if (parameter.empty()) {
-            if (value.empty()) {
-                variable.wash();
-                return;
-            }
-            istringstream iss(value);
+            variable.wash();
+			istringstream iss(value);
             string material;
             iss >> material;
-            if (iss.fail()) throw SCATMECH_exception("Invalid parameter for dielectric_stack");
+            if (iss.fail()) return;
             double thickness;
             iss >> thickness;
             if (iss.fail()) {

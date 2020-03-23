@@ -287,7 +287,7 @@ namespace SCATMECH {
                 j[0]=pp;
                 j[1]=ss;
                 j[2]=ps,
-                     j[3]=sp;
+                j[3]=sp;
             }
 
             ///
@@ -1101,7 +1101,7 @@ namespace SCATMECH {
 	//
 	MuellerMatrix MuellerDiagonal(double m00,double m11, double m22, double m33);
     ///
-    /// Returns a partiall linear polarizer
+    /// Returns a partial linear polarizer
     ///
     MuellerMatrix MuellerPartialLinearPolarizer(
         double tmax,   ///< The maximum transmittance

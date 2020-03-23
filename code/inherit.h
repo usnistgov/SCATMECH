@@ -39,7 +39,7 @@ namespace SCATMECH {
     template <class _Model> _Model* _Get_Model();
 
     typedef std::deque<const Inheritance*> InheritanceList;
-    typedef std::auto_ptr<ModelParameterBase> ModelParameterBasePtr;
+    typedef std::unique_ptr<ModelParameterBase> ModelParameterBasePtr;
     typedef std::deque<const ModelParameterBase*> ModelParameterList;
     typedef std::deque<STRING> StringList;
 
@@ -423,6 +423,7 @@ namespace SCATMECH {
                 }
             }
 
+
         private:
             friend class ModelParameterBase;
 
@@ -470,7 +471,7 @@ namespace SCATMECH {
 
             /// The following contains a pointers to the class that contain the
             /// maker and the registrars for this Model class...
-            std::auto_ptr<Model_Maker_Base> maker;
+            std::unique_ptr<Model_Maker_Base> maker;
 
             //
             // Functions that returns a list of inherited classes and their
@@ -482,14 +483,14 @@ namespace SCATMECH {
             void get_model_inheritance_list(InheritanceList& result,int option=1) const;
             Model* get_model(bool top) const;
             Model* get_named_model(const STRING& name,bool nothrow) const;
-            void get_parameters(ModelParameterList& result,bool top) const;
-            friend void display_descriptions(const Inheritance* inherit,
+			void get_parameters(ModelParameterList& result, bool top) const;
+			friend void display_descriptions(const Inheritance* inherit,
                                              const InheritanceList& ilist);
     };
 
     /// @brief Smart pointer to a Model
     ///
-    /// The template class Model_Ptr<_Model> works similarly to std::auto_ptr<T>,
+    /// The template class Model_Ptr<_Model> works similarly to std::unique_ptr<T>,
     /// except that it makes cloned copies rather than transferring ownership of
     /// a pointer.  It also adds some functions which make use of the SCATMECH
     /// Inheritance and Model classes.

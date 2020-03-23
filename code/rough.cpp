@@ -319,9 +319,7 @@ namespace SCATMECH {
 
     DEFINE_MODEL(ABC_PSD_Function,PSD_Function,
                  "PSD = A/pow(1+sqr(B*f),C/2)");
-    DEFINE_PARAMETER(ABC_PSD_Function,double,A,"Program assumes power spectrum S2(f) = "
-                     "A/(1+(B*f)^2)^(C/2)\n"
-                     "Power Spectrum A Parameter [um^4]","0.01",0xFF);
+    DEFINE_PARAMETER(ABC_PSD_Function,double,A,"Power Spectrum A Parameter [um^4]","0.01",0xFF);
     DEFINE_PARAMETER(ABC_PSD_Function,double,B,"Power Spectrum B Parameter [um]","362",0xFF);
     DEFINE_PARAMETER(ABC_PSD_Function,double,C,"Power Spectrum C Parameter","2.5",0xFF);
 

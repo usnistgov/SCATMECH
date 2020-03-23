@@ -281,7 +281,7 @@ namespace SCATMECH {
         JonesMatrix rotatein = GetJonesRotator(bi,ai,si,pi).transpose();
         JonesMatrix rotateout = GetJonesRotator(br,ar,sr,pr);
 
-        return rotateout*scatter*rotatein;
+		return rotateout*scatter*rotatein;
     }
 
     //

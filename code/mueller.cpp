@@ -1,4 +1,4 @@
-//********ei**********************************************************************
+//******************************************************************************
 //** SCATMECH: Polarized Light Scattering C++ Class Library
 //**
 //** File: mueller.cpp
@@ -492,7 +492,17 @@ namespace SCATMECH {
                 imax = i;
             }
         }
-        if (sqr(real(W(imax,1)))<sqr(real(W(imax,2)))+sqr(real(W(imax,3)))+sqr(real(W(imax,4)))) return false;
+		// Check that the vector with the largest eigenvalue is a valid Stokes vector.  
+		// After normalizing to the 1st element, the others must be real and the 
+		// sum-of-squares must be less than 1.
+		COMPLEX W1 = W(1, imax);
+		COMPLEX W2 = W(2, imax) / W1;
+		COMPLEX W3 = W(3, imax) / W1;
+		COMPLEX W4 = W(4, imax) / W1;
+		if (fabs(imag(W2)) > small) return false;
+		if (fabs(imag(W3)) > small) return false;
+		if (fabs(imag(W4)) > small) return false;
+		if (1. < sqr(real(W2)) + sqr(real(W3)) + sqr(real(W4))) return false;
         return true;
     }
 

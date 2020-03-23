@@ -117,7 +117,10 @@ namespace SCATMECH {
         vector<double> a(N);
         vector<double> PSDint(N);
         for (int i=0; i<N; ++i) {
-            double argument = fourpisqr*nu*qpow*stack->get_t()[i];
+			// The following was changed 2/27/2019...
+			// double argument = fourpisqr*nu*qpow*stack->get_t()[i];
+			double argument = nu*qpow*stack->get_t()[i];
+
             // The replication factor between the layers...
             a[i] = exp(-argument);
             // The intrinsic roughness of the layer...
