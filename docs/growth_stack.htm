@@ -8,6 +8,19 @@
    <link rel="STYLESHEET" href="style.css" type="text/css">
 
   <title>SCATMECH: Growth_Roughness_Stack_BRDF_Model</title>
+
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+    </script>
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script type="text/javascript" async
+            src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+
 </head>
 
 <body><br>
@@ -31,18 +44,24 @@
         <strong>Growth_Roughness_Stack_BRDF_Model</strong> uses
         <a href="roughnes.htm">Roughness_Stack_BRDF_Model</a> to calculate the scatter from a stack of films, whose roughness evolves from that of the substrate. The model employs a 
 	linear growth model to determine the roughness of each interface and the
-	cross-correlation statistics. The model takes two power spectral density (PSD) functions as input, one
-	for the substrate and one which is the intrinsic roughness of the coatings (in the large thickness limit). A
+	cross-correlation statistics. The model takes two power spectral density (PSD) functions as input: $S_0(f)$
+	for the substrate and $S_{\rm int}(f)$ for the intrinsic roughness of the coatings (in the large thickness limit), where $f$ is spatial frequency. A
 	single intrinsic roughness is used and applies to all of the coating materials. A replication function 
-	with two adjustable parameters, a relaxation parameter and a spatial frequency exponent, is used to describe propagation
+	with two adjustable parameters, a relaxation parameter $l_r$ and a spatial frequency exponent $n$, are used to describe propagation
 	of roughness from one interface to the next and for development of the finite thickness intrinsic roughness.  This model is based upon
-	that of <a href="#RefStearns">Stearns</a>. The replication factor is given by 
-	  <center><tt>exp(-4&#960;<sup>2</sup><b>relaxation</b><sup>(<b>exponent</b>-1)</sup>d f<sup><b>exponent</b></sup>)</tt></center>
-	 <p>where <b>relaxation</b> is the relaxation parameter, <b>exponent</b> is the spatial frequency exponent, <tt>d</tt> is the
-	thickness of the layer, and <tt>f</tt> is the spatial frequency. <br><br>
-	  When <b>relaxation</b> and the intrinsic PSD are both zero, the results of the model will match that of <a href="./correlated_stack.htm">Correlated_Roughness_Stack_BRDF_Model</a>.  
-	  When <b>relaxation</b> is large and the intrinsic PSD is the same as the substrate PSD, the results of the model will match that of <a href="./uncorrelated_stack.htm">Uncorrelated_Roughness_Stack_BRDF_Model</a>
-	  
+	that of <a href="#RefStearns">Stearns</a>. The replication and growth factor is given by 
+          \begin{equation}
+          a(f)=\exp{[-l_r^{n-1}t_i(2\pi f)^n] }
+          \end{equation}
+          <p>where $t_i$ is the thickness of layer $i$. The PSD of inteface $i$ is given by
+          \begin{equation}
+          S_i(f) = a(f)^2 S_{i-1}(f) + [1-a(f)^2] S_{\rm int}(f)
+          \end{equation}
+          The function $a(f)$ also expresses the correlation between respective interfaces.
+          </p> 
+	  <p>When $l_r =0$ and $S_{\rm int}(f)=0$, the results of the model will match that of <a href="./correlated_stack.htm">Correlated_Roughness_Stack_BRDF_Model</a>.  
+	  When $l_r\rightarrow\infty$ and $S_{\rm int}(f)= S_0(f)$, the results of the model will match that of <a href="./uncorrelated_stack.htm">Uncorrelated_Roughness_Stack_BRDF_Model</a>.</p>
+
       <br><br>
 
         <center>
@@ -121,7 +140,7 @@
 
             <td class="description">The
             two-dimensional power spectrum of the surface height
-            function for the substrate [&#181;m<sup>4</sup>].<br>
+            function for the substrate, $S_0(f)$ [&#181;m<sup>4</sup>].<br>
             (Inherited from <a href=
             "roughbrdf.htm">Roughness_BRDF_Model</a>).</td>
 
@@ -147,8 +166,8 @@
 
             <td class="description">The
             two-dimensional power spectrum of the surface height
-            function for the coatings in the thick coating limit. Note that, for simplicity, this 
-	      function is assumed to be the same for all coating materials. [&#181;m<sup>4</sup>].</td>
+            function for the coatings in the thick coating limit, $S_{\rm int}(f)$. Note that, for simplicity, $S_{\rm int}(f)$
+              is assumed to be the same for all coating materials. [&#181;m<sup>4</sup>].</td>
 
             <td class="default">ABC_PSD_Function</td>
           </tr>
@@ -158,8 +177,8 @@
 
             <td class="datatype">double</td>
 
-            <td class="description">The relaxation parameter for growth process.  
-	      This corresponds to the characteristic length for which 
+            <td class="description">The relaxation parameter $l_r$ for the growth process,  
+	      corresponding to the characteristic length for which 
 	      roughness from preceeding layers is damped out. Note that, for simplicity, this 
 	      value is assumed to be the same for all coating materials. [&#181;m]</td>
 
@@ -171,9 +190,9 @@
 
             <td class="datatype">double</td>
 
-            <td class="description">The relaxation exponent for the growth process. Different values of this parameter correspond to different 
-	      growth mechanisms: (1) indicates viscous flow, (2) indicates the condensation and re-evaporation, (3) indicates bulk diffusion, and 
-	      (4) indicates surface diffusion. Note that, for simplicity, this value is assumed to be the same for all coating materials. </td>
+            <td class="description">The relaxation exponent $n$ for the growth process. Different values of $n$ correspond to different 
+	      growth mechanisms: $n=1$ indicates viscous flow, $n=2$ indicates the condensation and re-evaporation, $n=3$ indicates bulk diffusion, and 
+	      $n=4$ indicates surface diffusion. Note that, for simplicity, $n$ is assumed to be the same for all coating materials. </td>
 
             <td class="default">2</td>
           </tr>
@@ -233,13 +252,13 @@ class Growth_Roughness_Stack_BRDF_Model
 <h2>For More Information</h2>
 
 <p>
-<a href="http://www.nist.gov/pml/div685/grp06/germer.cfm">SCATMECH Technical Information and Questions</a><br>
+<a href="https://www.nist.gov/people/thomas-germer">SCATMECH Technical Information and Questions</a><br>
 <a href="http://www.nist.gov/pml/div685/index.cfm" target="_top">Sensor Science Division Home Page</a><br>
 <a href="mailto:fraser@nist.gov">Sensor Science Division Inquiries</a><br>
 <a href="mailto:thomas.germer@nist.gov">Website Comments</a>
 
 <p>
-Current SCATMECH version: <a href="./download.htm">7.10 (October 2017)</a><br>
+Current SCATMECH version: <a href="./download.htm">7.21 (February 2019)</a><br>
 <br>
 
 </td>

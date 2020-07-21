@@ -9,6 +9,19 @@
 
   <title>SCATMECH: PSD_Function</title>
 <script language="JavaScript" id="_fed_an_js_tag" src="/js/federated-analytics.all.min.js?agency=NIST&subagency=pml&pua=UA-37115410-46&yt=true"></script>
+
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+    </script>
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script type="text/javascript" async
+            src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+
 </head>
 
 <body><br>
@@ -68,9 +81,7 @@
 
           <tr>
             <td colspan="4" class="model"><b>ABC_PSD_Function</b>:<br>
-            A power spectrum that is given by
-            <i>S</i><sub>2</sub>(<i>f</i>)&nbsp;=&nbsp;<i>A</i>&nbsp;/&nbsp;[1&nbsp;+&nbsp;(<i>
-            Bf</i>)<sup>2</sup>]<sup><i>C</i>/2</sup>.</td>
+            A power spectrum that is given by $S_2(f)=A/(1+B^2f^2)^{C/2}$. </td>
           </tr>
 
           <tr>
@@ -125,9 +136,8 @@
 
           <tr>
             <td colspan="4" class="model"><b>Fractal_PSD_Function</b>:<br>
-            A power spectrum that is given by
-            <i>S</i><sub>2</sub>(<i>f</i>)&nbsp;=&nbsp;<i>A</i>&nbsp;/&nbsp;<i>
-            f</i><sup>exponent</sup>.</td>
+            A power spectrum that is given by $S_2(f)=A/f^\gamma$. 
+              </td>
           </tr>
 
           <tr>
@@ -148,7 +158,7 @@
             <td class="datatype">double</td>
 
             <td class="description">The
-            fractal exponent.</td>
+            fractal exponent $\gamma$.</td>
 
             <td class="default">2.5</td>
           </tr>
@@ -567,13 +577,13 @@ typedef <a href=
 <h2>For More Information</h2>
 
 <p>
-<a href="http://www.nist.gov/pml/div685/grp06/germer.cfm">SCATMECH Technical Information and Questions</a><br>
+<a href="https://www.nist.gov/people/thomas-germer">SCATMECH Technical Information and Questions</a><br>
 <a href="http://www.nist.gov/pml/div685/index.cfm" target="_top">Sensor Science Division Home Page</a><br>
 <a href="mailto:fraser@nist.gov">Sensor Science Division Inquiries</a><br>
 <a href="mailto:thomas.germer@nist.gov">Website Comments</a>
 
 <p>
-Current SCATMECH version: <a href="./download.htm">7.10 (October 2017)</a><br>
+Current SCATMECH version: <a href="./download.htm">7.21 (February 2019)</a><br>
 <br>
 
 </td>
