@@ -22,6 +22,7 @@
                     <hr>
 
                     <ul>
+                        <li><a href="#v7.22">Version 7.22</a> (April 2020)</li>
                         <li><a href="#v7.21">Version 7.21</a> (February 2019)</li>
                         <li><a href="#v7.20">Version 7.20</a> (May 2018)</li>
                         <li><a href="#v7.10">Version 7.10</a> (October 2017)</li>
@@ -42,6 +43,18 @@
                         <li><a href="#v1.01">Version 1.01</a> (July 2000)</li>
                         <li>Version 1.00 (March 2000)</li>
                     </ul>
+                    <a name="v7.22" id="v7.22"><!-- --></a>
+                    <h2>Version 7.22 (April 2021)</h2> 
+
+                    <p>Modified <a href="bobvlieg.htm">Bobbert_Vlieger_BRDF_Model</a>, <a href="subbobvlieg.htm">Subsurface_Bobbert_Vlieger_BRDF_Model</a>,
+                    <a href="axipart.htm">Axisymmetric_Particle_BRDF_Model</a>, and <a href="subaxipart.htm">Subsurface_Axisymmetric_Particle_BRDF_Model</a> by 
+                    removing the functions <b>PartialExtinctionS(double theta)</b> and <b>PartialExtinctionP(double theta)</b> (which provided a partial extinction coefficient) and 
+                    replaced them with a single function <b>Specular(double theta)</b> that returns the Mueller matrix specular reflectance or regular transmittance, calculated 
+                    using the optical theorem.
+                    </p>
+
+                    <p>Repaired errors in <a href="muellermatrix.htm#valid()">MuellerMatrix::valid()</a> and <a href="muellermatrix.htm#valid()">MuellerMatrix::physically_valid()</a>.</p>
+
                     <a name="v7.21" id="v7.21"><!-- --></a>
                     <h2>Version 7.21 (February 2019)</h2>
 
@@ -102,7 +115,7 @@
                     assumed a Rayleigh-Gans-like polarization dependence to the phase function.
 
                     <a name="v7.10" id="v7.10"><!-- --></a>
-                    <h2>Version 7.21 (February 2019)</h2>
+                    <h2>Version 7.22 (April 2021)</h2>
 
                     The model <a href="./zernikeexpansion.htm">ZernikeExpansion_BRDF_Model</a> was added.
 
@@ -1215,7 +1228,7 @@
                     <a href="mailto:thomas.germer@nist.gov">Website Comments</a>
 
                 <p>
-                    Current SCATMECH version: <a href="./download.htm">7.21 (February 2019)</a><br>
+                    Current SCATMECH version: <a href="./download.htm">7.22 (April 2021)</a><br>
                     <br>
 
             </td>

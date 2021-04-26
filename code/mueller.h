@@ -287,7 +287,7 @@ namespace SCATMECH {
                 j[0]=pp;
                 j[1]=ss;
                 j[2]=ps,
-                     j[3]=sp;
+                j[3]=sp;
             }
 
             ///
@@ -415,10 +415,20 @@ namespace SCATMECH {
             /// Return the Hermitian transpose
             ///
             JonesMatrix hermitian() const {
-                return JonesMatrix(j[0],j[1],conj(j[3]),conj(j[2]));
+                return JonesMatrix(std::conj(j[0]), std::conj(j[1]), std::conj(j[3]), std::conj(j[2]));
             }
             friend JonesMatrix hermitian(const JonesMatrix& j) {
-                return JonesMatrix(j[0],j[1],conj(j[3]),conj(j[2]));
+                return JonesMatrix(std::conj(j[0]), std::conj(j[1]), std::conj(j[3]), std::conj(j[2]));
+            }
+
+            ///
+            /// Return the complex conjugate
+            ///
+            JonesMatrix conj() const {
+                return JonesMatrix(std::conj(j[0]), std::conj(j[1]), std::conj(j[2]), std::conj(j[3]));
+            }
+            friend JonesMatrix conj(const JonesMatrix& j) {
+                return JonesMatrix(std::conj(j[0]), std::conj(j[1]), std::conj(j[2]), std::conj(j[3]));
             }
 
             ///
@@ -1101,7 +1111,7 @@ namespace SCATMECH {
 	//
 	MuellerMatrix MuellerDiagonal(double m00,double m11, double m22, double m33);
     ///
-    /// Returns a partiall linear polarizer
+    /// Returns a partial linear polarizer
     ///
     MuellerMatrix MuellerPartialLinearPolarizer(
         double tmax,   ///< The maximum transmittance

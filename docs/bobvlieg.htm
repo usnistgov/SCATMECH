@@ -314,8 +314,7 @@ class Bobbert_Vlieger_BRDF_Model
    complex&lt;double&gt; <a href="#Esp">Esp</a>(double thetai,double thetas,double phis);
    complex&lt;double&gt; <a href="#Ess">Ess</a>(double thetai,double thetas,double phis);
 
-   complex&lt;double&gt;  <a href="#extinction">PartialExtinctionS</a>(double theta);
-   complex&lt;double&gt;  <a href="#extinction">PartialExtinctionP</a>(double theta);
+   <a href="muellermatrix.htm">MuellerMatrix</a> <a href="#Specular">Specular</a>(double theta);
 };
 </pre>
 
@@ -341,44 +340,23 @@ class Bobbert_Vlieger_BRDF_Model
 
         <p><a href="#top"><span class="totop">Top of Page</span></a></p>
 
-	<h3><a name="extinction" id="extinction">complex&lt;double&gt; PartialExtinctionS(double theta)</a><br>
-	   complex&lt;double&gt; PartialExtinctionP(double theta)</h3>
+	<h3><a name="Specular" id="Specular"><a href="muellermatrix.htm">MuellerMatrix</a> Specular(double theta)</a></h3>
 
-	<blockquote>
-	  The real part of these functions return the partial
-	  extinction cross section for an incident angle
-	  of <tt>theta</tt> (expressed in radians) and s- or
-	  p-polarization, respectively, where the &quot;partial&quot;
-	  means the following: when <tt>type=0</tt>
-	  or <tt>type=2</tt>, the reflectance is reduced
-	  by <tt>real(PartialExtinctionS(theta))*density/cos(theta)</tt>,
-	  and for <tt>type=1</tt> or <tt>type=3</tt>, the
-	  transmittance is reduced
-	  by <tt>real(PartialExtinctionS(theta)*density/cos(theta)</tt>. The total extinction
-	  cross section is the sum of these values for <tt>type=0</tt>
-	  and <tt>type=1</tt>, for light incident downward, or the sum
-	  of these values for <tt>type=2</tt> and <tt>type=3</tt>, for
-	  light incident upward. The value of the partial extinction
-	  cross section can be negative, which is an indication that
-	  the reflectance or transmittance is <i>increased</i> by the
-	  presence of the particle. The routines use the extinction
-	  theorem to arrive at their results. The imaginary part is
-	  that part which would affect the reflected or transmitted
-	  phase.
+    <blockquote>
+        This function returns the Mueller matrix specular reflectance (for <tt>type==0</tt> or
+        <tt>type==2</tt> or the regular transmittance (for <tt>type==1</tt> or <tt>type==3</tt>) for an incident
+        angle of theta (in radians). The result is derived from the optical theorem
+        and is only valid when density is suffiently low that multiple scattering
+        between spheres can be neglected.
+        <h4>Example:</h4>
 
-<h4>Example:</h4>
-
-          <pre>
-	    Bobbert_Vlieger_BRDF_Model model;
-	    model.set_type(0);
-	    // Change in reflectance...
-	    double deltaRs = real(model.PartialExtinctionS(theta))*density/cos(theta);
-	    model.set_type(1);
-	    // Change in transmittance...
-	    double deltaTs = real(model.PartialExtinctionS(theta))*density/cos(theta);
+        <pre>
+    Bobbert_Vlieger_BRDF_Model model;
+    model.set_type(0);
+    MuellerMatrix R = Specular(theta);
 </pre>
 
-	</blockquote>
+    </blockquote>
 
         <p><a href="#top"><span class="totop">Top of Page</span></a></p>
 
@@ -393,7 +371,7 @@ class Bobbert_Vlieger_BRDF_Model
 <a href="mailto:thomas.germer@nist.gov">Website Comments</a>
 
 <p>
-Current SCATMECH version: <a href="./download.htm">7.21 (February 2019)</a><br>
+Current SCATMECH version: <a href="./download.htm">7.22 (April 2021)</a><br>
 
 </td>
 </tr>

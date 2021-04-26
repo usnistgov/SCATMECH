@@ -184,8 +184,12 @@ namespace SCATMECH {
                 reflect_s[j] = rsnormal;
                 reflect_p[j] = rpnormal;
             } else {               // Exact solution
-                reflect_s[j] = stack->rs12(alpha,lambda,vacuum,substrate);
-                reflect_p[j] = stack->rp12(alpha,lambda,vacuum,substrate);
+				COMPLEX rs = stack->rs12(alpha, lambda, vacuum, substrate);
+				COMPLEX rp = stack->rp12(alpha, lambda, vacuum, substrate);
+				// Added 14 Jul 2020, because reflection coefficients at large complex
+				// angles sometime yield numerical errors from thick dielectrics
+                reflect_s[j] = (rs == rs) ? rs : 0.;
+                reflect_p[j] = (rp == rp) ? rp : 0.;		
             }
 
             // Calculate U, V, d+, and d- for each angle and (l,m) combination...
@@ -810,112 +814,78 @@ Line10:
         old_phis=-1000;
     }
 
-    COMPLEX
+    MuellerMatrix
     Bobbert_Vlieger_BRDF_Model::
-    PartialExtinctionS(double theta)
-    {
-        return PartialExtinction(theta,1);
-    }
-
-    COMPLEX
-    Bobbert_Vlieger_BRDF_Model::
-    PartialExtinctionP(double theta)
-    {
-        return PartialExtinction(theta,0);
-    }
-
-    COMPLEX
-    Bobbert_Vlieger_BRDF_Model::
-    PartialExtinction(double theta,int pol)
+    Specular(double theta)
     {
         SETUP();
 
-        // This function returns the partial extinction cross section for
-        // an incident angle of theta and polarization pol, where the "partial"
-        // means the following: when type=0 or type=2, the reflectance changes
-        // by a factor exp(-sigma*density/cos(theta)) and for type=1 or type=3, the
-        // transmittance changes by a factor exp(-sigma*density/cos(theta). The total
-        // extinction cross section is the sum of these values for type=0 and type=1,
-        // for light incident downward, or the sum of these values for type=2 and type=3,
-        // for light incident upward. The value of the partial extinction cross
-        // section can be negative, which is an indication that the reflectance
-        // or transmittance is increased by the presence of the particle.
-        //
-
-        pol = pol ? 1 : 0;
-        vector<COMPLEX>& W = pol ? Ws : Wp;
-        vector<COMPLEX>& Z = pol ? Zs : Zp;
+        // This function returns the Mueller matrix specular reflectance (for type==0 or 
+        // type==2) or the regular transmittance (for type==1 or type==3) for an incident 
+        // angle of theta (in radians). The result is derived from the optical theorem 
+        // and is only valid when density is suffiently low that multiple scattering 
+        // between spheres can be neglected.
 
         switch (type) {
-            case 0:
-            {
-                set_geometry(theta,theta,0.);
-                COMPLEX e = E(W,Z);
-                COMPLEX r = stack->r12(theta,lambda,vacuum,substrate)[pol];
-                r *= exp(2.*cI*qq*cos(theta));
-                double R = norm(r);
-                return 4.*pi/k*COMPLEX(0.,-1.)*(e/r)*R;
-            }
-            break;
-            case 1:
-            {
-                double index = substrate.n(lambda);
-                double sint = sin(theta)/index;
-                if (sint>=1. || substrate.k(lambda)!=0) return 0.;
-                double thetat = asin(sint);
-                set_geometry(theta,thetat,0.);
-                COMPLEX e = E(W,Z);
-                COMPLEX phase =  exp(cI*qq*(cos(theta)-index*cos(thetat)));
-                double factor = cos(thetat)/cos(theta);
-                e /= phase;
-                COMPLEX t = stack->t12(theta,lambda,vacuum,substrate)[pol];
-                double T = norm(t)*factor*index;
-                return 4.*pi/k/sqrt(cube(index))/factor*COMPLEX(0.,-1.)*(e/t)*T;
-            }
-            break;
-            case 2:
-            {
-                set_geometry(theta,theta,0.);
-                COMPLEX e = E(W,Z);
-                double index = substrate.n(lambda);
+        case 0:
+        {
+            JonesMatrix X = JonesDSC(theta, theta, 0., 0.);
+            JonesMatrix r = stack->r12(theta, lambda, vacuum, substrate);
+            r *= exp(2. * cI * qq * cos(theta));
+            MuellerMatrix sigma = (4. * pi / k) * ReCrossMueller(X, r);
 
-                COMPLEX sint = sin(theta)*index;
-                COMPLEX cost = sqrt(1.-sqr(sint));
-                if (imag(cost)<0) cost = -cost;
-
-                COMPLEX r = stack->r21i(theta,lambda,substrate,vacuum)[pol];
-                double R = norm(r);
-
-                r *= exp(-2.*cI*qq*index*cos(theta));
-
-                return 4.*pi/k/index*COMPLEX(0.,-1.)*(e/r)*R;
-            }
-            break;
-            case 3:
-            {
-                double index = substrate.n(lambda);
-                double sint = sin(theta)*index;
-                COMPLEX cost = sqrt(1.-sqr(sint));
-                if (imag(cost)<0) cost = -cost;
-                if (sint>=1.) return 0.;
-                double thetat = asin(sint);
-
-                set_geometry(theta,thetat,0.);
-                COMPLEX e = E(W,Z);
-
-                double factor = cos(theta)/real(cost);
-                COMPLEX phase = exp(cI*qq*(cost-index*cos(theta)));
-
-                e /= phase;
-                COMPLEX t = stack->t21i(theta,lambda,substrate,vacuum)[pol];
-                double T = norm(t)/index/factor;
-                return 4.*pi/k*sqrt(index)*factor*COMPLEX(0.,-1.)*(e/t)*T;
-            }
-            break;
-            default:
-                error("Invalid type = " + to_string(type));
+            return MuellerMatrix(r) - sigma * (density / cos(theta));
         }
-        return 0;
+        break;
+        case 1:
+        {
+            double index = substrate.n(lambda);
+            double sint = sin(theta) / index;
+            if (sint >= 1. || substrate.k(lambda) != 0) return MuellerZero();
+            double thetat = asin(sint);
+            JonesMatrix X = JonesDSC(theta, thetat, 0., 0.);
+            COMPLEX phase = exp(cI * qq * (cos(theta) - index * cos(thetat)));
+            //double factor = cos(thetat)/cos(theta);
+            JonesMatrix t = stack->t12(theta, lambda, vacuum, substrate);
+            t *= phase;
+            MuellerMatrix sigma = (4. * pi / k / sqrt(index)) * ReCrossMueller(X, t);
+
+            return MuellerMatrix(t) * (cos(thetat) / cos(theta) * index) - sigma * (density / cos(theta));
+        }
+        break;
+        case 2:
+        {
+            double index = substrate.n(lambda);
+            JonesMatrix X = JonesDSC(theta, theta, 0., 0.);
+            JonesMatrix r = stack->r21i(theta, lambda, substrate, vacuum);
+            r *= exp(-2. * cI * index * qq * cos(theta));
+            MuellerMatrix sigma = (4. * pi / k / index) * ReCrossMueller(X, r);
+
+            return MuellerMatrix(r) - sigma * (density / cos(theta));
+        }
+        break;
+        case 3:
+        {
+            double index = substrate.n(lambda);
+            double sint = sin(theta) * index;
+            COMPLEX cost = sqrt(1. - sqr(sint));
+            if (imag(cost) < 0) cost = -cost;
+            if (sint >= 1.) return MuellerZero();
+            double thetat = asin(sint);
+            JonesMatrix X = JonesDSC(theta, thetat, 0., 0.);
+            COMPLEX phase = exp(cI * qq * (cost - index * cos(theta)));
+            //double factor = cos(thetat)/cos(theta);
+            JonesMatrix t = stack->t21i(theta, lambda, substrate, vacuum);
+            t *= phase;
+            MuellerMatrix sigma = (4. * pi / k / sqrt(index)) * ReCrossMueller(X, t);
+
+            return MuellerMatrix(t) * (cos(theta) / index / cos(thetat)) - sigma * (density / cos(theta));
+        }
+        break;
+        default:
+            error("Invalid type = " + to_string(type));
+        }
+        return MuellerZero();
     }
 
     DEFINE_MODEL(Bobbert_Vlieger_BRDF_Model,Local_BRDF_Model,
