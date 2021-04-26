@@ -28,7 +28,7 @@ namespace SCATMECH {
         // _norm to a small number, rather than zero...
         Vector3D<double> _a = unit(a);
         Vector3D<double> _b = unit(b);
-
+		
         Vector3D<double> temp=cross(_a,_b);
         double _norm=Norm(temp);
         if (_norm>1E-10) return temp/_norm;

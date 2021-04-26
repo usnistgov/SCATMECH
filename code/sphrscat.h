@@ -41,6 +41,11 @@ namespace SCATMECH {
             // The Vectors kin and kout are unit vectors in the incident and scattering directions, respectively.
             //
             virtual JonesMatrix jones(const Vector& kin,const Vector& kout) = 0;
+
+			// 
+			// Exctinction cross section...
+			//
+			MuellerMatrix extinction(const Vector& k);
     };
 
     typedef Model_Ptr<Free_Space_Scatterer> Free_Space_Scatterer_Ptr;
