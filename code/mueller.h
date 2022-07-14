@@ -37,7 +37,6 @@ namespace SCATMECH {
     class MuellerMatrix;
     class StokesVector;
 
-
     /**
      * @brief Class to handle Jones vectors
      *
