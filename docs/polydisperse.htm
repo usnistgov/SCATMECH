@@ -1,14 +1,36 @@
 <html>
 <head>
-<link rel="stylesheet" href="https://pages.nist.gov/nist-header-footer/css/nist-combined.css">
-<script src="https://pages.nist.gov/nist-header-footer/js/jquery-1.9.0.min.js" type="text/javascript" defer="defer"></script>
-<script src="https://pages.nist.gov/nist-header-footer/js/nist-header-footer.js" type="text/javascript" defer="defer"></script>
-  <meta name="generator" content="HTML Tidy for Cygwin (vers 1st September 2004), see www.w3.org">
-   <link rel="STYLESHEET" href="style.css" type="text/css">
+    <link rel="stylesheet" href="https://pages.nist.gov/nist-header-footer/css/nist-combined.css">
+    <script src="https://pages.nist.gov/nist-header-footer/js/jquery-1.12.4.min.js" type="text/javascript" defer="defer"></script>
+    <script src="https://pages.nist.gov/nist-header-footer/js/nist-header-footer.js" type="text/javascript" defer="defer"></script>
 
-  <title>SCATMECH: Polydisperse_Sphere_BRDF_Model</title>
-<script language="JavaScript" id="_fed_an_js_tag" src="/js/federated-analytics.all.min.js?agency=NIST&subagency=pml&pua=UA-37115410-46&yt=true"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Mark external (non-nist.gov) A tags with class "external"
+            //If the adress start with https and ends with nist.gov
+            var re_nist = new RegExp('^https?:\/\/((^\/)*\.)*nist\\.gov(\/|$)');
+            //Regex to find address that start with https
+            var re_absolute_address = new RegExp('^((https?:)?\/\/)');
+            $("a").each(function () {
+                var url = $(this).attr('href');
+                if (re_nist.test(url) || !re_absolute_address.test(url)) {
+                    $(this).addClass('local');
+                } else {
+                    $(this).addClass('external');
+                }
+            });
+            // Add leaveNotice to external A elements
+            $('a.external').leaveNotice({
+                siteName: 'the NIST fork of the leaveNotice jQuery plugin',
+            });
+        });
+    </script>
 
+    <meta name="generator" content="HTML Tidy for Cygwin (vers 1st September 2004), see www.w3.org">
+    <link rel="STYLESHEET" href="style.css" type="text/css">
+
+    <title>SCATMECH: Polydisperse_Sphere_BRDF_Model</title>
+    <script async type="text/javascript" id="_fed_an_ua_tag" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=NIST&subagency=github&pua=UA-66610693-1&yt=true&exts=ppsx,pps,f90,sch,rtf,wrl,txz,m1v,xlsm,msi,xsd,f,tif,eps,mpg,xml,pl,xlt,c"></script>
 
     <script type="text/x-mathjax-config">
         MathJax.Hub.Config({

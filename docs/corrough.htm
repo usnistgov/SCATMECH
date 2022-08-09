@@ -1,257 +1,297 @@
 <html>
 <head>
-<link rel="stylesheet" href="https://pages.nist.gov/nist-header-footer/css/nist-combined.css">
-<script src="https://pages.nist.gov/nist-header-footer/js/jquery-1.9.0.min.js" type="text/javascript" defer="defer"></script>
-<script src="https://pages.nist.gov/nist-header-footer/js/nist-header-footer.js" type="text/javascript" defer="defer"></script>
-  <meta name="generator" content=
-  "HTML Tidy for Cygwin (vers 1st September 2004), see www.w3.org">
-   <link rel="STYLESHEET" href="style.css" type="text/css">
+    <link rel="stylesheet" href="https://pages.nist.gov/nist-header-footer/css/nist-combined.css">
+    <script src="https://pages.nist.gov/nist-header-footer/js/jquery-1.12.4.min.js" type="text/javascript" defer="defer"></script>
+    <script src="https://pages.nist.gov/nist-header-footer/js/nist-header-footer.js" type="text/javascript" defer="defer"></script>
 
-  <title>SCATMECH: Correlated_Roughness_BRDF_Model</title>
-<script language="JavaScript" id="_fed_an_js_tag" src="/js/federated-analytics.all.min.js?agency=NIST&subagency=pml&pua=UA-37115410-46&yt=true"></script>
-</head>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Mark external (non-nist.gov) A tags with class "external"
+            //If the adress start with https and ends with nist.gov
+            var re_nist = new RegExp('^https?:\/\/((^\/)*\.)*nist\\.gov(\/|$)');
+            //Regex to find address that start with https
+            var re_absolute_address = new RegExp('^((https?:)?\/\/)');
+            $("a").each(function () {
+                var url = $(this).attr('href');
+                if (re_nist.test(url) || !re_absolute_address.test(url)) {
+                    $(this).addClass('local');
+                } else {
+                    $(this).addClass('external');
+                }
+            });
+            // Add leaveNotice to external A elements
+            $('a.external').leaveNotice({
+                siteName: 'the NIST fork of the leaveNotice jQuery plugin',
+            });
+        });
+    </script>
 
-<body><br>
-  <a name="top" id="top"><!-- --></a>
+    <meta name="generator" content="HTML Tidy for Cygwin (vers 1st September 2004), see www.w3.org">
+    <link rel="STYLESHEET" href="style.css" type="text/css">
 
-  <table width="98%" border="0" cellpadding="0" cellspacing="0"
-  align="center">
-    <tr>
-      <td>
-        <p class="nav"><a href="index.htm">SCATMECH</a> &gt; <a href=
-        "classes.htm">Classes and Functions</a> &gt;
-        <a href="classes.htm#SSM">Surface Scattering Models</a>
-        &gt; Correlated_Roughness_BRDF_Model</p>
+    <title>SCATMECH: Correlated_Roughness_BRDF_Model</title>
+    <script async type="text/javascript" id="_fed_an_ua_tag" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=NIST&subagency=github&pua=UA-66610693-1&yt=true&exts=ppsx,pps,f90,sch,rtf,wrl,txz,m1v,xlsm,msi,xsd,f,tif,eps,mpg,xml,pl,xlt,c"></script>
+    <\head>
 
-        <h1>class Correlated_Roughness_BRDF_Model</h1>
+        <body>
+            <br>
+            <a name="top" id="top"><!-- --></a>
 
-        <hr>
+            <table width="98%" border="0" cellpadding="0" cellspacing="0"
+                   align="center">
+                <tr>
+                    <td>
+                        <p class="nav">
+                            <a href="index.htm">SCATMECH</a> &gt; <a href="classes.htm">Classes and Functions</a> &gt;
+                            <a href="classes.htm#SSM">Surface Scattering Models</a>
+                            &gt; Correlated_Roughness_BRDF_Model
+                        </p>
 
-        <p>The class <strong>Correlated_Roughness_BRDF_Model</strong>
-        implements the solution to first-order vector perturbation,
-        or Rayleigh-Rice, theory for conformal roughness of a
-        dielectric film in the smooth surface limit. It inherits
-        the properties of <a href=
-        "roughbrdf.htm">Roughness_BRDF_Model</a>, which inherits
-        the properties of <a href="BRDF_Model.htm">BRDF_Model</a>.
-	
-	<p>
-        <center>
-          <img src="Images/corrrough.gif" width="600" height="127"
-          alt=
-          "Diagram showing the components contributing to the effective BRDF of a sample surrounded by air.">
-          </center>
+                        <h1>class Correlated_Roughness_BRDF_Model</h1>
 
-	  <h2>Parameters:</h2>
+                        <hr>
 
-        <table border="1" cellpadding="5">
-          <tr>
-            <th>Parameter</th>
+                        <p>
+                            The class <strong>Correlated_Roughness_BRDF_Model</strong>
+                            implements the solution to first-order vector perturbation,
+                            or Rayleigh-Rice, theory for conformal roughness of a
+                            dielectric film in the smooth surface limit. It inherits
+                            the properties of <a href="roughbrdf.htm">Roughness_BRDF_Model</a>, which inherits
+                            the properties of <a href="BRDF_Model.htm">BRDF_Model</a>.
 
-            <th>Data
-            Type</th>
+                        <p>
+                            <center>
+                                <img src="Images/corrrough.gif" width="600" height="127"
+                                     alt="Diagram showing the components contributing to the effective BRDF of a sample surrounded by air.">
+                            </center>
 
-            <th>Description</th>
+                            <h2>Parameters:</h2>
 
-            <th>Default</th>
-          </tr>
+                            <table border="1" cellpadding="5">
+                                <tr>
+                                    <th>Parameter</th>
 
-          <tr>
-            <td class="parameter">lambda</td>
+                                    <th>
+                                        Data
+                                        Type
+                                    </th>
 
-            <td class="datatype">double</td>
+                                    <th>Description</th>
 
-            <td class="description">Wavelength of the light
-            in vacuum [&#181;m].<br>
-            (Inherited from <a href=
-            "BRDF_Model.htm">BRDF_Model</a>).</td>
+                                    <th>Default</th>
+                                </tr>
 
-            <td class="default">0.532</td>
-          </tr>
+                                <tr>
+                                    <td class="parameter">lambda</td>
 
-          <tr>
-            <td class="parameter">type</td>
+                                    <td class="datatype">double</td>
 
-            <td class="datatype">int</td>
+                                    <td class="description">
+                                        Wavelength of the light
+                                        in vacuum [&#181;m].<br>
+                                        (Inherited from <a href="BRDF_Model.htm">BRDF_Model</a>).
+                                    </td>
 
-            <td class="description">
-	      Indicates whether the light is incident from above the
-            substrate or from within the substrate and whether the
-            scattering is evaluated in reflection or transmission.
-            The choices are:<br>
-	      <b>0</b> : Light is incident from the above the substrate, and scattering is evaluated in reflection.<br>
-	      <b>1</b> : Light is incident from the above the substrate, and scattering is evaluated in transmission.<br>
-	      <b>2</b> : Light is incident from the within the substrate, and scattering is evaluated in reflection.<br>
-	      <b>3</b> : Light is incident from the within the substrate, and scattering is evaluated in transmission.<br>
-            (Inherited from <a href=
-            "BRDF_Model.htm">BRDF_Model</a>).</td>
+                                    <td class="default">0.532</td>
+                                </tr>
 
-            <td class="default">0</td>
-          </tr>
+                                <tr>
+                                    <td class="parameter">type</td>
 
-          <tr>
-            <td class="parameter">substrate</td>
+                                    <td class="datatype">int</td>
 
-            <td class="datatype"><a href="dielfunc.htm">dielectric_function</a></td>
+                                    <td class="description">
+                                        Indicates whether the light is incident from above the
+                                        substrate or from within the substrate and whether the
+                                        scattering is evaluated in reflection or transmission.
+                                        The choices are:<br>
+                                        <b>0</b> : Light is incident from the above the substrate, and scattering is evaluated in reflection.<br>
+                                        <b>1</b> : Light is incident from the above the substrate, and scattering is evaluated in transmission.<br>
+                                        <b>2</b> : Light is incident from the within the substrate, and scattering is evaluated in reflection.<br>
+                                        <b>3</b> : Light is incident from the within the substrate, and scattering is evaluated in transmission.<br>
+                                        (Inherited from <a href="BRDF_Model.htm">BRDF_Model</a>).
+                                    </td>
 
-            <td class="description">The
-            optical constants of the substrate, expressed as a
-            complex number (n,k) or, optionally, as a function of
-            wavelength.<br>
-            (Inherited from <a href=
-            "BRDF_Model.htm">BRDF_Model</a>).</td>
+                                    <td class="default">0</td>
+                                </tr>
 
-            <td class="default">(4.05,0.05)</td>
-          </tr>
+                                <tr>
+                                    <td class="parameter">substrate</td>
 
-          <tr>
-            <td class="parameter">psd</td>
+                                    <td class="datatype"><a href="dielfunc.htm">dielectric_function</a></td>
 
-            <td class="datatype"><a href="psd.htm">PSD_Function_Ptr</a></td>
+                                    <td class="description">
+                                        The
+                                        optical constants of the substrate, expressed as a
+                                        complex number (n,k) or, optionally, as a function of
+                                        wavelength.<br>
+                                        (Inherited from <a href="BRDF_Model.htm">BRDF_Model</a>).
+                                    </td>
 
-            <td class="description">The
-            two-dimensional power spectrum of the surface height
-            function [&#181;m<sup>4</sup>].<br>
-            (Inherited from <a href=
-            "roughbrdf.htm">Roughness_BRDF_Model</a>).</td>
+                                    <td class="default">(4.05,0.05)</td>
+                                </tr>
 
-            <td class="default">ABC_PSD_Function</td>
-          </tr>
+                                <tr>
+                                    <td class="parameter">psd</td>
 
-          <tr>
-            <td class="parameter">film</td>
+                                    <td class="datatype"><a href="psd.htm">PSD_Function_Ptr</a></td>
 
-            <td class="datatype"><a href="dielfunc.htm">dielectric_function</a></td>
+                                    <td class="description">
+                                        The
+                                        two-dimensional power spectrum of the surface height
+                                        function [&#181;m<sup>4</sup>].<br>
+                                        (Inherited from <a href="roughbrdf.htm">Roughness_BRDF_Model</a>).
+                                    </td>
 
-            <td class="description">The
-            optical constants of the film, expressed as a complex
-            number (n,k) or, optionally, as a function of
-            wavelength.</td>
+                                    <td class="default">ABC_PSD_Function</td>
+                                </tr>
 
-            <td class="default">(1.46,0.05)</td>
-          </tr>
+                                <tr>
+                                    <td class="parameter">film</td>
 
-          <tr>
-            <td class="parameter">thickness</td>
+                                    <td class="datatype"><a href="dielfunc.htm">dielectric_function</a></td>
 
-            <td class="datatype">double</td>
+                                    <td class="description">
+                                        The
+                                        optical constants of the film, expressed as a complex
+                                        number (n,k) or, optionally, as a function of
+                                        wavelength.
+                                    </td>
 
-            <td class="description">The
-            thickness of the film [&#181;m].</td>
+                                    <td class="default">(1.46,0.05)</td>
+                                </tr>
 
-            <td class="default">0.05</td>
-          </tr>
-        </table>
+                                <tr>
+                                    <td class="parameter">thickness</td>
 
-        <h2>See also:</h2>
+                                    <td class="datatype">double</td>
 
-        <p><a href=
-        "index.htm">SCATMECH Home</a>, &nbsp; <a href=
-        "convent.htm">Conventions</a>, &nbsp; <a href=
-        "BRDF_Model.htm">BRDF_Model</a>, &nbsp; <a href=
-        "roughbrdf.htm">Roughness_BRDF_Model</a></p>
+                                    <td class="description">
+                                        The
+                                        thickness of the film [&#181;m].
+                                    </td>
 
-        <p><a href="https://doi.org/10.1364/JOSA.66.000682">J. M. Elson, "Light scattering from surfaces with a
-        single dielectric overlayer," J. Opt. Soc. Am. <b>66</b>
-        (7) 682-694 (1976).</a></p>
+                                    <td class="default">0.05</td>
+                                </tr>
+                            </table>
 
-	<h2>Include file:</h2>
+                            <h2>See also:</h2>
 
-          <pre>
+                        <p>
+                            <a href="index.htm">SCATMECH Home</a>, &nbsp; <a href="convent.htm">Conventions</a>, &nbsp; <a href="BRDF_Model.htm">BRDF_Model</a>, &nbsp; <a href="roughbrdf.htm">Roughness_BRDF_Model</a>
+                        </p>
+
+                        <p>
+                            <a href="https://doi.org/10.1364/JOSA.66.000682">
+                                J. M. Elson, "Light scattering from surfaces with a
+                                single dielectric overlayer," J. Opt. Soc. Am. <b>66</b>
+                                (7) 682-694 (1976).
+                            </a>
+                        </p>
+
+                        <h2>Include file:</h2>
+
+                        <pre>
 #include "<a href="../code/crough.h">crough.h</a>"
 </pre>
-        <h2>Source code:</h2>
+                        <h2>Source code:</h2>
 
-          <pre>
+                        <pre>
 <a href="../code/crough.cpp">crough.cpp</a>
 </pre>
-        <h2>Definition of public elements:</h2>
+                        <h2>Definition of public elements:</h2>
 
-          <pre>
+                        <pre>
 class Correlated_Roughness_BRDF_Model
  : public <a href="roughbrdf.htm">Roughness_BRDF_Model</a>
 {
     public:
-        <a href=
-"#Correlated_Roughness_BRDF_Model">Correlated_Roughness_BRDF_Model</a>( int ask=0);
+                        <a href="#Correlated_Roughness_BRDF_Model">Correlated_Roughness_BRDF_Model</a>( int ask=0);
 
         void <a href="#set_thickness">set_thickness</a>( double t);
         double <a href="#get_thickness">get_thickness</a>();
 
-        void <a href="#set_epsilon0">set_film</a>(const <a href=
-"dielfunc.htm">dielectric_function&amp;</a> e);
-        <a href="dielfunc.htm">dielectric_function</a> <a href=
-"#get_epsilon0">get_film</a>();
+        void <a href="#set_epsilon0">set_film</a>(const <a href="dielfunc.htm">dielectric_function&amp;</a> e);
+                        <a href="dielfunc.htm">dielectric_function</a> <a href="#get_epsilon0">get_film</a>();
 
         virtual void <a href="model.htm#AskUser">AskUser</a>();
-        virtual void <a href=
-"model.htm#parameter">set_parameter</a>(const string&amp; name,const string&amp; value);
+        virtual void <a href="model.htm#parameter">set_parameter</a>(const string&amp; name,const string&amp; value);
         static <a href="inherit.htm">Inheritance</a> inheritance;
-        virtual <a href="model.htm">Model*</a> <a href=
-"model.htm#clone">clone</a>() const;
+        virtual <a href="model.htm">Model*</a> <a href="model.htm#clone">clone</a>() const;
 };
 
 </pre>
 
-        <hr>
-        <a name="thickness" id="thickness"><!-- --></a> <h3><a name="set_thickness"
-        id="set_thickness">void set_thickness( double t)</a><br>
-        <a name="get_thickness" id="get_thickness">double
-        get_thickness()</a></h3>
+                        <hr>
+                        <a name="thickness" id="thickness"><!-- --></a> <h3>
+                            <a name="set_thickness"
+                               id="set_thickness">void set_thickness( double t)</a><br>
+                            <a name="get_thickness" id="get_thickness">
+                                double
+                                get_thickness()
+                            </a>
+                        </h3>
 
-        <blockquote><p>
-          Functions to
-          set and get the thickness of the film.
-        </blockquote>
+                        <blockquote>
+                            <p>
+                                Functions to
+                                set and get the thickness of the film.
+                        </blockquote>
 
-        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
-	
-	<h3><a name="epsilon0"
-        id="epsilon0"><!-- --></a> <a name="set_epsilon0" id=
-        "set_epsilon0">void set_film(const dielectric_function&amp;
-        f)</a><br>
-        <a name="get_epsilon0" id=
-        "get_epsilon0">dielectric_function get_film()</a></h3>
+                        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
 
-        <blockquote><p>
-          Functions to set and get the dielectric function of the
-          layer.
-        </blockquote>
+                        <h3>
+                            <a name="epsilon0"
+                               id="epsilon0"><!-- --></a> <a name="set_epsilon0" id="set_epsilon0">
+                                void set_film(const dielectric_function&amp;
+                                f)
+                            </a><br>
+                            <a name="get_epsilon0" id="get_epsilon0">dielectric_function get_film()</a>
+                        </h3>
 
-        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+                        <blockquote>
+                            <p>
+                                Functions to set and get the dielectric function of the
+                                layer.
+                        </blockquote>
 
-	<h3><a name=
-        "Correlated_Roughness_BRDF_Model" id=
-        "Correlated_Roughness_BRDF_Model">Correlated_Roughness_BRDF_Model(
-        int ask=0)</a></h3>
+                        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
 
-        <blockquote><p>
-          The constructor for
-          <strong>Correlated_Roughness_BRDF_Model</strong>. If
-          <strong>ask</strong>=1, then the program asks the user
-          for the layer thickness and optical constant.
-        </blockquote>
+                        <h3>
+                            <a name="Correlated_Roughness_BRDF_Model" id="Correlated_Roughness_BRDF_Model">
+                                Correlated_Roughness_BRDF_Model(
+                                int ask=0)
+                            </a>
+                        </h3>
 
-        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
+                        <blockquote>
+                            <p>
+                                The constructor for
+                                <strong>Correlated_Roughness_BRDF_Model</strong>. If
+                                <strong>ask</strong>=1, then the program asks the user
+                                for the layer thickness and optical constant.
+                        </blockquote>
 
-<!-- START FOOTER -->
-<hr>
-<h2>For More Information</h2>
+                        <p><a href="#top"><span class="totop">Top of Page</span></a></p>
 
-<p>
-<a href="https://www.nist.gov/people/thomas-germer">SCATMECH Technical Information and Questions</a><br>
-<a href="http://www.nist.gov/pml/div685/index.cfm" target="_top">Sensor Science Division Home Page</a><br>
-<a href="mailto:fraser@nist.gov">Sensor Science Division Inquiries</a><br>
-<a href="mailto:thomas.germer@nist.gov">Website Comments</a>
+                        <!-- START FOOTER -->
+                        <hr>
+                        <h2>For More Information</h2>
 
-<p>
-Current SCATMECH version: <a href="./download.htm">7.22 (April 2021)</a><br>
+                        <p>
+                            <a href="https://www.nist.gov/people/thomas-germer">SCATMECH Technical Information and Questions</a><br>
+                            <a href="http://www.nist.gov/pml/div685/index.cfm" target="_top">Sensor Science Division Home Page</a><br>
+                            <a href="mailto:fraser@nist.gov">Sensor Science Division Inquiries</a><br>
+                            <a href="mailto:thomas.germer@nist.gov">Website Comments</a>
 
-<br>
+                        <p>
+                            Current SCATMECH version: <a href="./download.htm">7.22 (April 2021)</a><br>
 
-</td>
-</tr>
-</table>
+                            <br>
 
-</body>
+                    </td>
+                </tr>
+            </table>
+
+        </body>
 </html>
