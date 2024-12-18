@@ -29,7 +29,7 @@ namespace SCATMECH {
     string
     Get_SCATMECH_Version()
     {
-        return std::string("SCATMECH 7.22 (Build: ") + std::string(__DATE__) + std::string(")");
+        return std::string("SCATMECH 7.23 (Build: ") + std::string(__DATE__) + std::string(")");
     }
 
     optical_constant default_substrate(4.15,0.05);
