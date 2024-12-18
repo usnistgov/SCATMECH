@@ -92,7 +92,7 @@ namespace SCATMECH {
                 COMPLEX an = (mr*psi(n,mr*yr)*(psi_(n,yr)+T*chi_(n,yr))-psi_(n,mr*yr)*(psi(n,yr)+T*chi(n,yr)))/
                              (mr*zeta(n,mr*yr)*(psi_(n,yr)+T*chi_(n,yr))-zeta_(n,mr*yr)*(psi(n,yr)+T*chi(n,yr)));
                 result = -an;
-            } else if (f=hfield) {
+            } else if (f==hfield) {
                 COMPLEX S = 0.;
                 double Rs = r0;
                 COMPLEX ns = N2;
@@ -125,7 +125,7 @@ namespace SCATMECH {
     //
     void
     Bobbert_Vlieger_BRDF_Model::
-    Amatrix(ScatterTMatrix& A)
+    Amatrix(ScatterTMatrix& _A)
     {
         // Choose number of points in Gaussian integration, depending upon
         // LMAX, and round up to nearest 10.
@@ -229,16 +229,16 @@ namespace SCATMECH {
                     int ii_ = index(l_,m);
 
                     // Integration by Gaussian method [see Eq. (4.2) of BV&G]
-                    for (int k=0; k<npts; ++k) {
-                        double weight = Gauss_Laguerre_Integration::weights[ipt][k];
-                        Aee += weight*(reflect_p[k]*Vmatrix[k][ii]*dminusmatrix[k][ii_]
-                                       +reflect_s[k]*Umatrix[k][ii]*dplusmatrix[k][ii_]);
-                        Ahe += weight*(reflect_p[k]*Vmatrix[k][ii]*dplusmatrix[k][ii_]
-                                       +reflect_s[k]*Umatrix[k][ii]*dminusmatrix[k][ii_]);
-                        Aeh += weight*(reflect_p[k]*Umatrix[k][ii]*dminusmatrix[k][ii_]
-                                       +reflect_s[k]*Vmatrix[k][ii]*dplusmatrix[k][ii_]);
-                        Ahh += weight*(reflect_p[k]*Umatrix[k][ii]*dplusmatrix[k][ii_]
-                                       +reflect_s[k]*Vmatrix[k][ii]*dminusmatrix[k][ii_]);
+                    for (int _k=0; _k<npts; ++_k) {
+                        double weight = Gauss_Laguerre_Integration::weights[ipt][_k];
+                        Aee += weight*(reflect_p[_k]*Vmatrix[_k][ii]*dminusmatrix[_k][ii_]
+                                       +reflect_s[_k]*Umatrix[_k][ii]*dplusmatrix[_k][ii_]);
+                        Ahe += weight*(reflect_p[_k]*Vmatrix[_k][ii]*dplusmatrix[_k][ii_]
+                                       +reflect_s[_k]*Umatrix[_k][ii]*dminusmatrix[_k][ii_]);
+                        Aeh += weight*(reflect_p[_k]*Umatrix[_k][ii]*dminusmatrix[_k][ii_]
+                                       +reflect_s[_k]*Vmatrix[_k][ii]*dplusmatrix[_k][ii_]);
+                        Ahh += weight*(reflect_p[_k]*Umatrix[_k][ii]*dplusmatrix[_k][ii_]
+                                       +reflect_s[_k]*Vmatrix[_k][ii]*dminusmatrix[_k][ii_]);
                     }
 
                     // Constant value in front of Eq. (8.17) of BV...
@@ -251,18 +251,18 @@ namespace SCATMECH {
 
                     // Put the results into the A matrix...
 
-                    A[LMAX+m][2*(LMAX-l_)][2*(LMAX-l)] = Aee;
-                    A[LMAX+m][2*(LMAX-l_)+1][2*(LMAX-l)] = Ahe;
-                    A[LMAX+m][2*(LMAX-l_)+1][2*(LMAX-l)+1] = Ahh;
-                    A[LMAX+m][2*(LMAX-l_)][2*(LMAX-l)+1] = Aeh;
+                    _A[LMAX+m][2*(LMAX-l_)][2*(LMAX-l)] = Aee;
+                    _A[LMAX+m][2*(LMAX-l_)+1][2*(LMAX-l)] = Ahe;
+                    _A[LMAX+m][2*(LMAX-l_)+1][2*(LMAX-l)+1] = Ahh;
+                    _A[LMAX+m][2*(LMAX-l_)][2*(LMAX-l)+1] = Aeh;
 
                     // Use the symmetry relations described in
                     // Eqs. (4.5) of BV&G...
 
-                    A[LMAX-m][2*(LMAX-l_)][2*(LMAX-l)] = Aee;
-                    A[LMAX-m][2*(LMAX-l_)+1][2*(LMAX-l)] = -Ahe;
-                    A[LMAX-m][2*(LMAX-l_)+1][2*(LMAX-l)+1] = Ahh;
-                    A[LMAX-m][2*(LMAX-l_)][2*(LMAX-l)+1] = -Aeh;
+                    _A[LMAX-m][2*(LMAX-l_)][2*(LMAX-l)] = Aee;
+                    _A[LMAX-m][2*(LMAX-l_)+1][2*(LMAX-l)] = -Ahe;
+                    _A[LMAX-m][2*(LMAX-l_)+1][2*(LMAX-l)+1] = Ahh;
+                    _A[LMAX-m][2*(LMAX-l_)][2*(LMAX-l)+1] = -Aeh;
                     //}
                 }
             }
@@ -283,7 +283,7 @@ namespace SCATMECH {
         COMPLEX Y,Z;
 
         double S,T;
-        int   I,J,K,L,M,P;
+        int   I,J,K=0,L,M,P;
         //int test;
         if ( N != 1 ) {
             L = 0;
@@ -605,36 +605,36 @@ Line10:
     //
     void
     Bobbert_Vlieger_BRDF_Model::
-    set_geometry(double thetai,double thetas,double phis)
+    set_geometry(double _thetai,double _thetas,double _phis)
     {
         SETUP();
 
-        if (abs(thetai)<1E-6) thetai=1E-6;
-        if (abs(thetas)<1E-6) thetas=1E-6;
+        if (abs(_thetai)<1E-6) _thetai=1E-6;
+        if (abs(_thetas)<1E-6) _thetas=1E-6;
 
-        if (thetai<0) {
-            thetai=-thetai;
-            phis = pi+phis;
+        if (_thetai<0) {
+            _thetai=-_thetai;
+            _phis = pi+_phis;
         }
 
-        if (thetas<0) {
-            thetas=-thetas;
-            phis=pi+phis;
+        if (_thetas<0) {
+            _thetas=-_thetas;
+            _phis=pi+_phis;
         }
 
-        if (thetai!=old_thetai) {
-            calculate_W(thetai);
-            old_thetai=thetai;
+        if (_thetai!=old_thetai) {
+            calculate_W(_thetai);
+            old_thetai=_thetai;
         }
 
-        if (thetas!=old_thetas) {
-            calculate_Z(pi-thetas);
-            old_thetas=thetas;
+        if (_thetas!=old_thetas) {
+            calculate_Z(pi-_thetas);
+            old_thetas=_thetas;
         }
 
-        if (phis!=old_phis) {
-            calculate_eIP(phis);
-            old_phis=phis;
+        if (_phis!=old_phis) {
+            calculate_eIP(_phis);
+            old_phis=_phis;
         }
     }
 
@@ -642,9 +642,9 @@ Line10:
     // differential scattering cross-section...
     COMPLEX
     Bobbert_Vlieger_BRDF_Model::
-    Epp(double thetai,double thetas,double phis)
+    Epp(double _thetai,double _thetas,double _phis)
     {
-        set_geometry(thetai,thetas,phis);
+        set_geometry(_thetai,_thetas,_phis);
         return E(Wp,Zp);
     }
 
@@ -652,9 +652,9 @@ Line10:
     // differential scattering cross-section...
     COMPLEX
     Bobbert_Vlieger_BRDF_Model::
-    Eps(double thetai,double thetas,double phis)
+    Eps(double _thetai,double _thetas,double _phis)
     {
-        set_geometry(thetai,thetas,phis);
+        set_geometry(_thetai,_thetas,_phis);
         return E(Wp,Zs);
     }
 
@@ -662,9 +662,9 @@ Line10:
     // differential scattering cross-section...
     COMPLEX
     Bobbert_Vlieger_BRDF_Model::
-    Esp(double thetai,double thetas,double phis)
+    Esp(double _thetai,double _thetas,double _phis)
     {
-        set_geometry(thetai,thetas,phis);
+        set_geometry(_thetai,_thetas,_phis);
         return E(Ws,Zp);
     }
 
@@ -672,9 +672,9 @@ Line10:
     // differential scattering cross-section...
     COMPLEX
     Bobbert_Vlieger_BRDF_Model::
-    Ess(double thetai,double thetas,double phis)
+    Ess(double _thetai,double _thetas,double _phis)
     {
-        set_geometry(thetai,thetas,phis);
+        set_geometry(_thetai,_thetas,_phis);
         return E(Ws,Zs);
     }
 
@@ -683,7 +683,7 @@ Line10:
     //
     CVector
     Bobbert_Vlieger_BRDF_Model::
-    EField(double thetai,const JonesVector& inpol,const Vector R)
+    EField(double _thetai,const JonesVector& inpol,const Vector R)
     {
         double rr = sqrt(sqr(R.x)+sqr(R.y)+sqr(R.z));
         double theta = acos(R.z/rr);
@@ -692,7 +692,7 @@ Line10:
         if (rr<radius || R.z > radius+delta) return CVector(0,0,0);
         if (rr>radius+delta) return CVector(0,0,0);
 
-        set_geometry(thetai,0.,0.);
+        set_geometry(_thetai,0.,0.);
 
         COMPLEX Esr = 0;
         COMPLEX Estheta = 0;
